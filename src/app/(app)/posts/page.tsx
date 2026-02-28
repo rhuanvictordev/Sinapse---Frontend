@@ -44,8 +44,13 @@ const getCharacters = unstable_cache(
 export default async function Posts() {
   const data: ApiResponse = await getCharacters();
 
-  return (
-    <div className="flex flex-row flex-wrap text-center justify-center gap-5">
+    return (
+    <div className="flex flex-col h-full">
+      <header className="h-12 pl-4 flex items-center">
+        <h2 className="font-bold text-2xl">Personagens</h2>
+      </header>
+
+      <div className="flex flex-row flex-wrap text-center justify-center gap-5">
       {data.results.map((item) => (
         <div key={item.id} className="justify-center">
           <h2>{item.name}</h2>
@@ -54,5 +59,7 @@ export default async function Posts() {
         </div>
       ))}
     </div>
-  );
-}
+
+    </div>
+  )
+  }

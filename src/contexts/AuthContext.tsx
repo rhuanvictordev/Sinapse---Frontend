@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function login(email: string, password: string) {
-    const test = { id: 1, name: "Teste", email: email, level: 99, image: "https://lh3.googleusercontent.com/ogw/AF2bZyg2SoZEjuYCosrOqdVid8_y-oUK_On8LJFTQCe_UMYO2A=s64-c-mo" };
+    const test = { id: 1, name: "Teste", email: email, level: 99, image: "https://img.freepik.com/fotos-premium/distinto-homem-afro-americano-de-camisola-cinzenta-contra-fundo-laranja_1143378-8127.jpg?w=360" };
     setUser(test);
     localStorage.setItem("user", JSON.stringify(test));
     console.log("Usuário logado, Email: " + email + " Senha: " + password);

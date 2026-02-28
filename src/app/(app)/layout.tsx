@@ -26,7 +26,7 @@ export default function AppLayout({children,}: {children: React.ReactNode;}) {
     <div className="flex flex-1 px-10 pb-10 gap-4 overflow-hidden">
       <Menu />
 
-      <div className="flex-1 bg-white rounded-2xl p-4 overflow-y-auto">
+      <div className="flex-1 bg-[#ADC6D5] rounded-2xl p-4 overflow-y-auto">
         {children}
       </div>
     </div>

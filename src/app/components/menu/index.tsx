@@ -54,13 +54,13 @@ export default function Menu() {
           </Link>
         </li>
 
-        <li>
+        {/* <li>
           <Link href="/posts">
             <button className={linkClass("/posts")}>
               Posts
             </button>
           </Link>
-        </li>
+        </li> */}
 
         <li>
           <Link href="/">
