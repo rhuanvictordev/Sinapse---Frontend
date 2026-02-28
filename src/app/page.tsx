@@ -5,6 +5,6 @@ import { useEffect } from "react";
 
 export default function StartPage(){
     useEffect(()=>{
-      redirect("/login");
+      redirect("/home");
     },[])
 }

@@ -1,11 +1,24 @@
-import Header from "@/app/components/header"
-import Menu from "@/app/components/menu"
+"use client";
 
-export default function AppLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+import Header from "@/app/components/header";
+import Menu from "@/app/components/menu";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function AppLayout({children,}: {children: React.ReactNode;}) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+  if (!loading && !user) {
+    router.push("/login");
+  }
+  }, [user, loading]);
+
+  if (loading) return null;
+  if (!user) return null;
+
   return (
     <div className="h-screen flex flex-col bg-[#C4D0DA]">
       <Header />
@@ -16,5 +29,6 @@ export default function AppLayout({
         </div>
       </div>
     </div>
-  )
+  );
 }
+

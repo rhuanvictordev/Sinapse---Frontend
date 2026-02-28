@@ -4,22 +4,29 @@ import Image from "next/image"
 import Logo from "../../../../assets/images/logo.png"
 import Google from "../../../../assets/images/google.png"
 import Link from "next/link"
-import { useState } from "react"
-import { redirect } from "next/navigation"
+import { useEffect, useState } from "react"
+import { redirect, useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login(){
-
+  const { user, login, loading } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function login(){
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/home");
+    }
+  }, [user, loading]);
+  
+
+  function validateFields(){
     if (email == "" || password == ""){
       alert("Preencha os todos os campos!")
       return
     }
-    
-    console.log(email, password)
-    redirect("/home");
+    login(email, password);
   }
 
   return(
@@ -59,7 +66,7 @@ export default function Login(){
 
         <button
           className="w-32 h-10 p-2 bg-blue-500 rounded-2xl text-white hover:bg-blue-400 hover:text-white hover:border-white transition duration-300 cursor-pointer"
-          onClick={login}
+          onClick={validateFields}
         >
           Entrar
         </button>

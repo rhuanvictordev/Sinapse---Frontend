@@ -1,33 +1,40 @@
-import Image from "next/image"
-import Link from "next/link"
-import Logo from "../../../../assets/images/logo_horizontal.png"
-import User from "../../../../assets/images/user.png"
+"use client";
 
-export default function Header(){
-    return (
-        <header className="flex pl-20 pr-20 py-2 bg-[#C4D0DA]">
-            <div className="flex items-center justify-between w-full mx-auto max-w-7x1">
-                <div>
-                    <a href="/home">
-                        <Image src={Logo} alt="logo_sinapse"></Image>
-                    </a>
-                </div>
-                <div className="flex flex-row gap-3 justify-center">
-                    <div className="mt-3">
-                        <div className="">
-                            <p className="font-bold text-2xl">Rhuan Victor</p>
-                        </div>
-                        <div>
-                            <p className="font-bold text-end">Nível 60</p>
-                        </div>
-                    </div>
-                    <div>
-                        <a href="/profile">
-                            <Image src={User} alt="user_image"></Image>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </header>
-    )
+import Image from "next/image";
+import Logo from "../../../../assets/images/logo_horizontal.png";
+import UserImage from "../../../../assets/images/user.png";
+import { useAuth } from "@/contexts/AuthContext";
+
+export default function Header() {
+  const { user } = useAuth();
+
+  if (!user){
+    return null;
+  }
+
+  return (
+    <header className="flex pl-34 pr-20 py-2 bg-[#C4D0DA]">
+      <div className="flex items-center justify-between w-full mx-auto max-w-7x1">
+        <div>
+          <a href="/">
+            <Image src={Logo} alt="logo_sinapse" />
+          </a>
+        </div>
+
+        <div className="flex flex-row gap-3 justify-center">
+          <div>
+            <p className="font-bold text-2xl">{user.name}</p>
+            <p className="font-bold text-end">Nível {user.level}</p>
+          </div>
+
+          <div>
+            <a href="/profile">
+                <img src={user.image ? user.image : UserImage.src} alt="user_image" className="w-15 h-15 rounded-full"/>
+              {/* <Image src={user.image ? user.image : UserImage } alt="user_image" width={60} height={60} className="rounded-full"/> */}
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 }
