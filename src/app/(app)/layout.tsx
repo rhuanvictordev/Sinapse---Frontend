@@ -20,15 +20,17 @@ export default function AppLayout({children,}: {children: React.ReactNode;}) {
   if (!user) return null;
 
   return (
-    <div className="h-screen flex flex-col bg-[#C4D0DA]">
-      <Header />
-      <div className="flex flex-1 px-10 pb-10 gap-4">
-        <Menu />
-        <div className="flex-1 bg-white rounded-2xl p-6">
-          {children}
-        </div>
+  <div className="h-screen flex flex-col bg-[#C4D0DA]">
+    <Header />
+
+    <div className="flex flex-1 px-10 pb-10 gap-4 overflow-hidden">
+      <Menu />
+
+      <div className="flex-1 bg-white rounded-2xl p-4 overflow-y-auto">
+        {children}
       </div>
     </div>
-  );
+  </div>
+);
 }
 
