@@ -64,13 +64,13 @@ export default function Dashboard() {
                   {item.quizzes_ids.length > 1 ? ( <h2 className="md:mt-4 text-base md:text-2xl"> {item.quizzes_ids.length} Quizzes Disponíveis </h2> ) : ( <h2 className="text-base md:text-2xl md:mt-4"> {item.quizzes_ids.length} Quiz Disponível </h2> )}
                 </div>
 
-                <div className="justify-between flex md:w-140 md:mt-12 mt-2 md:ml-10">
+                <div className="justify-between flex md:w-140 w-84 md:mt-12 mt-2 md:ml-10">
                   <button className="bg-blue-900 cursor-pointer md:rounded-2xl md:w-42 md:h-18 ml-4 text-white hover:bg-blue-700 hover:text-white"> Entrar </button>
                   {!item.visibility && (
                     <>
                       <div className="md:w-90 w-47 md:h-18 flex flex-row justify-between mr-4">
-                        <button className="bg-gray-300 cursor-pointer md:rounded-2xl md:w-42 md:h-18 hover:bg-gray-100 md:ml-3"> Editar </button>
-                        <button className="bg-gray-400 cursor-pointer md:rounded-2xl md:w-42 md:h-18 hover:bg-red-400"> Excluir </button>
+                        <button className="bg-gray-300 cursor-pointer md:rounded-2xl md:w-42 md:h-18 hover:bg-gray-100 md:ml-3 p-2 md:p-0"> Editar </button>
+                        <button className="bg-gray-400 cursor-pointer md:rounded-2xl md:w-42 md:h-18 hover:bg-red-400 p2 md:p-0"> Excluir </button>
                       </div>
                     </>
                   )}

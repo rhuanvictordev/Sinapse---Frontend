@@ -11,8 +11,8 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function Login(){
   const { user, login, loading } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState("teste@email.com");
-  const [password, setPassword] = useState("senhateste");
+  const [email, setEmail] = useState("rhuansoliveira1072@gmail.com");
+  const [password, setPassword] = useState("Rrr19283.");
 
   useEffect(() => {
     if (!loading && user) {

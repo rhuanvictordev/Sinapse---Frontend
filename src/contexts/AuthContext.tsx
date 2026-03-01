@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import { sinapseAPI } from "@/services/api";
 
 type UserType = {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  paying: boolean;
-  is_admin: boolean;
-  answered_questions: number;
-  points: number;
+  _id?: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  paying?: boolean;
+  is_admin?: boolean;
+  answered_questions?: number;
+  points?: number;
   image?: string;
 };
 
@@ -43,29 +43,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   async function login(email: string, password: string) {
-    const obj = {
-      _id: "1",
-      name:"Rhuan Victor da Silva",
-      email: email,
-      password: password,
-      paying: true,
-      is_admin: true,
-      answered_questions: 0,
-      points: 0
-    }
     
-    setUser(obj)
-    localStorage.setItem("user", JSON.stringify(obj))
-    router.push("/home")
-    // try {
-    //   const response = await sinapseAPI.post("/users/login", obj )
-    //   const userData = response.data
-    //   setUser(userData)
-    //   localStorage.setItem("user", JSON.stringify(userData))
-    //   router.push("/home")
-    // } catch (error: any) {
-    //   console.log("Erro no login:", error.response?.data || error.message)
-    // }
+    const obj = {email: email, password: password}
+    try {
+      const response = await sinapseAPI.post("/users/login", obj )
+      const userData = response.data
+      localStorage.setItem("user", JSON.stringify(userData))
+      setUser(userData)
+      router.push("/home")
+    } catch (error: any) {
+      console.log("Erro no login:", error.response?.data || error.message)
+    }
   }
 
   function logout() {

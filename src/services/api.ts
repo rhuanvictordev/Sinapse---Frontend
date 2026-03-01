@@ -1,17 +1,16 @@
 import axios from "axios";
+import "dotenv/config";
 
-// API local do seu backend
 export const LocalAPI = axios.create({
-  baseURL: "http://192.168.0.27:8080/api",
+  baseURL: process.env.NEXT_PUBLIC_LOCAL
 });
 
 export const sinapseAPI = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: process.env.NEXT_PUBLIC_BACKEND
 });
 
-// API pública do Rick and Morty
 export const RickAPI = axios.create({
-  baseURL: "https://rickandmortyapi.com/api",
+  baseURL: process.env.NEXT_PUBLIC_RICK
 });
 
 // ===============================
