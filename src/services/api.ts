@@ -5,6 +5,10 @@ export const LocalAPI = axios.create({
   baseURL: "http://192.168.0.27:8080/api",
 });
 
+export const sinapseAPI = axios.create({
+  baseURL: "http://localhost:3001",
+});
+
 // API pública do Rick and Morty
 export const RickAPI = axios.create({
   baseURL: "https://rickandmortyapi.com/api",
@@ -31,7 +35,7 @@ export const RickAPI = axios.create({
 
 LocalAPI.interceptors.response.use(
   (response) => {
-    console.log("OK RESPONSE:", {
+    console.log("AXIOS LOCAL RESPONSE OK", {
       status: response.status,
       url: response.config.url,
     });
@@ -39,13 +43,60 @@ LocalAPI.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-      console.log("X RESPONSE ERROR:", {
+      console.log("AXIOS LOCAL RESPONSE ERROR:", {
         status: error.response.status,
         data: error.response.data,
         url: error.config?.url,
       });
     } else {
-      console.log("X NETWORK ERROR:", error.message);
+      console.log("AXIOS LOCAL NETWORK ERROR:", error.message);
+    }
+    return Promise.reject(error);
+  }
+);
+
+
+
+sinapseAPI.interceptors.response.use(
+  (response) => {
+    console.log("AXIOS SINAPSE RESPONSE OK", {
+      status: response.status,
+      url: response.config.url,
+    });
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      console.log("AXIOS SINAPSE RESPONSE ERROR:", {
+        status: error.response.status,
+        data: error.response.data,
+        url: error.config?.url,
+      });
+    } else {
+      console.log("AXIOS SINAPSE NETWORK ERROR:", error.message);
+    }
+    return Promise.reject(error);
+  }
+);
+
+
+RickAPI.interceptors.response.use(
+  (response) => {
+    console.log("AXIOS RICK RESPONSE OK:", {
+      status: response.status,
+      url: response.config.url,
+    });
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      console.log("AXIOS RICK RESPONSE ERROR:", {
+        status: error.response.status,
+        data: error.response.data,
+        url: error.config?.url,
+      });
+    } else {
+      console.log("AXIOS RICK NETWORK ERROR:", error.message);
     }
     return Promise.reject(error);
   }

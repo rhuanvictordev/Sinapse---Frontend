@@ -2,12 +2,17 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { sinapseAPI } from "@/services/api";
 
 type UserType = {
-  id: number;
+  _id: string;
   name: string;
   email: string;
-  level?: number;
+  password: string;
+  paying: boolean;
+  is_admin: boolean;
+  answered_questions: number;
+  points: number;
   image?: string;
 };
 
@@ -37,12 +42,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(false);
   }, []);
 
-  function login(email: string, password: string) {
-    const test = { id: 1, name: "Teste", email: email, level: 99, image: "https://img.freepik.com/fotos-premium/distinto-homem-afro-americano-de-camisola-cinzenta-contra-fundo-laranja_1143378-8127.jpg?w=360" };
-    setUser(test);
-    localStorage.setItem("user", JSON.stringify(test));
-    console.log("Usuário logado, Email: " + email + " Senha: " + password);
-    router.push("/home");
+  async function login(email: string, password: string) {
+    const obj = {
+      _id: "1",
+      name:"Rhuan Victor da Silva",
+      email: email,
+      password: password,
+      paying: true,
+      is_admin: true,
+      answered_questions: 0,
+      points: 0
+    }
+    
+    setUser(obj)
+    localStorage.setItem("user", JSON.stringify(obj))
+    router.push("/home")
+    // try {
+    //   const response = await sinapseAPI.post("/users/login", obj )
+    //   const userData = response.data
+    //   setUser(userData)
+    //   localStorage.setItem("user", JSON.stringify(userData))
+    //   router.push("/home")
+    // } catch (error: any) {
+    //   console.log("Erro no login:", error.response?.data || error.message)
+    // }
   }
 
   function logout() {

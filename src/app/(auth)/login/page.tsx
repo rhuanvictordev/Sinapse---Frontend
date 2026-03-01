@@ -11,8 +11,8 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function Login(){
   const { user, login, loading } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("teste@email.com");
+  const [password, setPassword] = useState("senhateste");
 
   useEffect(() => {
     if (!loading && user) {
@@ -23,7 +23,7 @@ export default function Login(){
 
   function validateFields(){
     if (email == "" || password == ""){
-      alert("Preencha os todos os campos!")
+      alert("Preencha todos os campos!")
       return
     }
     login(email, password);

@@ -2,6 +2,7 @@
 
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { StateProvider } from "@/contexts/StateContext";
 
 export default function RootLayout({
   children,
@@ -10,9 +11,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body>
+      <body className="bg-[#C4D0DA]">
         <AuthProvider>
-          {children}
+            <StateProvider>
+                {children}
+            </StateProvider>
         </AuthProvider>
       </body>
     </html>
