@@ -43,13 +43,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   async function login(email: string, password: string) {
-    
     const obj = {email: email, password: password}
     try {
       const response = await sinapseAPI.post("/users/login", obj )
-      const userData = response.data
-      localStorage.setItem("user", JSON.stringify(userData))
-      setUser(userData)
+      const user = response.data
+      localStorage.setItem("user", JSON.stringify(user))
+      setUser(user)
       router.push("/home")
     } catch (error: any) {
       console.log("Erro no login:", error.response?.data || error.message)

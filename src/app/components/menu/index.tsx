@@ -23,8 +23,8 @@ export default function Menu() {
       <ul className="text-white font-bold text-2xl ml-2 text-center mt-2">
 
         <li>
-          <Link href="/dashboard" className={linkClass("/dashboard")}>
-            Dashboard
+          <Link href="/home" className={linkClass("/home")}>
+            Início
           </Link>
         </li>
 

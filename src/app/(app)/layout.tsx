@@ -24,7 +24,7 @@ export default function AppLayout({children,}: {children: React.ReactNode;}) {
  return (
   <div className="h-full w-full flex flex-col bg-[#C4D0DA]">
       
-    <div className="fixed top-0 left-0 w-full z-50 border-2"> {/* Header */}
+    <div className="fixed top-0 left-0 w-full z-50"> {/* Header */}
       <Header />
     </div>
 
