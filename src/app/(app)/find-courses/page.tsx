@@ -2,6 +2,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { LocalAPI } from "@/services/api";
+import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
 
 type Course = {
   id: string;
@@ -96,6 +97,7 @@ export default function FindCourses() {
         </table>
         
     </div>
+    <ScrollToTopButton/>
   </div>
 )
 }

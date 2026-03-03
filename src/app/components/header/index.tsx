@@ -5,22 +5,26 @@ import Logo from "../../../../assets/images/logo_horizontal.png";
 import UserImage from "../../../../assets/images/user.png";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMenu } from "@/contexts/StateContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Header() {
   const { user } = useAuth();
   const menu = useMenu();
+  const myTheme = useTheme();
 
   if (!user){
     return null;
   }
 
   return (
-    <header className="bg-[#C4D0DA] md:pl-10 md:pr-12 md:py-2 md:w-fill md:justify-between md:w-screen px-4 py-2 border md:border-0">
-      <div className="flex items-center justify-between mx-auto">
+    <header className="md:pl-10 md:pr-12 md:py-4 md:w-fill md:justify-between md:w-screen px-4 py-2 border" style={{backgroundColor:myTheme.theme.screenBack}}>
+      <div className="flex items-center justify-between mx-auto" style={{color:myTheme.theme.foreground}}>
 
         {/*Toggle Menu icon*/}
         <div className="text-4xl md:hidden">
-          <button className="border-2 pl-3 pr-3" onClick={menu.toggleMenu}>=</button>
+          <button className="border-2 pl-3 pr-3" onClick={menu.toggleMenu}>
+            =
+          </button>
         </div>
 
         {/* Logo */}

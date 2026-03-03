@@ -4,6 +4,7 @@ import Image from "next/image"
 import Logo from "../../../../assets/images/logo.png"
 import Link from "next/link"
 import { useState } from "react"
+import { useTheme } from "@/contexts/ThemeContext"
 
 export default function Register(){
 
@@ -11,6 +12,7 @@ export default function Register(){
   const [email, setEmail] = useState("");
   const [password, setPassord] = useState("");
   const [password2, setPassord2] = useState("");
+  const myTheme = useTheme();
 
   function register(){
     if (userName == "" || email == "" || password == "" || password2 == ""){
@@ -26,7 +28,7 @@ export default function Register(){
   }
 
   return(
-    <div className="bg-[#C4D0DA] w-screen h-screen flex flex-col items-center justify-center">
+    <div className="w-screen h-screen flex flex-col items-center justify-center" style={{color:myTheme.theme.foreground}}>
       
       <div className="mb-5">
         <Image src={Logo} alt="logo" width={200}/>
@@ -38,22 +40,22 @@ export default function Register(){
           <div>
             
             <p className="font-bold">Nome de Usuário</p>
-            <input type="text" className="w-100 h-12 bg-gray-300 rounded-2xl border pl-2" maxLength={42} value={userName} onChange={(event) => setUserName(event.target.value)}/>
+            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={userName} onChange={(event) => setUserName(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Email</p>
-            <input type="text" className="w-100 h-12 bg-gray-300 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
+            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Senha</p>
-            <input type="text" className="w-100 h-12 bg-gray-300 rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassord(event.target.value)}/>
+            <input type="text" className="w-100 h-12  rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassord(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Confirme a senha</p>
-            <input type="text" className="w-100 h-12 bg-gray-300 rounded-2xl border pl-2" maxLength={42} value={password2} onChange={(event) => setPassord2(event.target.value)}/>
+            <input type="text" className="w-100 h-12  rounded-2xl border pl-2" maxLength={42} value={password2} onChange={(event) => setPassord2(event.target.value)}/>
           </div>
         </div>
       </div>

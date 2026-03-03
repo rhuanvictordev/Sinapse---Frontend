@@ -4,11 +4,13 @@ import Image from "next/image"
 import Logo from "../../../../assets/images/logo.png"
 import Link from "next/link"
 import { useState } from "react"
+import { useTheme } from "@/contexts/ThemeContext"
 
 export default function Register(){
 
 const [email, setEmail] = useState("");
 const [btnDisabled, setbtnDisabled] = useState(false);
+const myTheme = useTheme();
 
 function sendConfirmation(){
     if (email == ""){
@@ -24,7 +26,7 @@ function sendConfirmation(){
 
   return(
 
-    <div className="bg-[#C4D0DA] w-screen h-screen flex flex-col items-center justify-center">
+    <div className="w-screen h-screen flex flex-col items-center justify-center" style={{color:myTheme.theme.foreground}}>
         <div className="mb-5">
             <Image src={Logo} alt="logo" width={200}/>
         </div>
@@ -33,7 +35,7 @@ function sendConfirmation(){
 
         <div>
             <p className="font-bold">Email</p>
-            <input type="text" className="w-100 h-12 bg-gray-300 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
+            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
         </div>
 
         <p className="mt-5 mb-5 w-100">

@@ -7,12 +7,19 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { redirect, useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext";
+import { Modal } from "@/app/components/modal/Modal"
+import { useToast } from "@/contexts/ToastContext"
+import { useTheme } from "@/contexts/ThemeContext"
 
 export default function Login(){
   const { user, login, loading } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState("rhuansoliveira1072@gmail.com");
   const [password, setPassword] = useState("Rrr19283.");
+  const [modalVisible, setModalVisible] = useState(false);
+  const { showToast } = useToast();
+  const myTheme = useTheme();
+  
 
   useEffect(() => {
     if (!loading && user) {
@@ -23,16 +30,16 @@ export default function Login(){
 
   function validateFields(){
     if (email == "" || password == ""){
-      alert("Preencha todos os campos!")
+      showToast("Preencha todos os campos!", "error")
       return
     }
     login(email, password);
   }
 
   return(
-    <div className="bg-[#C4D0DA] w-screen h-screen flex flex-col items-center justify-center">
+    <div className="w-screen h-screen flex flex-col items-center justify-center" style={{color:myTheme.theme.foreground}}>
       
-      <div className="mb-10">
+      <div>
         <Image src={Logo} alt="logo" width={200}/>
       </div>
 
@@ -40,12 +47,12 @@ export default function Login(){
         <div className="flex flex-col gap-4">
           <div>
             <p className="font-bold">Email</p>
-            <input type="text" className="w-100 h-12 bg-gray-300 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
+            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Senha</p>
-            <input type="text" className="w-100 h-12 bg-gray-300 rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassword(event.target.value)}/>
+            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassword(event.target.value)}/>
           </div>
         </div>
 
@@ -66,8 +73,7 @@ export default function Login(){
 
         <button
           className="w-32 h-10 p-2 bg-blue-500 rounded-2xl text-white hover:bg-blue-400 hover:text-white hover:border-white transition duration-300 cursor-pointer"
-          onClick={validateFields}
-        >
+          onClick={validateFields}>
           Entrar
         </button>
 

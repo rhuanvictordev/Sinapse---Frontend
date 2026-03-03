@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { sinapseAPI } from "@/services/api";
+import { useToast } from "@/contexts/ToastContext"
 
 type UserType = {
   _id?: string;
@@ -30,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { showToast } = useToast();
 
   // RESTAURA USUARIO AO INICIAR
   useEffect(() => {
@@ -46,11 +48,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const obj = {email: email, password: password}
     try {
       const response = await sinapseAPI.post("/users/login", obj )
-      const user = response.data
-      localStorage.setItem("user", JSON.stringify(user))
-      setUser(user)
-      router.push("/home")
+      if (response.data){
+        const user = response.data
+        console.log(user)
+        localStorage.setItem("user", JSON.stringify(user))
+        setUser(user)
+        router.push("/home")
+        showToast("Logado com sucesso.", "success")
+      }
     } catch (error: any) {
+      showToast("Email ou senha incorretos.", "error")
       console.log("Erro no login:", error.response?.data || error.message)
     }
   }

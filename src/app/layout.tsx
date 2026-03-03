@@ -3,6 +3,10 @@
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { StateProvider } from "@/contexts/StateContext";
+import { ToastProvider } from "@/contexts/ToastContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { AppWrapper } from "./components/AppWrappper";
+
 
 export default function RootLayout({
   children,
@@ -11,15 +15,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className="bg-[#C4D0DA]">
-        <AuthProvider>
+      <body>
+        <ThemeProvider>
+          <ToastProvider>
+          <AuthProvider>
             <StateProvider>
-                {children}
+                <AppWrapper>
+                  {children}
+                </AppWrapper>
             </StateProvider>
-        </AuthProvider>
+          </AuthProvider>
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-
-// NUNCA INSERIR O AUTH CONTEXT AQUI, ESSA É A ROTA BASE
