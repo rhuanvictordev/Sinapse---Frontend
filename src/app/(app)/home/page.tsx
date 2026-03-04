@@ -46,7 +46,7 @@ export default function Home() {
     
     <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center md:h-20 border border-black">
       <h2 className="font-bold md:text-2xl mt-3 py-2">Cursos disponíveis</h2>
-      <button className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold md:rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300">+ Criar Curso</button>
+      <button className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold md:rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={()=>{router.push("/course/create")}}>+ Criar Curso</button>
     </header>
     
     <div style={{backgroundColor:myTheme.theme.screenBack}}>

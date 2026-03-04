@@ -2,7 +2,8 @@
     "terminal.integrated.profiles.windows": {
         "PowerShell": {
             "source": "PowerShell",
-            "icon": "terminal-powershell"
+            "icon": "terminal-powershell",
+            "path": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
         },
         "Command Prompt": {
             "path": [
@@ -15,6 +16,9 @@
         "Git Bash": {
             "source": "Git Bash",
             "icon": "terminal-git-bash"
+        },
+        "Windows PowerShell": {
+            "path": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
         },
         "🔊 FAAAH Shell": {
             "path": "powershell.exe",

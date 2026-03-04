@@ -6,74 +6,94 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Trash } from "@/app/components/icons";
 
-type Course = {
+type Category = {
   id: number
   name: string
 }
 
 export default function CreateCourse() {
   const { user, login, logout } = useAuth();
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [created, setCreated] = useState(false);
   const myTheme = useTheme();
 
   useEffect( () => {
-    //getCourses();
+    getCategories();
   }, [])
 
-  async function getCourses(){
+  async function getCategories(){
     const response = await LocalAPI.get("/categories");
-    setCourses(response.data);
+    setCategories(response.data);
   }
 
-  return (
-  <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
-    
-    <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4  text-center border md:h-20 border-black">
-      <h2 className="font-bold md:text-2xl mt-3 py-2">Criação de novo curso</h2>
-    </header>
-      
-    <div className="w-full h-full bg-(--area-back)">
-        <div className="w-fill h-fill md:p-4 p-2 md:px-2">
-            <div className="flex flex-col h-fill">
-                <div className="h-fill">
-                    <div>
-                        <div className="w-fill h-40 text-center md:text-left">
-                            <div className="md:mt-8 mt-0">
-                                <h2 className="text-xl font-bold">Criar Categoria</h2>
-                            </div>
-                            <div className="flex md:flex-row flex-col md:gap-4 gap-4">
-                                <input type="text" className="border bg-(--input-back) pl-2 text-(--input-fore) font-bold md:w-200 w-fill h-10 rounded-lg md:mb-0 mb-2 md:mt-0 mt-2" maxLength={50}/>
-                                <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) font-bold rounded-lg cursor-pointer duration-300 md:px-4 md:py-2 h-10">CRIAR</button>
-                            </div>
-                            <div className="md:mt-14 mt-2">
-                                <h2 className="font-bold md:text-xl text-lg">Categorias existentes</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border md:mt-0 mt-8">
-                        <table className="w-full h-fill border-collapse">
-                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
-                                <tr>
-                                    <th className="text-left border pl-2 md:py-3">Nome</th>
-                                    <th className="text-left border pl-2 md:py-3 w-20">Opções</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore)">
-                                {
-                                courses.map((item) => (
-                                    <tr key={item.id}>
-                                        <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.name}</td>
-                                        <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"><img src={Trash.src} alt="trash" /></td>
-                                    </tr>
-                                ))
-                                }
-                            </tbody>
-                        </table>
+  if (!created){ return (
+    <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
+        <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4  text-center border md:h-20 border-black">
+        <h2 className="font-bold md:text-2xl mt-3 py-2">Criação de novo curso</h2> {/* titulo externo */}
+        </header>
+        <div className="p-0 h-full"> {/* paddind da area interna */}
+            <div className="w-full h-full bg-(--area-back)"> {/* area interna */}
+                {/* conteudo inicio */}
+                <div className="md:w-250 flex flex-col md:items-end">
+                    <div className="flex flex-col pt-6 md:gap-8 gap-4">
+                    <div className="flex md:flex-row flex-col">
+                        <h2 className="md:text-xl text-xl font-bold text-center md:text-left mb-2">Categoria:</h2>
+                        <select className="md:w-200 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                            {
+                            categories.map((item)=>(
+                                <option key={item.id}>{item.name}</option>
+                            ))
+                            }
+                        </select>
                     </div>
                 </div>
+                <div className="flex flex-col pt-6 md:gap-8 gap-4">
+                    <div className="flex md:flex-row flex-col">
+                        <h2 className="md:text-xl text-xl font-bold text-center md:text-left mb-2">Nome:</h2>
+                        <input maxLength={50} type="text" className="bg-(--input-back) text-(--input-fore) md:w-200 ml-2 mr-2 w-fill rounded-lg pl-2 md:ml-4 h-10 font-bold" />
+                    </div>
+                </div>
+                    <div className="flex flex-col pt-6 md:gap-8 gap-4">
+                        <div className="flex md:flex-row flex-col">
+                            <h2 className="md:text-xl text-xl font-bold text-center md:text-left mb-2">Privado:</h2>
+                            <select className="md:w-200 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div className="pt-10 flex md:justify-end justify-center">
+                            <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) w-40 h-10 md:mr-2 font-bold rounded-lg cursor-pointer" onClick={() => setCreated(true)}>Criar curso</button>
+                        </div>
+                    </div>
+                </div>
+                {/* conteudo fim */}
             </div>
         </div>
     </div>
-  </div>
-)
+    )
+  } else { return (
+
+        <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
+        <div className="p-0 h-full"> {/* paddind da area interna */}
+            <div className="w-full h-full bg-(--area-back)"> {/* area interna */}
+                {/* conteudo inicio */}
+                <div className="md:w-160 flex flex-col md:items-end">
+                    <div className="flex flex-col pt-6 md:gap-8 gap-4">
+                        <div className="flex md:flex-row flex-col">
+                            <h2 className="md:text-3xl text-xl font-bold text-center md:text-left mb-2 mt-20">Curso Criado!</h2>
+                        </div>
+                        <div className="flex md:flex-row flex-col mt-20 md:mt-0">
+                            <h2 className="md:text-xl text-lg font-bold text-center md:text-left mb-2 ml-10 md:ml-0 mr-10">Navegue até a página inicial para começar a criar quizzes.</h2>
+                        </div>
+                        <div className="pt-10 flex md:justify-end justify-center">
+                            <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) w-40 h-10 md:mr-2 font-bold rounded-lg cursor-pointer">Ver Cursos</button>
+                        </div>
+                    </div>
+                </div>
+                {/* conteudo fim */}
+            </div>
+        </div>
+    </div>
+    )
+  }
 }
