@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useMenu } from "@/contexts/StateContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { ScrollToTopButton } from "../components/scroll/ScrollTop";
 
 export default function AppLayout({children,}: {children: React.ReactNode;}) {
   const { user, loading } = useAuth();
@@ -36,11 +37,13 @@ export default function AppLayout({children,}: {children: React.ReactNode;}) {
         <Menu />
       </div>
 
-      <div className="flex-1" style={{backgroundColor:myTheme.theme.screenBack}}> {/* Conteudo */}
+      <div className="flex-1 md:ml-70" style={{backgroundColor:myTheme.theme.screenBack}}> {/* Conteudo */}
         {children}
+        <ScrollToTopButton/>
       </div>
 
     </div>
+
   </div>
 );
 }

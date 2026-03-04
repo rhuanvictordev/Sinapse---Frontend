@@ -17,7 +17,7 @@ export default function Header() {
   }
 
   return (
-    <header className="md:pl-10 md:pr-12 md:py-4 md:w-fill md:justify-between md:w-screen px-4 py-2 border" style={{backgroundColor:myTheme.theme.screenBack}}>
+    <header className="md:pl-10 md:pr-12 md:py-4 md:w-fill md:justify-between md:w-full px-4 py-2 border" style={{backgroundColor:myTheme.theme.screenBack}}>
       <div className="flex items-center justify-between mx-auto" style={{color:myTheme.theme.foreground}}>
 
         {/*Toggle Menu icon*/}

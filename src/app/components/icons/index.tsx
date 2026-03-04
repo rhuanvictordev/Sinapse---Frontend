@@ -5,6 +5,7 @@ import Star from "@/../assets/images/star.png"
 import Power from "@/../assets/images/power.png"
 import Pencil from "@/../assets/images/pencil.png"
 import Trash from "@/../assets/images/trash.png"
+import Persons from "@/../assets/images/persons.png"
 
 export {
   Folder,
@@ -13,5 +14,6 @@ export {
   Star,
   Power,
   Pencil,
-  Trash
+  Trash,
+  Persons
 }

@@ -5,6 +5,7 @@ import { LocalAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Pencil, Trash } from "@/app/components/icons"
+import { useRouter } from "next/navigation";
 
 type Ranking = {
   user_id: number;
@@ -27,6 +28,7 @@ type Course = {
 
 export default function Home() {
   const { user, login, logout } = useAuth();
+  const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
   const myTheme = useTheme();
 
@@ -42,12 +44,12 @@ export default function Home() {
   return (
   <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
     
-    <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center md:h-20">
+    <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center md:h-20 border border-black">
       <h2 className="font-bold md:text-2xl mt-3 py-2">Cursos disponíveis</h2>
       <button className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold md:rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300">+ Criar Curso</button>
     </header>
     
-    <div className="" style={{backgroundColor:myTheme.theme.background}}>
+    <div style={{backgroundColor:myTheme.theme.screenBack}}>
       
       <div className="md:p-10 md:gap-10 gap-2 flex flex-row flex-wrap justify-center">
           {
@@ -66,18 +68,17 @@ export default function Home() {
                 </div>
 
                 <div className="justify-between flex md:w-140 md:mt-12 mt-3 md:ml-10 gap-2 pl-2 md:pl-0">
-                  <button className="cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-4 text-white px-2 bg-(--button-enter) hover:bg-(--button-enter-hover) hover:text-white"> Entrar </button>
+                  <button className="cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-4 text-white px-2 bg-(--button-enter) hover:bg-(--button-enter-hover) hover:text-white duration-300"> Entrar </button>
                   {!item.visibility && (
                     <>
                       <div className="md:w-90 w-full md:h-18 h-8 flex flex-row justify-between md:mr-4 mr-2 gap-2">
-                        <button className="bg-(--button-edit) hover:bg-(--button-edit-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 md:px-0 flex items-center justify-center gap-2"><img src={Pencil.src} className="w-5 h-5"/> Editar</button>
-                        <button className="bg-(--button-delete) hover:bg-(--button-delete-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 flex items-center justify-center gap-2"><img src={Trash.src} className="w-5 h-5"/> Excluir</button>
+                        <button className="bg-(--button-edit) hover:bg-(--button-edit-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 md:px-0 flex items-center justify-center gap-2 duration-300"><img src={Pencil.src} className="w-5 h-5"/> Editar</button>
+                        <button className="bg-(--button-delete) hover:bg-(--button-delete-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 flex items-center justify-center gap-2 duration-300"><img src={Trash.src} className="w-5 h-5"/> Excluir</button>
                       </div>
                     </>
                   )}
                 </div>
               </div>
-
             </div>
           ))
           
@@ -85,7 +86,6 @@ export default function Home() {
 
       </div>
     </div>
-    <ScrollToTopButton/>
   </div>
 )
 }
