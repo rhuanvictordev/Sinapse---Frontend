@@ -19,21 +19,21 @@ const ToastContext = createContext({} as ToastContextType)
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toast, setToast] = useState<Toast | null>(null)
 
-  function showToast(message: string, type: ToastType = "info", duration = 3000) {
+  function showToast(message: string, type: ToastType = "info", duration = 1000) {
     if(message.length <= 10){
-      duration = 2000
+      duration = 1000
     }
     if(message.length >= 10 && message.length <= 20 ){
-      duration = 3000
+      duration = 1000
     }
     if(message.length >= 20 && message.length <= 30 ){
-      duration = 4000
+      duration = 2000
     }
     if(message.length >= 30 && message.length <= 45 ){
-      duration = 5000
+      duration = 2000
     }
     if(message.length >= 45 && message.length <= 70 ){
-      duration = 7000
+      duration = 2000
     }
     if(message.length >= 70){
       duration = 15000

@@ -9,7 +9,7 @@ type StateContextType = {
 
 const StateContext = createContext<StateContextType | undefined>(undefined)
 
-export function StateProvider({ children }: { children: React.ReactNode }) {
+export function MenuStateProvider({ children }: { children: React.ReactNode }) {
   const [menuActive, setMenuActive] = useState(false)
 
   function toggleMenu() {

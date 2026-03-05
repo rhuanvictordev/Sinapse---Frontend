@@ -21,6 +21,7 @@ type AuthContextType = {
   user: UserType | null;
   loading: boolean;
   login: (email: string, password: string) => void;
+  register: (name: string, email: string, password: string) => void;
   logout: () => void;
 };
 
@@ -58,8 +59,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error: any) {
       showToast("Email ou senha incorretos.", "error")
-      console.log("Erro no login:", error.response?.data || error.message)
     }
+  }
+
+
+  async function register(name: string, email: string, password: string){
+      const obj = {name: name, email: email, password: password}
+      try {
+        const response = await sinapseAPI.post("/users", obj )
+        if (response.data){
+          showToast("Conta criada com sucesso. Realize o login", "success")
+          router.push("/login")
+        }
+      } catch (error: any) {
+        showToast("Não foi possível criar a conta. Esse email já existe!", "error")
+      }
   }
 
   function logout() {
@@ -69,7 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

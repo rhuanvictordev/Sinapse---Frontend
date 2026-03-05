@@ -19,17 +19,8 @@
         },
         "Windows PowerShell": {
             "path": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-        },
-        "🔊 FAAAH Shell": {
-            "path": "powershell.exe",
-            "args": [
-                "-NoExit",
-                "-ExecutionPolicy",
-                "Bypass",
-                "-File",
-                "c:\\Users\\Usuario\\.vscode\\extensions\\salmanfarsi-faaah.faaah-when-your-code-fails-to-run-0.0.2\\media\\faah-prompt.ps1"
-            ]
         }
     },
-    "terminal.integrated.defaultProfile.windows": "🔊 FAAAH Shell"
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "code-runner.runInTerminal": true
 }

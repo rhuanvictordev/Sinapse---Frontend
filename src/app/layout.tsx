@@ -2,10 +2,9 @@
 
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { StateProvider } from "@/contexts/StateContext";
+import { MenuStateProvider } from "@/contexts/StateContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { AppWrapper } from "./components/AppWrappper";
 
 
 export default function RootLayout({
@@ -18,13 +17,11 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <ToastProvider>
-          <AuthProvider>
-            <StateProvider>
-                <AppWrapper>
+            <AuthProvider>
+              <MenuStateProvider>
                   {children}
-                </AppWrapper>
-            </StateProvider>
-          </AuthProvider>
+              </MenuStateProvider>
+            </AuthProvider>
           </ToastProvider>
         </ThemeProvider>
       </body>

@@ -5,6 +5,8 @@ import Logo from "../../../../assets/images/logo.png"
 import Link from "next/link"
 import { useState } from "react"
 import { useTheme } from "@/contexts/ThemeContext"
+import { useToast } from "@/contexts/ToastContext"
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function Register(){
 
@@ -13,60 +15,65 @@ export default function Register(){
   const [password, setPassord] = useState("");
   const [password2, setPassord2] = useState("");
   const myTheme = useTheme();
+  const toast = useToast();
+  const { user, login, logout, register } = useAuth();
 
-  function register(){
+  function createUser(){
     if (userName == "" || email == "" || password == "" || password2 == ""){
-      alert("Preencha todos os campos!");
+      toast.showToast("Preecha todos os campos!", "error")
       return;
     }
     if (password != password2){
-      alert("As senhas não coincidem!");
+      toast.showToast("As senhas não coincidem!", "error")
       return;
     }
-
-    console.log(userName, email, password);
+    if (!email.includes("@") || !email.includes(".")){
+      toast.showToast("Insira um email válido!", "error")
+      return
+    }
+    register(userName, email, password)
   }
 
   return(
-    <div className="w-screen h-screen flex flex-col items-center justify-center" style={{color:myTheme.theme.foreground}}>
+    <div className="w-full h-full flex flex-col items-center justify-center pt-2" style={{color:myTheme.theme.foreground}}>
       
-      <div className="mb-5">
+      <div className="md:mb-5">
         <Image src={Logo} alt="logo" width={200}/>
       </div>
-      <h3 className="text-center font-bold text-3xl mb-8">Crie sua conta</h3>
-      <div>
+
+      <h3 className="text-center font-bold text-2xl md:mb-8 mb-4"> Crie sua conta </h3>
+
+      <div className="md:w-100 w-80">
         <div className="flex flex-col gap-4">
 
-          <div>
+          <div className="md:w-100 w-80">
             
             <p className="font-bold">Nome de Usuário</p>
-            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={userName} onChange={(event) => setUserName(event.target.value)}/>
+            <input type="text" className="md:w-100  w-80 md:h-12 h-10 rounded-2xl border pl-2" maxLength={42} value={userName} onChange={(event) => setUserName(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Email</p>
-            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
+            <input type="text" className="md:w-100  w-80 md:h-12 h-10 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Senha</p>
-            <input type="text" className="w-100 h-12  rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassord(event.target.value)}/>
+            <input type="text" className="md:w-100  w-80 md:h-12 h-10  rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassord(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Confirme a senha</p>
-            <input type="text" className="w-100 h-12  rounded-2xl border pl-2" maxLength={42} value={password2} onChange={(event) => setPassord2(event.target.value)}/>
+            <input type="text" className="md:w-100  w-80 md:h-12 h-10  rounded-2xl border pl-2" maxLength={42} value={password2} onChange={(event) => setPassord2(event.target.value)}/>
           </div>
         </div>
       </div>
 
-      <div className="flex w-100 justify-between gap-4 mt-8">
-        <button className="bg-[#2C79D0] text-white font-bold rounded-2xl justify-between w-35 pl-6 pr-6 p-2 ml-32 cursor-pointer hover:bg-blue-400 duration-300"
-          onClick={register}>
-        Criar conta
-        </button>
+      <div className="flex md:w-100 w-80 justify-center items-center gap-4 md:mt-8 mt-6 flex-col">
+        <button className=" bg-(--button-back) text-(--button-fore) font-bold rounded-2xl justify-between w-35 p-2 cursor-pointer hover:bg-(--button-hover) duration-300" onClick={createUser}>Criar conta </button>
+        <Link href={"/login"} className="md:mt-4 mt-2 text-center">Voltar</Link>
       </div>
-        <Link href={"/login"} className="mt-4">Voltar</Link>
+        
     </div>
   )
 }

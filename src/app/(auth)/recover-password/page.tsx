@@ -31,27 +31,24 @@ function sendConfirmation(){
             <Image src={Logo} alt="logo" width={200}/>
         </div>
         
-        <h3 className="text-center font-bold text-2xl mb-8">Recuperar Senha</h3>
+            <h3 className="text-center font-bold text-2xl mb-8">Recuperação de Senha</h3>
+            
+            <div className="md:w-100 w-80 text-center">
+                <div className="text-left">
+                    <p className="font-bold">Email</p>
+                    <input type="text" className="w-80 md:w-100 h-12 rounded-2xl border" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
+                </div>
+                <p className="mt-5 mb-5 md:w-100 w-80">
+                    Caso o E-mail informado corresponda a um <strong>usuário do Sinapse</strong>, enviaremos um link de confirmação para a alteração da senha.
+                </p>
 
-        <div>
-            <p className="font-bold">Email</p>
-            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
-        </div>
+                <button className="bg-(--button-back) text-white font-bold rounded-2xl justify-between w-80 pl-6 pr-6 p-2  cursor-pointer hover:bg-(--button-hover) duration-300" onClick={sendConfirmation} disabled={btnDisabled}> Enviar código </button>
 
-        <p className="mt-5 mb-5 w-100">
-        Caso o E-mail informado corresponda a um <strong>usuário do Sinapse</strong>, enviaremos um link de confirmação para a alteração da senha.
-        </p>
-
-        <div className="flex w-100 justify-between gap-4">
-            <button className="bg-[#2C79D0] text-white font-bold rounded-2xl justify-between w-100 pl-6 pr-6 p-2  cursor-pointer hover:bg-blue-400 duration-300"
-            id="btnSendCode"
-            onClick={sendConfirmation}
-            disabled={btnDisabled}
-            >
-            Enviar código
-            </button>
-        </div>
-            <Link href={"/login"} className="mt-4">Voltar</Link>
+                <div className="text-center mt-8">
+                    <Link href={"/login"} className="mt-4 text-center">Voltar</Link>
+                </div>
+            </div>
+        
     </div>
   )
 }

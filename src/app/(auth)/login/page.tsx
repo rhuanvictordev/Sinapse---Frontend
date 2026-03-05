@@ -29,10 +29,16 @@ export default function Login(){
   
 
   function validateFields(){
-    if (email == "" || password == ""){
+    if (email === "" || password === ""){
       showToast("Preencha todos os campos!", "error")
       return
     }
+
+    if (!email.includes("@") || !email.includes(".")){
+      showToast("Insira um email válido!", "error")
+      return
+    }
+
     login(email, password);
   }
 
@@ -43,16 +49,16 @@ export default function Login(){
         <Image src={Logo} alt="logo" width={200}/>
       </div>
 
-      <div>
+      <div className="md:w-100 w-80">
         <div className="flex flex-col gap-4">
-          <div>
+          <div className="w-full">
             <p className="font-bold">Email</p>
-            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
+            <input type="text" className="w-full h-12 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
           </div>
 
-          <div>
+          <div className="w-full">
             <p className="font-bold">Senha</p>
-            <input type="text" className="w-100 h-12 rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassword(event.target.value)}/>
+            <input type="text" className="w-full h-12 rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassword(event.target.value)}/>
           </div>
         </div>
 
@@ -64,7 +70,7 @@ export default function Login(){
         </div>
       </div>
 
-      <div className="flex w-100 justify-between gap-4">
+      <div className="flex md:w-100 w-80 justify-between gap-4">
         
         <button className="flex items-center justify-center gap-3 w-60 h-10 p-2 border rounded-2xl hover:bg-blue-400 hover:text-white duration-300 cursor-pointer hover:text-bold">
           <Image src={Google} alt="google_logo" width={20} height={20} />
@@ -72,7 +78,7 @@ export default function Login(){
         </button>
 
         <button
-          className="w-32 h-10 p-2 bg-blue-500 rounded-2xl text-white hover:bg-blue-400 hover:text-white hover:border-white transition duration-300 cursor-pointer"
+          className="w-32 h-10 p-2 bg-(--button-back) rounded-2xl text-white hover:bg-(--button-hover) hover:text-white hover:border-white transition duration-300 cursor-pointer"
           onClick={validateFields}>
           Entrar
         </button>
