@@ -33,30 +33,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { showToast } = useToast();
 
-  // RESTAURA USUARIO Do local storage
+  // VALIDA SE O USUARIO EXISTE AO RECARREGAR A PAGINA
   useEffect(() => {
+    console.log("Effect do authContext")
+    setLoading(true)
+    const storedToken = localStorage.getItem("token");
     const storedUserID = localStorage.getItem("userID");
 
-    if (storedUserID && !user) {
-      getByID(storedUserID)
+    if ((storedUserID && !storedToken) || (!storedUserID && storedToken)){
+      logout();
+      return
     }
 
-    setLoading(false);
+    if (!user || !storedToken){
+      
+      if (storedUserID) {
+        getByID(storedUserID)
+      }else{
+        logout();
+      }
+
+    }else{
+      setLoading(false)
+    }
   }, []);
+
 
   async function getByID(id: string){
     try {
-      const token = localStorage.getItem("token")
-        if (token){
-          const response = await sinapseAPI.get(`/users/${id}`)
-            if (response.data){
-              setUser(response.data)
-        }
+    const token = localStorage.getItem("token")
+      if (token){
+      const response = await sinapseAPI.get(`/users/${id}`)
+      if (response.data){
+        setUser(response.data)
+        console.log("Usuario: " + JSON.stringify(response.data))
+        setLoading(false)
       }
+    }
     } catch (error: any) {
       const message = error?.response?.data?.message || "Sessão expirada"
-      localStorage.removeItem("token")
-      localStorage.removeItem("userID")
+      logout();
       showToast("message", "error")
     }
   }
@@ -69,6 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("userID", response.data._id)
         localStorage.setItem("token", response.data.token)
         setUser(response.data)
+        setLoading(false)
         router.push("/home")
         showToast("Logado com sucesso.", "success")
       }

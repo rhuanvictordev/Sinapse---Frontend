@@ -72,7 +72,7 @@ const lightTheme: ThemeColors = {
   buttonEnterHover: "#313F5F",
   buttonEdit: "#EEEDE7",
   buttonEditHover: "#B8B8B8",
-  buttonDelete: "#000000",
+  buttonDelete: "#A29BFF",
   buttonDeleteHover: "#B8B8B8",
   menuButtonBack: "#EEEEF6",
   menuButtonHover: "#BDC1DE",

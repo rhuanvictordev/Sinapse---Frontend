@@ -1,11 +1,11 @@
 "use client"
-import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
-import { useAuth } from "@/contexts/AuthContext";
+
 import { LocalAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Pencil, Trash } from "@/app/components/icons"
+import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons"
 import { useRouter } from "next/navigation";
+import { Modal } from "@/app/components/modal/Modal";
 
 type Ranking = {
   user_id: number;
@@ -27,10 +27,10 @@ type Course = {
 }
 
 export default function Home() {
-  const { user, login, logout } = useAuth();
   const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
   const myTheme = useTheme();
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect( () => {
     getCourses();
@@ -41,23 +41,28 @@ export default function Home() {
     setCourses(response.data);
   }
 
+  async function deleteDiscipline(id: number){
+      setModalVisible(true)
+  }
+
   return (
   <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
-    
+
+    <Modal message="Deseja remover esta disciplina?" textButton="Remover" active={modalVisible} onClose={()=>{setModalVisible(false)}} onConfirm={()=>{}} showInput={false} subText=""></Modal>
+
     <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center md:h-20 border border-black">
-      <h2 className="font-bold md:text-2xl mt-3 py-2">Cursos disponíveis</h2>
-      <button className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold md:rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={()=>{router.push("/course/create")}}>+ Criar Curso</button>
+      <h2 className="font-bold md:text-2xl mt-3 py-2">Disciplinas disponíveis</h2>
+      <button className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 rounded-lg" onClick={()=>{router.push("/course/create")}}>+ Criar Disciplina</button>
     </header>
     
     <div style={{backgroundColor:myTheme.theme.screenBack}}>
       
-      <div className="md:p-10 md:gap-10 gap-2 flex flex-row flex-wrap justify-center">
+      <div className="flex flex-wrap gap-4 md:gap-6 justify-center mt-4 md:mt-10 mb-8 md:m-8">
           {
 
           courses.map((item) => (
-            <div key={item.id} className="md:w-160 border w-84 md:h-80 h-fill mt-4 md:pb-2 pb-4 mb-4 bg-(--card-back) rounded-lg font-bold text-2xl overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.35)]">
+            <div key={item.id} className="md:w-130 w-84 border h-fill pb-4 bg-(--card-back) rounded-lg font-bold text-2xl overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.35)]">
               
-              <div>
                 <div className="ml-4 mr-5 mt-4 flex flex-row justify-between">
                   <h2 className="bg-(--card-hover) rounded-lg pl-2 pr-2 md:h-auto h-7 border overflow-hidden text-base md:text-2xl">{item.description}</h2>
                 </div>
@@ -67,19 +72,32 @@ export default function Home() {
                   {item.quizzes_ids.length > 1 ? ( <h2 className="md:mt-4 text-base md:text-2xl"> {item.quizzes_ids.length} Quizzes Disponíveis </h2> ) : ( <h2 className="text-base md:text-2xl md:mt-4"> {item.quizzes_ids.length} Quiz Disponível </h2> )}
                 </div>
 
-                <div className="justify-between flex md:w-140 md:mt-12 mt-3 md:ml-10 gap-2 pl-2 md:pl-0">
-                  <button className="cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-4 text-white px-2 bg-(--button-enter) hover:bg-(--button-enter-hover) hover:text-white duration-300" onClick={()=> router.push("/course/detail")}> Entrar </button>
-                  {!item.visibility && (
-                    <>
-                      <div className="md:w-90 w-full md:h-18 h-8 flex flex-row justify-between md:mr-4 mr-2 gap-2">
-                        <button className="bg-(--button-edit) hover:bg-(--button-edit-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 md:px-0 flex items-center justify-center gap-2 duration-300" onClick={()=> router.push("/course/edit")} ><img src={Pencil.src} className="w-5 h-5"/> Editar</button>
-                        <button className="bg-(--button-delete) hover:bg-(--button-delete-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 flex items-center justify-center gap-2 duration-300"><img src={Trash.src} className="w-5 h-5"/> Excluir</button>
+                <div className="mt-4 md:mt-10">
+                {
+                  <>
+                    {
+                      !item.visibility && (
+                      <div className="flex flex=row items-center justify-left ml-4 md:ml-12">
+                          <button className="h-10 bg-(--button-enter) hover:bg-(--button-enter-hover) duration-300 text-(--button-fore) flex items-center text-lg gap-2 px-5 rounded-lg cursor-pointer" onClick={()=> router.push("/course/detail")}> Entrar </button>
                       </div>
-                    </>
-                  )}
+                      )
+                    }
+                    
+                    {
+                      item.visibility && (
+                      <div className="flex flex=row items-center justify-center h-10">
+                        <div className="flex flex-row w-full justify-center md:gap-14 gap-4">
+                          <button className=" h-10 bg-(--button-enter) hover:bg-(--button-enter-hover) text-(--button-fore) duration-300 flex items-center text-lg gap-2 px-5 rounded-lg cursor-pointer" onClick={()=> router.push("/course/edit")} > Entrar</button>
+                          <button className=" h-10 bg-(--button-edit) hover:bg-(--button-edit-hover) duration-300 flex items-center text-lg gap-2 md:gap-4 px-2 rounded-lg cursor-pointer" onClick={()=> router.push("/course/edit")} ><img src={ myTheme.mode == "light" ? Pencil.src : PencilLight.src } className="w-5 h-5"/> Editar</button>
+                          <button className=" h-10 bg-(--button-delete) hover:bg-(--button-delete-hover) duration-300 flex items-center text-lg gap-2 md:gap-4 px-2 rounded-lg cursor-pointer" onClick={()=> deleteDiscipline(item.id)}><img src={ myTheme.mode == "light" ? Trash.src : TrashLight.src } className="w-5 h-5"/> Excluir</button>
+                        </div>
+                      </div>
+                      )
+                    }
+                  </>
+                }
                 </div>
               </div>
-            </div>
           ))
           
           }

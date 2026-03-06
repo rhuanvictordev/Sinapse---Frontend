@@ -19,14 +19,6 @@ export default function Login(){
   const [modalVisible, setModalVisible] = useState(false);
   const { showToast } = useToast();
   const myTheme = useTheme();
-  
-
-  useEffect(() => {
-    if (!loading && user) {
-      router.push("/home");
-    }
-  }, [user, loading]);
-  
 
   function validateFields(){
     if (email === "" || password === ""){

@@ -33,11 +33,11 @@ export default function Menu() {
         </li>
 
         <li>
-          <Link href="/categories" className={linkClass(pathname === "/categories")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Categories.src : CategoriesLight.src)} alt="" /> Categorias</Link>
+          <Link href="/categories" className={linkClass(pathname === "/categories")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Categories.src : CategoriesLight.src)} alt="" /> Períodos</Link>
         </li>
         
         <li>
-          <Link href="/find-courses" className={linkClass(pathname === "/find-courses")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Search.src : SearchLight.src)} alt="" /> Encontrar cursos</Link>
+          <Link href="/find-courses" className={linkClass(pathname === "/find-courses")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Search.src : SearchLight.src)} alt="" /> Encontrar Disciplinas</Link>
         </li>
         
         <li>
