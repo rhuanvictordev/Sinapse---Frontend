@@ -13,24 +13,13 @@ export const RickAPI = axios.create({
   baseURL: process.env.NEXT_PUBLIC_RICK
 });
 
-// ===============================
-// INTERCEPTOR DE REQUEST (TOKEN)
-// ===============================
-// Se quiser autenticação com token, descomente isso
-// LocalAPI.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("token");
-//
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//
-//   return config;
-// });
-
-// ===============================
-// INTERCEPTOR DE RESPONSE (DEBUG)
-// ===============================
-
+sinapseAPI.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 LocalAPI.interceptors.response.use(
   (response) => {
@@ -53,7 +42,6 @@ LocalAPI.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 
 sinapseAPI.interceptors.response.use(

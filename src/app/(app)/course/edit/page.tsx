@@ -1,0 +1,133 @@
+"use client"
+import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
+import { useAuth } from "@/contexts/AuthContext";
+import { LocalAPI } from "@/services/api";
+import { useEffect, useState } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
+import { Modal } from "@/app/components/modal/Modal";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/contexts/ToastContext";
+
+type Quiz = {
+  id: number
+  name: string
+}
+
+type Category = {
+  id: number
+  name: string
+}
+
+export default function Home() {
+  const { user, login, logout } = useAuth();
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const myTheme = useTheme();
+  const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
+  const toast = useToast();
+
+  useEffect( () => {
+    getQuizzes();
+    getCategories();
+  }, [])
+
+  async function getCategories(){
+    const response = await LocalAPI.get("/categories");
+    setCategories(response.data);
+  }
+
+  async function getQuizzes(){
+    const response = await LocalAPI.get("/quizzes");
+    setQuizzes(response.data);
+  }
+
+  async function createQuiz(){
+    setModalVisible(false)
+    toast.showToast("Quiz criado com sucesso!", "success")
+    getQuizzes();
+    
+  }
+
+  return (
+  <div>
+    <Modal active={modalVisible} message="Nome do Quiz:" textButton="Criar Quiz" onClose={()=>{setModalVisible(false)}} onConfirm={()=>{createQuiz()}}/>
+    <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
+    
+        <header className="flex flex-col md:justify-between justify-center border-black pl-2 mb-2">
+            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left">Editar curso</h2>
+            <h2 className="font-bold md:text-xl text-lg mt-3">Código de convite: <strong className="font-bold">{"RA025"}</strong></h2>
+            
+        </header>
+        
+        <div className="w-full h-full bg-(--area-back) p-2">
+            <div className="w-fill h-fill md:px-2">
+                <div className="h-fill">
+                    <div className="w-fill text-center md:text-left">
+                        <div className="flex md:flex-col md:gap-4">
+                            <div className="md:w-200 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
+                                <div className="flex md:flex-row flex-col md:mb-4 mb-2">
+                                    <h2 className="text-lg font-bold">Categoria:</h2>
+                                    <select className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                        {
+                                        categories.map( (item)=>(
+                                            <option key={item.id}>{item.name}</option>
+                                        ))
+                                        }
+                                    </select>
+                                </div>
+                                <div className="flex md:flex-row flex-col md:mb-4 mb-2">
+                                    <h2 className="text-lg font-bold">Nome:</h2>
+                                    <input className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
+                                </div>
+                                <div className="flex md:flex-row flex-col md:mr-120 items-center mb-4">
+                                    <h2 className="text-lg font-bold">Privado:</h2>
+                                    <select className="w-40 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                        <option>Não</option>
+                                        <option>Sim</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <button className="w-40 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={()=>{setModalVisible(true)}}>Salvar alterações</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-8 mb-4 pl-2">
+                        <div className="flex w-full justify-between pr-2 text-center items-center mt-16">
+                            <h2 className="font-bold md:text-xl text-xl mb-2">Quizzes neste curso</h2>
+                            <button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={()=>{setModalVisible(true)}}>+ Novo Quiz</button>
+                        </div>
+                    </div>
+                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
+                        <table className="w-full h-fill border-collapse">
+                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+                                <tr>
+                                    <th className="text-left border pl-2 md:py-3">Nome</th>
+                                    <th className="text-center border pl-2 md:py-3 w-20">Iniciar</th>
+                                    <th className="text-center border pl-2 md:py-3 w-20">Editar</th>
+                                    <th className="text-center border pl-2 md:py-3 w-20">Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-(--area-back) text-(--area-fore)">
+                            {
+                            quizzes.map((item) => (
+                                <tr key={item.id}>
+                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.name}</td>
+                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer">▶</td>
+                                    <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>router.push("/quiz/edit")}><img src={myTheme.mode == "light"? Pencil.src : PencilLight.src} alt="trash" /></td>
+                                    <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"><img src={myTheme.mode == "light"? Trash.src : TrashLight.src} alt="trash" /></td>
+                                </tr>
+                            ))
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+  </div>
+)
+}

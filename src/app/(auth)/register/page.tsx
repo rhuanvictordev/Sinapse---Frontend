@@ -35,7 +35,7 @@ export default function Register(){
   }
 
   return(
-    <div className="w-full h-full flex flex-col items-center justify-center pt-2" style={{color:myTheme.theme.foreground}}>
+    <div className="w-full h-full flex flex-col items-center justify-center pt-2 md:pt-25" style={{color:myTheme.theme.foreground}}>
       
       <div className="md:mb-5">
         <Image src={Logo} alt="logo" width={200}/>

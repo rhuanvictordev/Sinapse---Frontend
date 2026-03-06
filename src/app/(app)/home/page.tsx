@@ -68,11 +68,11 @@ export default function Home() {
                 </div>
 
                 <div className="justify-between flex md:w-140 md:mt-12 mt-3 md:ml-10 gap-2 pl-2 md:pl-0">
-                  <button className="cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-4 text-white px-2 bg-(--button-enter) hover:bg-(--button-enter-hover) hover:text-white duration-300"> Entrar </button>
+                  <button className="cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-4 text-white px-2 bg-(--button-enter) hover:bg-(--button-enter-hover) hover:text-white duration-300" onClick={()=> router.push("/course/detail")}> Entrar </button>
                   {!item.visibility && (
                     <>
                       <div className="md:w-90 w-full md:h-18 h-8 flex flex-row justify-between md:mr-4 mr-2 gap-2">
-                        <button className="bg-(--button-edit) hover:bg-(--button-edit-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 md:px-0 flex items-center justify-center gap-2 duration-300"><img src={Pencil.src} className="w-5 h-5"/> Editar</button>
+                        <button className="bg-(--button-edit) hover:bg-(--button-edit-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 md:px-0 flex items-center justify-center gap-2 duration-300" onClick={()=> router.push("/course/edit")} ><img src={Pencil.src} className="w-5 h-5"/> Editar</button>
                         <button className="bg-(--button-delete) hover:bg-(--button-delete-hover) cursor-pointer rounded-lg md:w-42 md:h-18 md:ml-3 px-2 flex items-center justify-center gap-2 duration-300"><img src={Trash.src} className="w-5 h-5"/> Excluir</button>
                       </div>
                     </>

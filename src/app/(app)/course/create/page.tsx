@@ -5,6 +5,7 @@ import { LocalAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Trash } from "@/app/components/icons";
+import { useRouter } from "next/navigation";
 
 type Category = {
   id: number
@@ -16,6 +17,7 @@ export default function CreateCourse() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [created, setCreated] = useState(false);
   const myTheme = useTheme();
+  const router = useRouter();
 
   useEffect( () => {
     getCategories();
@@ -86,7 +88,7 @@ export default function CreateCourse() {
                             <h2 className="md:text-xl text-lg font-bold text-center md:text-left mb-2 ml-10 md:ml-0 mr-10">Navegue até a página inicial para começar a criar quizzes.</h2>
                         </div>
                         <div className="pt-10 flex md:justify-end justify-center">
-                            <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) w-40 h-10 md:mr-2 font-bold rounded-lg cursor-pointer">Ver Cursos</button>
+                            <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) w-40 h-10 md:mr-2 font-bold rounded-lg cursor-pointer" onClick={()=> router.push("/home")}>Ver Cursos</button>
                         </div>
                     </div>
                 </div>

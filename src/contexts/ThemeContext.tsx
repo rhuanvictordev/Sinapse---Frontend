@@ -1,5 +1,6 @@
 "use client"
 
+import { Moon, Sun } from "@/app/components/icons"
 import { createContext, useContext, useEffect, useState } from "react"
 
 type ThemeMode = "light" | "dark"
@@ -42,6 +43,8 @@ type ThemeColors = {
   info: string
   inputBack: string
   inputFore: string
+  modalBack: string
+  modalFore: string
 }
 
 const lightTheme: ThemeColors = {
@@ -69,7 +72,7 @@ const lightTheme: ThemeColors = {
   buttonEnterHover: "#313F5F",
   buttonEdit: "#EEEDE7",
   buttonEditHover: "#B8B8B8",
-  buttonDelete: "#EEEDE7",
+  buttonDelete: "#000000",
   buttonDeleteHover: "#B8B8B8",
   menuButtonBack: "#EEEEF6",
   menuButtonHover: "#BDC1DE",
@@ -81,7 +84,9 @@ const lightTheme: ThemeColors = {
   warning: "#C99811",
   info: "#2770C2",
   inputBack: "#2C79D0",
-  inputFore: "#FFFFFF"
+  inputFore: "#FFFFFF",
+  modalBack: "#CADBFF",
+  modalFore: "#000000"
 }
 
 const darkTheme: ThemeColors = {
@@ -121,7 +126,9 @@ const darkTheme: ThemeColors = {
   warning: "#E3B341",           // amarelo quente
   info: "#4C9FFF",               // azul informativo claro
   inputBack: "#0F70DE",
-  inputFore: "#FFCC00"
+  inputFore: "#FFCC00",
+  modalBack: "#161D2B",
+  modalFore: "#000000"
 }
 
 type ThemeContextType = {
@@ -194,12 +201,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.style.setProperty("--menu-button-hover", theme.menuButtonHover)
     root.style.setProperty("--input-back", theme.inputBack)
     root.style.setProperty("--input-fore", theme.inputFore)
+    root.style.setProperty("--modal-back", theme.modalBack)
+    root.style.setProperty("--modal-fore", theme.modalFore)
     
   }, [theme])
 
   return (
     <ThemeContext.Provider value={{ theme, mode, toggleTheme }}>
-      <div className="fixed bottom-10 right-[-15] w-8 h-8 bg-blue-600 rounded-full cursor-pointer hover:border hover:bg-green-500" onClick={toggleTheme}></div>
+      <div className="bg-white fixed bottom-4 right-4 w-8 h-8 rounded-full cursor-pointer" onClick={toggleTheme}>
+        <img src={mode == "light"? Moon.src : Sun.src} alt="" className="flex justify-center items-center ml-1 mt-1" />
+      </div>
       {children}
     </ThemeContext.Provider>
   )

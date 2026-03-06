@@ -2,45 +2,48 @@
 
 import { useEffect, useState } from "react"
 
-type Props = {
+type Modal = {
   active: boolean
   message: string
   textButton: string
   onClose: () => void
+  onConfirm: () => void
 }
 
-export function Modal({ active, message, textButton, onClose }: Props) {
+export function Modal({ active, message, textButton, onClose, onConfirm }: Modal) {
   const [visible, setVisible] = useState(false)
+  const [animate, setAnimate] = useState(false)
 
   useEffect(() => {
     if (active) {
       setVisible(true)
+      setTimeout(() => { setAnimate(true) }, 10)
     } else {
-      const timer = setTimeout(() => {
-        setVisible(false)
-      }, 500) // tempo da animação
+      setAnimate(false)
+      const timer = setTimeout(() => { setVisible(false) }, 900)
       return () => clearTimeout(timer)
     }
   }, [active])
 
-  if (!active && !visible) return null
+
+  if (!visible) return null
 
   return (
-    <div className={`fixed inset-0 bg-black/40 flex items-center justify-center transition-opacity duration-500 ${active ? "opacity-100" : "opacity-0"}`}>
-      <div className={`bg-gray-100 md:w-[550px] w-[360px] rounded-2xl p-6 transition-all duration-300 ${active ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
-        <div className="flex flex-col">
+    <div className={`fixed inset-0 bg-black/70 flex items-center justify-center transition-opacity duration-900 ${ animate ? "opacity-100" : "opacity-0" }`}>
+      <div className="bg-(--modal-back) rounded-lg md:w-210 w-80 md:h-150 h-90 border-(--foreground) border text-center">
+        
+        <div className="flex flex-col items-center justify-center">
           
-          <div className="text-center flex flex-col justify-center min-h-[120px] md:min-h-[200px]">
-            <p className="md:text-lg font-light">{message}</p>
-          </div>
+          <p className="md:text-lg text-(--foreground) font-light md:mt-40 mt-10 md:mb-10 mb-4">{message}</p>
+          <input type="text" className="bg-(--input-back) text-(--input-fore) md:mb-10 h-10 md:w-200 w-74 rounded-lg pl-2" maxLength={70}/>
 
-          <div className="flex justify-center mt-6">
-            <button className="bg-blue-700 text-white text-sm md:text-lg font-bold px-6 py-2 rounded-xl hover:bg-blue-600 transition cursor-pointer" onClick={onClose}>
-              {textButton}
-            </button>
+          <div className="flex justify-center md:mt-58 mt-47 gap-5">
+            <button className="bg-(--button-delete) hover:bg-(--button-delete-hover) text-(--button-fore) text-sm md:text-lg font-bold px-6 py-2 rounded-xl transition cursor-pointer" onClick={onClose}> Cancelar </button>
+            <button className="bg-(--button-back) text-(--button-fore) text-sm md:text-lg font-bold px-6 py-2 rounded-xl hover:bg-(--button-hover) transition cursor-pointer" onClick={onConfirm}> {textButton} </button>
           </div>
 
         </div>
+
       </div>
     </div>
   )

@@ -16,7 +16,8 @@ import TrashLight from "@/../assets/images/trash_light.png"
 import PersonsLight from "@/../assets/images/persons_light.png"
 import ArrowToTop from "@/../assets/images/arrowToTop.png"
 import ArrowToTopLight from "@/../assets/images/arrowToTop_light.png"
-
+import Sun from "@/../assets/images/Sun.png"
+import Moon from "@/../assets/images/moon.png"
 
 export {
   Folder,
@@ -36,5 +37,7 @@ export {
   TrashLight,
   PersonsLight,
   ArrowToTop,
-  ArrowToTopLight
+  ArrowToTopLight,
+  Sun,
+  Moon
 }

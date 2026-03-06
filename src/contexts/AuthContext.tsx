@@ -9,7 +9,6 @@ type UserType = {
   _id?: string;
   name?: string;
   email?: string;
-  password?: string;
   paying?: boolean;
   is_admin?: boolean;
   answered_questions?: number;
@@ -34,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { showToast } = useToast();
 
-  // RESTAURA USUARIO AO INICIAR
+  // RESTAURA USUARIO Do local storage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
 
