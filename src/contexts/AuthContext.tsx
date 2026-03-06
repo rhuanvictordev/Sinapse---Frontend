@@ -35,48 +35,66 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // RESTAURA USUARIO Do local storage
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUserID = localStorage.getItem("userID");
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (storedUserID && !user) {
+      getByID(storedUserID)
     }
 
     setLoading(false);
   }, []);
 
-  async function login(email: string, password: string) {
-    const obj = {email: email, password: password}
+  async function getByID(id: string){
     try {
-      const response = await sinapseAPI.post("/users/login", obj )
-      if (response.data){
-        const user = response.data
-        console.log(user)
-        localStorage.setItem("user", JSON.stringify(user))
-        setUser(user)
-        router.push("/home")
-        showToast("Logado com sucesso.", "success")
+      const token = localStorage.getItem("token")
+        if (token){
+          const response = await sinapseAPI.get(`/users/${id}`)
+            if (response.data){
+              setUser(response.data)
+        }
       }
     } catch (error: any) {
-      showToast("Email ou senha incorretos.", "error")
+      const message = error?.response?.data?.message || "Sessão expirada"
+      localStorage.removeItem("token")
+      localStorage.removeItem("userID")
+      showToast("message", "error")
     }
   }
 
 
-  async function register(name: string, email: string, password: string){
-      const obj = {name: name, email: email, password: password}
-      try {
-        const response = await sinapseAPI.post("/users", obj )
-        if (response.data){
-          showToast("Conta criada com sucesso. Realize o login", "success")
-          router.push("/login")
-        }
-      } catch (error: any) {
-        showToast("Não foi possível criar a conta. Esse email já existe!", "error")
+  async function login(email: string, password: string) {
+    try {
+      const response = await sinapseAPI.post("/users/login", {email: email, password: password} )
+      if (response.data){
+        localStorage.setItem("userID", response.data._id)
+        localStorage.setItem("token", response.data.token)
+        setUser(response.data)
+        router.push("/home")
+        showToast("Logado com sucesso.", "success")
       }
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Erro ao fazer login"
+      showToast(message, "error")
+    }
+  }
+
+
+  async function register(name: string, email: string, password: string) {
+    try {
+      const response = await sinapseAPI.post("/users", { name, email, password })
+      if (response.data) {
+        router.push("/login")
+        showToast("Conta criada com sucesso. Realize o login", "success")
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Erro ao criar conta"
+      showToast(message, "error")
+    }
   }
 
   function logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem("userID");
+    localStorage.removeItem("token");
     setUser(null);
     router.push("/login");
   }
