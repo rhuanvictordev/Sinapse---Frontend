@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await sinapseAPI.get(`/users/${id}`)
       if (response.data){
         setUser(response.data)
-        console.log("Usuario: " + JSON.stringify(response.data))
+        //console.log("Usuario: " + JSON.stringify(response.data))
         setLoading(false)
       }
     }

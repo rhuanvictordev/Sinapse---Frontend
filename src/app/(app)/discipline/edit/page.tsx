@@ -14,7 +14,7 @@ type Quiz = {
   name: string
 }
 
-type Category = {
+type Semester = {
   id: number
   name: string
 }
@@ -22,7 +22,7 @@ type Category = {
 export default function Home() {
   const { user, login, logout } = useAuth();
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [semesters, setSemesters] = useState<Semester[]>([]);
   const myTheme = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
@@ -30,12 +30,12 @@ export default function Home() {
 
   useEffect( () => {
     getQuizzes();
-    getCategories();
+    getSemesters();
   }, [])
 
-  async function getCategories(){
+  async function getSemesters(){
     const response = await LocalAPI.get("/categories");
-    setCategories(response.data);
+    setSemesters(response.data);
   }
 
   async function getQuizzes(){
@@ -52,11 +52,11 @@ export default function Home() {
 
   return (
   <div>
-    <Modal active={modalVisible} message="Nome do Quiz:" textButton="Criar Quiz" onClose={()=>{setModalVisible(false)}} onConfirm={()=>{createQuiz()}}/>
+    <Modal active={modalVisible} message="Nome do Quiz:" textButton="Criar Quiz" onClose={()=>{setModalVisible(false)}} onConfirm={()=>{createQuiz()}} subText="" showInput={true}/>
     <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
     
         <header className="flex flex-col md:justify-between justify-center border-black pl-2 mb-2">
-            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left">Editar curso</h2>
+            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left">Editar Disciplina</h2>
             <h2 className="font-bold md:text-xl text-lg mt-3">Código de convite: <strong className="font-bold">{"RA025"}</strong></h2>
             
         </header>
@@ -68,10 +68,10 @@ export default function Home() {
                         <div className="flex md:flex-col md:gap-4">
                             <div className="md:w-200 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
-                                    <h2 className="text-lg font-bold">Categoria:</h2>
+                                    <h2 className="text-lg font-bold">Período:</h2>
                                     <select className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
                                         {
-                                        categories.map( (item)=>(
+                                        semesters.map( (item)=>(
                                             <option key={item.id}>{item.name}</option>
                                         ))
                                         }
@@ -81,8 +81,8 @@ export default function Home() {
                                     <h2 className="text-lg font-bold">Nome:</h2>
                                     <input className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
                                 </div>
-                                <div className="flex md:flex-row flex-col md:mr-120 items-center mb-4">
-                                    <h2 className="text-lg font-bold">Privado:</h2>
+                                <div className="flex md:flex-row flex-col md:mr-120 items-center mb-6 md:mt-0 mt-2">
+                                    <h2 className="text-lg font-bold">Priva disciplina:</h2>
                                     <select className="w-40 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
                                         <option>Não</option>
                                         <option>Sim</option>
@@ -96,7 +96,7 @@ export default function Home() {
                     </div>
                     <div className="mt-8 mb-4 pl-2">
                         <div className="flex w-full justify-between pr-2 text-center items-center mt-16">
-                            <h2 className="font-bold md:text-xl text-xl mb-2">Quizzes neste curso</h2>
+                            <h2 className="font-bold md:text-xl text-lg md:mb-2">Quizzes nesta disciplina</h2>
                             <button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={()=>{setModalVisible(true)}}>+ Novo Quiz</button>
                         </div>
                     </div>
