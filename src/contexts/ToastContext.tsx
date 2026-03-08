@@ -1,10 +1,10 @@
 "use client"
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, useRef } from "react"
 import Toast from "@/app/components/toast/Toast"
 
 type ToastType = "success" | "error" | "info"
 
-type Toast = {
+type ToastData = {
   message: string
   type: ToastType
   duration?: number
@@ -17,35 +17,47 @@ type ToastContextType = {
 const ToastContext = createContext({} as ToastContextType)
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [toast, setToast] = useState<Toast | null>(null)
+  const [toast, setToast] = useState<ToastData | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  function showToast(message: string, type: ToastType = "info", duration = 1000) {
-    if(message.length <= 10){
-      duration = 1000
+  function calculateDuration(message: string) {
+    const length = message.length
+    if (length <= 20) return 2000
+    if (length <= 45) return 3000
+    if (length <= 70) return 4000
+    return 6000
+  }
+
+  function showToast(message: string, type: ToastType = "info", duration?: number) {
+
+    const finalDuration = duration ?? calculateDuration(message)
+
+    // cancela o timer do toast anterior
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
     }
-    if(message.length >= 10 && message.length <= 20 ){
-      duration = 1000
-    }
-    if(message.length >= 20 && message.length <= 30 ){
-      duration = 2000
-    }
-    if(message.length >= 30 && message.length <= 45 ){
-      duration = 2000
-    }
-    if(message.length >= 45 && message.length <= 70 ){
-      duration = 2000
-    }
-    if(message.length >= 70){
-      duration = 15000
-    }
-    setToast({ message, type, duration })
-    setTimeout(() => { setToast(null) }, duration)
+
+    // substitui o toast atual
+    setToast({ message, type, duration: finalDuration })
+
+    timeoutRef.current = setTimeout(() => {
+      setToast(null)
+    }, finalDuration)
   }
 
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      {toast && ( <Toast message={toast.message} type={toast.type} duration={toast.duration} onClose={()=>{}}/> )}
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          duration={toast.duration}
+          onClose={() => setToast(null)}
+        />
+      )}
+
     </ToastContext.Provider>
   )
 }

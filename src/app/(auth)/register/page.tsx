@@ -4,7 +4,7 @@ import Image from "next/image"
 import Logo from "../../../../assets/images/logo.png"
 import Link from "next/link"
 import { useState } from "react"
-import { useTheme } from "@/contexts/ThemeContext"
+import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
 import { useToast } from "@/contexts/ToastContext"
 import { useAuth } from "@/contexts/AuthContext"
 
@@ -73,7 +73,7 @@ export default function Register(){
         <button className=" bg-(--button-back) text-(--button-fore) font-bold rounded-2xl justify-between w-35 p-2 cursor-pointer hover:bg-(--button-hover) duration-300" onClick={createUser}>Criar conta </button>
         <Link href={"/login"} className="md:mt-4 mt-2 text-center">Voltar</Link>
       </div>
-        
+        <ThemeIcon/>
     </div>
   )
 }

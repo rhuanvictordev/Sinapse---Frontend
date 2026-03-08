@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
+import { useTheme } from "@/contexts/ThemeContext"
 
 type ToastType = {
   message: string
@@ -35,7 +36,7 @@ export default function Toast({ message, type, duration = 3000, onClose }: Toast
   }, [duration, onClose])
 
   return (
-    <div className={`fixed md:bottom-8 bottom-4 md:right-6 right-2 ${colors[type]} md:w-[800px] w-[320px] rounded-xl p-4 border-2 hover:border-4 duration-200 text-white`}>
+    <div className={`fixed md:bottom-8 bottom-4 md:right-6 right-2 ${colors[type]} md:w-200 w-[320px] rounded-xl p-4 border-2 hover:border-4 duration-200 text-white`}>
       <p className="font-normal md:mb-4 mb-2">Mensagem</p>
       <p className="mb-4 font-bold">{message}</p>
       <div className="h-1 bg-white/30 w-full rounded">

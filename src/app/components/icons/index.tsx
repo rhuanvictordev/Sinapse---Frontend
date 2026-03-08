@@ -18,6 +18,11 @@ import ArrowToTop from "@/../assets/images/arrowToTop.png"
 import ArrowToTopLight from "@/../assets/images/arrowToTop_light.png"
 import Sun from "@/../assets/images/Sun.png"
 import Moon from "@/../assets/images/moon.png"
+import User from "@/../assets/images/user.png"
+import MenuIcon from "@/../assets/images/config_icon.png"
+import Logo from "@/../assets/images/logo_horizontal.png"
+import LogoMobile from "@/../assets/images/logo_horizontal_mobile.png"
+import Settings from "@/../assets/images/settings.png"
 
 export {
   Folder,
@@ -39,5 +44,10 @@ export {
   ArrowToTop,
   ArrowToTopLight,
   Sun,
-  Moon
+  Moon,
+  User,
+  MenuIcon,
+  Logo,
+  LogoMobile,
+  Settings
 }

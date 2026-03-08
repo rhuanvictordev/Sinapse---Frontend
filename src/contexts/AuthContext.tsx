@@ -35,12 +35,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // VALIDA SE O USUARIO EXISTE AO RECARREGAR A PAGINA
   useEffect(() => {
-    console.log("Effect do authContext")
+    console.log("effect do authContext")
     setLoading(true)
     const storedToken = localStorage.getItem("token");
     const storedUserID = localStorage.getItem("userID");
 
-    if ((storedUserID && !storedToken) || (!storedUserID && storedToken)){
+    if ((storedUserID && !storedToken) || (!storedUserID && storedToken) || (!storedToken && !storedUserID)){
       logout();
       return
     }
@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error: any) {
       const message = error?.response?.data?.message || "Sessão expirada"
       logout();
-      showToast("message", "error")
+      showToast(message, "error")
     }
   }
 
@@ -113,6 +113,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("userID");
     localStorage.removeItem("token");
     setUser(null);
+    setLoading(false)
     router.push("/login");
   }
 

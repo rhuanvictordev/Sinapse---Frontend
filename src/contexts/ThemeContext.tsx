@@ -208,9 +208,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ theme, mode, toggleTheme }}>
-      <div className="bg-white fixed bottom-4 right-4 w-8 h-8 rounded-full cursor-pointer" onClick={toggleTheme}>
-        <img src={mode == "light"? Moon.src : Sun.src} alt="" className="flex justify-center items-center ml-1 mt-1" />
-      </div>
       {children}
     </ThemeContext.Provider>
   )
@@ -222,4 +219,13 @@ export function useTheme() {
     throw new Error("useTheme deve estar dentro do ThemeProvider")
   }
   return context
+}
+
+export function ThemeIcon() {
+  const { mode, toggleTheme } = useTheme()
+  return (
+    <div className="bg-white fixed bottom-4 right-4 w-8 h-8 rounded-full cursor-pointer" onClick={toggleTheme}>
+      <img src={mode === "light" ? Moon.src : Sun.src} alt="" className="flex justify-center items-center ml-1 mt-1"/>
+    </div>
+  )
 }

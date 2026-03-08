@@ -22,6 +22,7 @@ export default function CreateDiscipline() {
   const { showToast } = useToast();
   const [name, setName] = useState("");
   const [semesterSelected, setSemesterSelected] = useState("");
+  const [restrict, setRestrict] = useState("");
 
   useEffect( () => {
     getSemesters();
@@ -33,10 +34,12 @@ export default function CreateDiscipline() {
   }
 
   async function createDiscipline(){
-    if(name == "" || semesterSelected == ""){
+    if(name == "" || semesterSelected == "" || restrict == ""){
         showToast("Verifique os campos!","info")
         return
     }else{
+        setCreated(true)
+        showToast("Disciplina criada com sucesso!","success")
         const response = await sinapseAPI.post("/disciplines")
     }
 
@@ -54,7 +57,7 @@ export default function CreateDiscipline() {
                 <div className="md:w-260 flex flex-col md:items-end">
                     <div className="flex flex-col pt-6 md:gap-8 gap-4">
                     <div className="flex md:flex-row flex-col">
-                        <h2 className="md:text-xl text-xl font-bold text-center md:text-left mb-2">Período:</h2>
+                        <h2 className="md:text-xl text-xl font-bold text-center md:text-left mb-2">Semestre:</h2>
                         <select value={semesterSelected} onChange={(e)=>setSemesterSelected(e.target.value)} className="md:w-200 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
                             <option value="">Selecione</option>
                             {
@@ -74,9 +77,10 @@ export default function CreateDiscipline() {
                     <div className="flex flex-col pt-6 md:gap-8 gap-4">
                         <div className="flex md:flex-row flex-col">
                             <h2 className="md:text-xl text-xl font-bold text-center md:text-left mb-2">Privar disciplina:</h2>
-                            <select className="md:w-200 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
-                                <option>Sim</option>
-                                <option>Não</option>
+                            <select value={restrict} onChange={(e)=>setRestrict(e.target.value)} className="md:w-200 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                <option value="">Selecione</option>
+                                <option value="Y" >Sim</option>
+                                <option value="N" >Não</option>
                             </select>
                         </div>
                         <div className="pt-10 flex md:justify-end justify-center">

@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useMenu } from "@/contexts/StateContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { ScrollToTopButton } from "../components/scroll/ScrollTop";
 
 export default function AppLayout({children,}: {children: React.ReactNode;}) {
   const { user, loading } = useAuth();
@@ -24,27 +23,26 @@ export default function AppLayout({children,}: {children: React.ReactNode;}) {
   if (loading) return null;
   if (!user) return null;
 
- return (
-  <div className="h-full w-full flex flex-col" style={{backgroundColor:myTheme.theme.screenBack}}>
-      
-    <div className="fixed top-0 left-0 w-full"> {/* Header */}
-      <Header />
+
+  return (
+    <div className="h-full w-full flex flex-col" style={{backgroundColor:myTheme.theme.screenBack}}>
+        <div className="fixed top-0 left-0 w-full">
+            <Header />  {/* height of header: ( H-20 ) */}
+        </div>
+        <div className="flex md:flex-row flex-col">
+            <div className={`fixed left-0 top-0 h-fill md:w-64 w-full flex transition-transform duration-500 ${menu.menuActive ? "translate-x-0" : "-translate-x-full"}`}>
+                <div className="fixed w-full md:h-full h-fill mt-20 flex">
+                    <Menu/>
+                </div>
+            </div>
+            <div className="mt-20 w-full">
+              {children}
+            </div>
+        </div>
+          
     </div>
+  )
 
-    <div className="md:mt-27 mt-19 flex flex-1 flex-col md:flex-row md:pb-10"> {/* Menu + Conteudo */}
-      
-      <div className={`${menu.menuActive ? "block fixed w-full" : "hidden"} md:block`}> {/* Menu */}
-        <Menu />
-      </div>
-
-      <div className="flex-1 md:ml-70" style={{backgroundColor:myTheme.theme.screenBack}}> {/* Conteudo */}
-        {children}
-        <ScrollToTopButton/>
-      </div>
-
-    </div>
-
-  </div>
-);
+  
 }
 

@@ -66,9 +66,9 @@ export default function Home() {
                 <div className="h-fill">
                     <div className="w-fill text-center md:text-left">
                         <div className="flex md:flex-col md:gap-4">
-                            <div className="md:w-200 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
+                            <div className="md:w-220 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
-                                    <h2 className="text-lg font-bold">Período:</h2>
+                                    <h2 className="text-lg font-bold">Semestre:</h2>
                                     <select className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
                                         {
                                         semesters.map( (item)=>(
@@ -81,9 +81,9 @@ export default function Home() {
                                     <h2 className="text-lg font-bold">Nome:</h2>
                                     <input className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
                                 </div>
-                                <div className="flex md:flex-row flex-col md:mr-120 items-center mb-6 md:mt-0 mt-2">
-                                    <h2 className="text-lg font-bold">Priva disciplina:</h2>
-                                    <select className="w-40 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                <div className="flex md:flex-row md:mr-2 flex-col items-center md:w-100 w-full mb-6 md:mt-0 mt-2 md:justify-end">
+                                    <h2 className="text-lg font-bold">Privar disciplina:</h2>
+                                    <select className="w-20 md:w-fill mt-2 md:mt-0 bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
                                         <option>Não</option>
                                         <option>Sim</option>
                                     </select>

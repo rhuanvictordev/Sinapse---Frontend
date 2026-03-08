@@ -4,7 +4,7 @@ import Image from "next/image"
 import Logo from "../../../../assets/images/logo.png"
 import Link from "next/link"
 import { useState } from "react"
-import { useTheme } from "@/contexts/ThemeContext"
+import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
 
 export default function Register(){
 
@@ -48,7 +48,7 @@ function sendConfirmation(){
                     <Link href={"/login"} className="mt-4 text-center">Voltar</Link>
                 </div>
             </div>
-        
+        <ThemeIcon/>
     </div>
   )
 }

@@ -55,14 +55,14 @@ export default function Home() {
 
     <Modal message="Deseja remover esta disciplina?" textButton="Remover" active={modalVisible} onClose={()=>{setModalVisible(false)}} onConfirm={()=>{}} showInput={false} subText=""></Modal>
 
-    <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center md:h-20 border border-black">
-      <h2 className="font-bold md:text-2xl mt-3 py-2">Disciplinas disponíveis</h2>
+    <header className="flex flex-col md:flex-row md:justify-between justify-center md:pl-4 text-center md:border border-0">
+      <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0 border md:border-0">Disciplinas disponíveis</h2>
       <button className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 rounded-lg" onClick={()=>{router.push("/discipline/create")}}>+ Criar Disciplina</button>
     </header>
     
     <div style={{backgroundColor:myTheme.theme.screenBack}}>
       
-      <div className="flex flex-wrap gap-4 md:gap-6 justify-center mt-4 md:mt-10 mb-8 md:m-8">
+      <div className="flex flex-wrap justify-center gap-4 py-4">
           {
 
           disciplines.map((item) => (
@@ -83,7 +83,7 @@ export default function Home() {
                     {
                       !item.visibility && (
                       <div className="flex flex=row items-center justify-left ml-4 md:ml-12">
-                          <button className="h-10 bg-(--button-enter) hover:bg-(--button-enter-hover) duration-300 text-(--button-fore) flex items-center text-lg gap-2 px-5 rounded-lg cursor-pointer" onClick={()=> router.push("/discipline/detail")}> Entrar </button>
+                          <button className="h-10 bg-(--button-enter) hover:bg-(--button-enter-hover) duration-300 text-(--button-fore) flex items-center text-lg gap-2 px-5 rounded-lg cursor-pointer" onClick={()=> router.push("/discipline")}> Entrar </button>
                       </div>
                       )
                     }
@@ -92,7 +92,7 @@ export default function Home() {
                       item.visibility && (
                       <div className="flex flex=row items-center justify-center h-10">
                         <div className="flex flex-row w-full justify-center md:gap-14 gap-4">
-                          <button className=" h-10 bg-(--button-enter) hover:bg-(--button-enter-hover) text-(--button-fore) duration-300 flex items-center text-lg gap-2 px-5 rounded-lg cursor-pointer" onClick={()=> router.push("/discipline/edit")} > Entrar</button>
+                          <button className=" h-10 bg-(--button-enter) hover:bg-(--button-enter-hover) text-(--button-fore) duration-300 flex items-center text-lg gap-2 px-5 rounded-lg cursor-pointer" onClick={()=> router.push("/discipline")} > Entrar</button>
                           <button className=" h-10 bg-(--button-edit) hover:bg-(--button-edit-hover) duration-300 flex items-center text-lg gap-2 md:gap-4 px-2 rounded-lg cursor-pointer" onClick={()=> router.push("/discipline/edit")} ><img src={ myTheme.mode == "light" ? Pencil.src : PencilLight.src } className="w-5 h-5"/> Editar</button>
                           <button className=" h-10 bg-(--button-delete) hover:bg-(--button-delete-hover) duration-300 flex items-center text-lg gap-2 md:gap-4 px-2 rounded-lg cursor-pointer" onClick={()=> handleDeleteDiscipline(item.id)}><img src={ myTheme.mode == "light" ? Trash.src : TrashLight.src } className="w-5 h-5"/> Excluir</button>
                         </div>

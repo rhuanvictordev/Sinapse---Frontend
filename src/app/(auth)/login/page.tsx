@@ -9,7 +9,7 @@ import { redirect, useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext";
 import { Modal } from "@/app/components/modal/Modal"
 import { useToast } from "@/contexts/ToastContext"
-import { useTheme } from "@/contexts/ThemeContext"
+import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
 
 export default function Login(){
   const { user, login, loading } = useAuth();
@@ -83,7 +83,7 @@ export default function Login(){
           <strong className="text-blue-700">Registre-se</strong>
         </Link>
       </div>
-
+        <ThemeIcon/>
     </div>
   )
 }

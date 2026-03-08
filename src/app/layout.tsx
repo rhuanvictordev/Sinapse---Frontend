@@ -17,11 +17,11 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <ToastProvider>
-            <AuthProvider>
               <MenuStateProvider>
-                  {children}
+                  <AuthProvider>
+                      {children}
+                  </AuthProvider>
               </MenuStateProvider>
-            </AuthProvider>
           </ToastProvider>
         </ThemeProvider>
       </body>
