@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { useMenu } from "@/contexts/StateContext"
 import { useTheme } from "@/contexts/ThemeContext"
-import { Categories, CategoriesLight, Folder, FolderLight, MenuIcon, Persons, PersonsLight, Power, PowerLight, Search, SearchLight, Settings, Star, StarLight } from "@/app/components/icons"
+import { Categories, CategoriesLight, Folder, FolderLight, MenuIcon, Moon, Persons, PersonsLight, Power, PowerLight, Search, SearchLight, Settings, SettingsLight, Star, StarLight, Sun } from "@/app/components/icons"
 
 export default function Menu() {
   const { logout } = useAuth()
@@ -32,7 +32,7 @@ export default function Menu() {
         </li>
         
         <li>
-          <Link href="/find-discipline" className={linkClass(pathname === "/find-discipline")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Search.src : SearchLight.src)} alt="" /> Disciplinas</Link>
+          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Search.src : SearchLight.src)} alt="" /> Disciplinas</Link>
         </li>
         
         <li>
@@ -44,7 +44,11 @@ export default function Menu() {
         </li>
 
         <li>
-          <Link href="/profile" className={linkClass(pathname === "/profile")} style={{color:myTheme.theme.menuButtonFore}}> <img className="w-6" src={(myTheme.mode=="light" ? Settings.src : Settings.src)} alt="" /> Perfil </Link>
+          <Link href="/profile" className={linkClass(pathname === "/profile")} style={{color:myTheme.theme.menuButtonFore}}> <img className="w-6" src={(myTheme.mode=="light" ? Settings.src : SettingsLight.src)} alt="" /> Perfil </Link>
+        </li>
+
+        <li onClick={()=>myTheme.toggleTheme()}>
+          <h2 className={linkClass(pathname === "")} style={{color:myTheme.theme.menuButtonFore}}> <img className="w-5 bg-white rounded-full p-1" src={(myTheme.mode=="light" ? Moon.src : Sun.src)} alt="" /> {myTheme.mode == "dark" ? "Modo Claro" : "Modo Escuro"} </h2>
         </li>
         
         <li>

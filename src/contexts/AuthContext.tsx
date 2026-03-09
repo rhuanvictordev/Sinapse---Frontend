@@ -71,7 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
     } catch (error: any) {
-      const message = error?.response?.data?.message || "Sessão expirada"
+      //const message = error?.response?.data?.message || "Sessão expirada"
+      const message = "Sessão expirada"
       logout();
       showToast(message, "error")
     }

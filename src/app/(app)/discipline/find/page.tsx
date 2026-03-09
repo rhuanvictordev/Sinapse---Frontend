@@ -1,7 +1,7 @@
 "use client"
 import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
 import { useAuth } from "@/contexts/AuthContext";
-import { LocalAPI } from "@/services/api";
+import { LocalAPI, sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
@@ -15,7 +15,7 @@ type Quiz = {
 }
 
 type Semester = {
-  id: number
+  _id: string
   name: string
 }
 
@@ -27,6 +27,8 @@ export default function Home() {
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
   const toast = useToast();
+  const [selectedSemester, setSelectedSemester] = useState("");
+  const [disciplineName, setDisciplineName] = useState("");
 
   useEffect( () => {
     getQuizzes();
@@ -34,7 +36,7 @@ export default function Home() {
   }, [])
 
   async function getSemesters(){
-    const response = await LocalAPI.get("/categories");
+    const response = await sinapseAPI.get("/semesters");
     setSemesters(response.data);
   }
 
@@ -55,11 +57,8 @@ export default function Home() {
     <Modal active={modalVisible} message="Nome do Quiz:" textButton="Criar Quiz" onClose={()=>{setModalVisible(false)}} onConfirm={()=>{createQuiz()}} subText="" showInput={true}/>
     <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
     
-        <header className="flex flex-col md:justify-between justify-center border-black pl-2 md:pl-6 mb-2">
-            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3">Editar Disciplina</h2>
-            <h2 className="font-bold text-lg text-left md:text-left">Banco de dados</h2>
-            <h2 className="font-normal text-sl">Código de convite: <strong className="font-bold">{"RA025"}</strong></h2>
-            
+        <header className="flex flex-col md:justify-between justify-center border-black pl-2 mb-2">
+            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3">Encontrar Disciplinas</h2>
         </header>
         
         <div className="w-full h-full bg-(--area-back) p-2">
@@ -70,17 +69,18 @@ export default function Home() {
                             <div className="md:w-220 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-lg font-bold">Semestre:</h2>
-                                    <select className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                    <select value={selectedSemester} onChange={(e)=>setSelectedSemester(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                        <option value="">Selecione</option>
                                         {
                                         semesters.map( (item)=>(
-                                            <option key={item.id}>{item.name}</option>
+                                            <option key={item._id}>{item.name}</option>
                                         ))
                                         }
                                     </select>
                                 </div>
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-lg font-bold">Nome:</h2>
-                                    <input className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
+                                    <input value={disciplineName} maxLength={120} onChange={(e)=>setDisciplineName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
                                 </div>
                                 <div className="flex md:flex-row md:mr-2 flex-col items-center md:w-100 w-full mb-6 md:mt-0 mt-2 md:justify-end">
                                     <h2 className="text-lg font-bold">Privar disciplina:</h2>

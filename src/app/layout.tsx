@@ -5,6 +5,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { MenuStateProvider } from "@/contexts/StateContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
 
 
 export default function RootLayout({
@@ -17,11 +18,12 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <ToastProvider>
+            <AuthProvider>
               <MenuStateProvider>
-                  <AuthProvider>
-                      {children}
-                  </AuthProvider>
+                <ScrollToTopButton/>
+                {children}
               </MenuStateProvider>
+            </AuthProvider>
           </ToastProvider>
         </ThemeProvider>
       </body>

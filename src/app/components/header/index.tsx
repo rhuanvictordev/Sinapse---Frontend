@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import LogoMobile from "../../../../assets/images/logo_horizontal_mobile.png";
 import UserImage from "../../../../assets/images/user.png";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMenu } from "@/contexts/StateContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Logo, MenuIcon, Trash } from "@/app/components/icons"
+import { Logo, MenuIcon, MenuIconLight, Trash } from "@/app/components/icons"
 import { useRouter } from "next/navigation";
 
 export default function Header() {
@@ -19,19 +18,25 @@ export default function Header() {
     return null;
   }
 
+  function handleLogoClick(){
+      router.push("/home")
+      if (menu.menuActive){
+        menu.toggleMenu()
+      }
+  }
+
 
   return (
     <div className="w-full h-20 border text-center flex md:px-10 px-4" style={{color:myTheme.theme.screenFore, backgroundColor:myTheme.theme.screenBack}}>
         <div className="flex flex-row items-center justify-between w-full">
             <div>
-              <button className="p-1 fixed top-2 rounded-full cursor-pointer hover:border" onClick={menu.toggleMenu}> 
-                <img src={MenuIcon.src} alt="menu" className="w-12 mt-2 md:hidden"/>
-                <img src={MenuIcon.src} alt="menu" className="w-16 hidden md:block"/>
+              <button className="p-1 fixed top-2 rounded-full cursor-pointer" onClick={menu.toggleMenu}> 
+                <img src={myTheme.mode == "light" ? MenuIcon.src : MenuIconLight.src} alt="menu" className="w-12 mt-2 md:hidden"/>
+                <img src={myTheme.mode == "light" ? MenuIcon.src : MenuIconLight.src} alt="menu" className="w-16 hidden md:block"/>
                 </button>
             </div>
-            <div className="cursor-pointer" onClick={()=>router.push("/home")}>
-              <Image src={Logo} alt="logo" className="w-52 ml-32 hidden md:block"/>
-              <Image src={LogoMobile} alt="logo" className="w-32 ml-12 md:hidden"/>
+            <div className="cursor-pointer" onClick={()=>handleLogoClick()}>
+              <Image src={Logo} alt="logo" className="w-32 ml-10 mt-2 md:ml-34"/>
             </div>
             <div className="flex flex-row justify-center items-center gap-2 cursor-pointer" onClick={()=> router.push("/profile")}>
                 <div className="flex-col text-end hidden md:block">

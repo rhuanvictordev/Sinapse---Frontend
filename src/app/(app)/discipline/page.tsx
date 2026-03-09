@@ -33,7 +33,7 @@ export default function Home() {
     </header>
       
     <div className="w-full h-full bg-(--area-back)">
-        <div className="w-fill h-fill md:p-4 p-2 md:px-2">
+        <div className="w-fill h-fill md:p-4 p-2 md:px-2"> 
             <div className="flex flex-col h-fill">
                 <div className="h-fill">
                     <div>

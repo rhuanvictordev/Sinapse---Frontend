@@ -18,10 +18,14 @@ export default function Profile() {
       <h1 className="text-xl">Pontuação acumulada: {user?.points}</h1>
       <h1 className="text-xl">Status do Pagamento: {user?.paying == true? "Pendente" : "Pago"}</h1>
       <div className="cursor-pointer flex flex-col text-center" onClick={myTheme.toggleTheme}>
-        <div className="flex flex-row justify-center items-center gap-4">
-          <h2>Alternar Tema:</h2>
-          <img src={myTheme.mode == "light"? Moon.src : Sun.src} alt="" className="flex justify-center items-center bg-white rounded-full p-1" />
-        </div>
+        {/*
+
+      <div className="flex flex-row justify-center items-center gap-4">
+        <h2>Alternar Tema:</h2>
+        <img src={myTheme.mode == "light"? Moon.src : Sun.src} alt="" className="flex justify-center items-center bg-white rounded-full p-1" />
+      </div>
+        
+        */}
       </div>
     </div>
   )
