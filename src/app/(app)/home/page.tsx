@@ -62,7 +62,7 @@ export default function Home() {
     
     <div style={{backgroundColor:myTheme.theme.screenBack}}>
       
-      <div className="flex flex-wrap justify-center gap-4 py-4">
+      <div className="flex flex-wrap justify-center gap-2 py-4">
           {
 
           disciplines.map((item) => (
