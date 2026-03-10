@@ -24,6 +24,8 @@ import Logo from "@/../assets/images/logo_horizontal.png"
 import Settings from "@/../assets/images/settings.png"
 import MenuIconLight from "@/../assets/images/config_icon_light.png"
 import SettingsLight from "@/../assets/images/settings_light.png"
+import Users from "@/../assets/images/users.png"
+import UsersLight from "@/../assets/images/users_light.png"
 
 export {
   Folder,
@@ -51,5 +53,7 @@ export {
   Logo,
   Settings,
   MenuIconLight,
-  SettingsLight
+  SettingsLight,
+  Users,
+  UsersLight
 }

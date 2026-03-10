@@ -10,14 +10,14 @@ export default function Ranking() {
       </header>
       
       <div className="items-center justify-center flex">
-          <div className="font-bold text-left flex flex-col md:flex-row gap-2 w-full ml-2 mr-2">
-              <div className="w-50">
-                <h2 className="text-lg">Selecione o Curso:</h2>
-              </div>
-              <select className="bg-(--select-back) text-(--select-fore) rounded-lg w-full h-8 cursor-pointer" name="" id="">
+          <div className="font-bold text-center flex flex-col md:flex-row gap-2 w-full ml-2 mr-2">
+              <div className="w-full">
+                <h2 className="text-lg mb-2">Selecione a disciplina:</h2>
+                <select className="bg-(--select-back) text-(--select-fore) rounded-lg w-full h-8 cursor-pointer" name="" id="">
                 <option value="">Selecione</option>
                 <option value="">B</option>
               </select>
+              </div>
           </div>
       </div>
 

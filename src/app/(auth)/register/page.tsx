@@ -37,11 +37,11 @@ export default function Register(){
   return(
     <div className="w-full h-full flex flex-col items-center justify-center pt-2 md:pt-25" style={{color:myTheme.theme.foreground}}>
       
-      <div className="md:mb-5">
-        <Image src={Logo} alt="logo" width={200}/>
+      <div className="md:mb-5 mt-4">
+        <Image src={Logo} alt="logo" width={150}/>
       </div>
 
-      <h3 className="text-center font-bold text-2xl md:mb-8 mb-4"> Crie sua conta </h3>
+      <h3 className="text-center font-bold text-xl md:mb-8 mb-2"> Crie sua conta </h3>
 
       <div className="md:w-100 w-80">
         <div className="flex flex-col gap-4">
@@ -49,29 +49,29 @@ export default function Register(){
           <div className="md:w-100 w-80">
             
             <p className="font-bold">Nome de Usuário</p>
-            <input type="text" className="md:w-100  w-80 md:h-12 h-10 rounded-2xl border pl-2" maxLength={42} value={userName} onChange={(event) => setUserName(event.target.value)}/>
+            <input type="text" className="md:w-100  w-80 h-10 rounded-2xl border pl-2" maxLength={42} value={userName} onChange={(event) => setUserName(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Email</p>
-            <input type="text" className="md:w-100  w-80 md:h-12 h-10 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
+            <input type="text" className="md:w-100  w-80 h-10 rounded-2xl border pl-2" maxLength={42} value={email} onChange={(event) => setEmail(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Senha</p>
-            <input type="text" className="md:w-100  w-80 md:h-12 h-10  rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassord(event.target.value)}/>
+            <input type="text" className="md:w-100  w-80 h-10  rounded-2xl border pl-2" maxLength={42} value={password} onChange={(event) => setPassord(event.target.value)}/>
           </div>
 
           <div>
             <p className="font-bold">Confirme a senha</p>
-            <input type="text" className="md:w-100  w-80 md:h-12 h-10  rounded-2xl border pl-2" maxLength={42} value={password2} onChange={(event) => setPassord2(event.target.value)}/>
+            <input type="text" className="md:w-100  w-80 h-10  rounded-2xl border pl-2" maxLength={42} value={password2} onChange={(event) => setPassord2(event.target.value)}/>
           </div>
         </div>
       </div>
 
-      <div className="flex md:w-100 w-80 justify-center items-center gap-4 md:mt-8 mt-6 flex-col">
+      <div className="flex md:w-100 w-80 justify-center items-center gap-4 md:mt-8 mt-4 flex-col">
         <button className=" bg-(--button-back) text-(--button-fore) font-bold rounded-2xl justify-between w-35 p-2 cursor-pointer hover:bg-(--button-hover) duration-300" onClick={createUser}>Criar conta </button>
-        <Link href={"/login"} className="md:mt-4 mt-2 text-center">Voltar</Link>
+        <Link href={"/login"} className="md:mt-4 mt-0 text-center">Voltar</Link>
       </div>
         <ThemeIcon/>
     </div>

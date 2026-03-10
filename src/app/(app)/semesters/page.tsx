@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
 import { useToast } from "@/contexts/ToastContext";
+import { useRouter } from "next/navigation";
 
 type Semester = {
   _id: string
@@ -13,13 +14,19 @@ type Semester = {
 }
 
 export default function Home() {
-  const { user, login, logout } = useAuth();
+  const { user, login, logout, loading } = useAuth();
+  const router = useRouter();
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const myTheme = useTheme();
   const { showToast } = useToast();
   const [name, setName] = useState("");
 
   useEffect( () => {
+    if ( !loading && !user?.is_admin){
+        router.push("/home")
+        showToast("Você não tem permissão para acessar esta página!", "error");
+        return
+    }
     getSemesters();
   }, [])
 

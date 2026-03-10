@@ -40,8 +40,8 @@ export default function Header() {
             </div>
             <div className="flex flex-row justify-center items-center gap-2 cursor-pointer" onClick={()=> router.push("/profile")}>
                 <div className="flex-col text-end hidden md:block">
-                  <h2>Administrador</h2>
-                  <h2>Nivel 0</h2>
+                  <h2>{user.name}</h2>
+                  <h2>Nivel {user.points}</h2>
                 </div>
                 <div>
                   <img className="rounded-full w-12" src={user.image ? user.image : UserImage.src} alt="user_image" />
@@ -50,42 +50,4 @@ export default function Header() {
         </div>
     </div>
   )
-
-  // return (
-  //   <header className="md:pl-10 md:pr-12 md:py-4 justify-between w-full px-4 py-2 ml-2 md:ml-0 border" style={{backgroundColor:myTheme.theme.screenBack}}>
-  //     <div className="flex items-center justify-between" style={{color:myTheme.theme.foreground}}>
-
-  //       {/*Toggle Menu icon*/}
-  //       <div className="text-2xl md:hidden">
-  //         <button className="border-2 pl-2 pr-2" onClick={menu.toggleMenu}> = </button>
-  //       </div>
-
-  //       {/* Logo */}
-  //       <a href="/home"> 
-  //       <Image src={LogoMobile} alt="logo" className="w-40 md:bg md:hidden"/>
-  //       <Image src={Logo} alt="logo" className="md:w-50 hidden md:block"/>
-  //       </a>
-
-  //       {/* Perfil */}
-  //       <a href="/profile">
-  //         <div className="flex items-center gap-3 p-2 hover:border duration-300 hover:rounded-3xl">
-
-  //           {/* Nome e nível */}
-  //           <div className="text-right">
-  //             <p className="font-bold text-xs md:text-2xl"> {user.name} </p>
-  //             <p className="font-bold text-xs md:text-base"> Nível {user.answered_questions} </p>
-  //           </div>
-
-  //           {/* Imagem */}
-  //           <img
-  //             src={user.image ? user.image : UserImage.src}
-  //             alt="user_image"
-  //             className="w-10 h-10 md:w-15 md:h-15 rounded-full"
-  //           />
-  //         </div>
-  //       </a>
-
-  //     </div>
-  //   </header>
-  // );
 }

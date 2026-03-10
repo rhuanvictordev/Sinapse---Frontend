@@ -57,8 +57,7 @@ function openModal(){
 }
 
 function removeQuestion() {
-  setQuestions(prev => prev.filter(q => q.id !== selectedQuestion))
-  setSelectedQuestion(0)
+  console.log("Removendo Pergunta atual")
 }
 
 function nextQuestion(){
@@ -191,7 +190,7 @@ function toggleQuestionType(type: string) {
                 <div className="flex md:flex-row flex-col md:pr-10 w-full mb-4 md:mb-0">
                     <div className="flex md:flex-row flex-col w-full mb-6">
                         <h2 className="font-bold md:text-xl text-ls pl-2 text-center md:text-left mb-2 md:mb-0">Nome:</h2>
-                        <input  maxLength={200} className="md:w-160 md:ml-4 mb-4 md:mb-0 ml-2 mr-2 md:mr-2 pl-2 w-fill bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
+                        <input  maxLength={200} className="md:w-160 md:ml-4 ml-2 mr-2 md:mr-2 pl-2 w-fill bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
                         <button className="md:w-50 w-fill mt-4 md:mt-0 ml-2 mr-2 md:mr-0 md:text-lg text-sm md:ml-5 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={ () => console.log(questions) } >Salvar Alterações</button>
                     </div>
                     <h2 className="md:mt-8 mr-20 font-bold md:hidden text-center w-full">{questions.length == 1 ? "1 Pergunta" : questions.length + " Perguntas"}</h2>
@@ -243,7 +242,7 @@ function toggleQuestionType(type: string) {
         </div>
 
 
-
+                                {/* MODAL */}
 
         
         <div className={`fixed inset-0 flex items-center justify-center bg-black/60 transition-opacity duration-500 ${modalVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
@@ -317,6 +316,11 @@ function toggleQuestionType(type: string) {
                 </div>
             </div>
         </div>
+
+
+                                {/* MODAL */}
+
+
   </div>
 
     )

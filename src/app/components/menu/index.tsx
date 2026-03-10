@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { useMenu } from "@/contexts/StateContext"
 import { useTheme } from "@/contexts/ThemeContext"
-import { Categories, CategoriesLight, Folder, FolderLight, MenuIcon, Moon, Persons, PersonsLight, Power, PowerLight, Search, SearchLight, Settings, SettingsLight, Star, StarLight, Sun } from "@/app/components/icons"
+import { Categories, CategoriesLight, Folder, FolderLight, MenuIcon, Moon, Persons, PersonsLight, Power, PowerLight, Search, SearchLight, Settings, SettingsLight, Star, StarLight, Sun, Users, UsersLight } from "@/app/components/icons"
 
 export default function Menu() {
   const { logout } = useAuth()
@@ -29,6 +29,10 @@ export default function Menu() {
 
         <li>
           <Link href="/semesters" className={linkClass(pathname === "/semesters")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Categories.src : CategoriesLight.src)} alt="" /> Semestres</Link>
+        </li>
+
+        <li>
+          <Link href="/users" className={linkClass(pathname === "/users")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Users.src : UsersLight.src)} alt="" /> Usuários</Link>
         </li>
         
         <li>
