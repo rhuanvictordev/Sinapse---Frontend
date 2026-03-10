@@ -2,10 +2,15 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Moon, Pencil, Sun, Trash, User } from "@/app/components/icons"
 import { useTheme } from "@/contexts/ThemeContext";
+import { useEffect } from "react";
 
 export default function Profile() {
   const { user, login, logout } = useAuth();
   const myTheme = useTheme();
+
+  useEffect( () => {
+    document.title = "Sinapse - Perfil"
+  } )
 
   return(
     <div className="p-4 gap-4 flex flex-col items-center justify-center text-center text-(--foreground) pb-0">

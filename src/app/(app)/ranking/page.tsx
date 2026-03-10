@@ -1,8 +1,15 @@
 "use client"
 
 import { Categories, Logo, Persons, Sun, Trash } from "@/app/components/icons"
+import { useEffect } from "react"
 
 export default function Ranking() {
+
+  useEffect( () => {
+    document.title = "Sinapse - Ranking"
+  } )
+
+
   return (
   <div className="w-full h-full text-(--foreground) pr-2 pl-2">
       <header className="h-12 md:h-18 flex items-center justify-center">

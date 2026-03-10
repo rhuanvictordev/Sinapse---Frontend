@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Logo from "../../../../assets/images/logo.png"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
 import { useToast } from "@/contexts/ToastContext"
 import { useAuth } from "@/contexts/AuthContext"
@@ -17,6 +17,10 @@ export default function Register(){
   const myTheme = useTheme();
   const toast = useToast();
   const { user, login, logout, register } = useAuth();
+
+  useEffect(() => {
+      document.title = "Sinapse - Criação de Conta"
+    }, [])
 
   function createUser(){
     if (userName == "" || email == "" || password == "" || password2 == ""){
@@ -35,7 +39,7 @@ export default function Register(){
   }
 
   return(
-    <div className="w-full h-full flex flex-col items-center justify-center pt-2 md:pt-25" style={{color:myTheme.theme.foreground}}>
+    <div className="w-full h-full flex flex-col items-center justify-center pt-2 md:pt-12" style={{color:myTheme.theme.foreground}}>
       
       <div className="md:mb-5 mt-4">
         <Image src={Logo} alt="logo" width={150}/>

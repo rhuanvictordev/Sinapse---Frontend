@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons"
 import { useRouter } from "next/navigation";
-import { Modal } from "@/app/components/modal/Modal";
 
 type Ranking = {
   user_id: number;
@@ -33,6 +32,7 @@ export default function Home() {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect( () => {
+    document.title = "Sinapse - Início"
     getDisciplines();
   }, [])
 
@@ -52,8 +52,6 @@ export default function Home() {
 
   return (
   <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
-
-    <Modal message="Deseja remover esta disciplina?" textButton="Remover" active={modalVisible} onClose={()=>{setModalVisible(false)}} onConfirm={()=>{}} showInput={false} subText=""></Modal>
 
     <header className="flex flex-col md:flex-row md:justify-between justify-center md:pl-4 text-center md:border border-0">
       <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0 border md:border-0">Disciplinas disponíveis</h2>

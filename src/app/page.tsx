@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 export default function StartPage(){
-    useEffect(()=>{
-      redirect("/home");
-    },[])
+  useEffect( () => {
+    redirect("/home");
+  },[])
 }

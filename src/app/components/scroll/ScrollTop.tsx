@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ArrowToTop, ArrowToTopLight } from "@/app/components/icons"
 import { useTheme } from "@/contexts/ThemeContext"
 
-export function ScrollToTopButton() {
+export function ScrollToTopComponent() {
   const [show, setShow] = useState(false)
   const myTheme = useTheme();
 

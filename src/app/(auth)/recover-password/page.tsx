@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Logo from "../../../../assets/images/logo.png"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
 
 export default function Register(){
@@ -11,6 +11,12 @@ export default function Register(){
 const [email, setEmail] = useState("");
 const [btnDisabled, setbtnDisabled] = useState(false);
 const myTheme = useTheme();
+
+
+useEffect(() => {
+    document.title = "Sinapse - Recuperação de Senha"
+  }, [])
+
 
 function sendConfirmation(){
     if (email == ""){

@@ -17,6 +17,7 @@ export default function Home() {
   const myTheme = useTheme();
 
   useEffect( () => {
+    document.title = "Sinapse - Detalhes da Disciplina"
     getCategories();
   }, [])
 

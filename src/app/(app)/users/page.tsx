@@ -13,6 +13,7 @@ const {showToast} = useToast();
 const myTheme = useTheme();
 
 useEffect( () => {
+    document.title = "Sinapse - Usuários"
     if ( !loading && !user?.is_admin){
         router.push("/home")
         showToast("Você não tem permissão para acessar esta página!", "error");

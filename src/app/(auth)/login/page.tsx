@@ -20,6 +20,11 @@ export default function Login(){
   const { showToast } = useToast();
   const myTheme = useTheme();
 
+
+  useEffect(() => {
+    document.title = "Sinapse - Login"
+  }, [])
+
   function validateFields(){
     if (email === "" || password === ""){
       showToast("Preencha todos os campos!", "error")

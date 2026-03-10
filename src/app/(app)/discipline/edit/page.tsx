@@ -1,5 +1,4 @@
 "use client"
-import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
 import { useAuth } from "@/contexts/AuthContext";
 import { LocalAPI } from "@/services/api";
 import { useEffect, useState } from "react";
@@ -29,6 +28,7 @@ export default function Home() {
   const toast = useToast();
 
   useEffect( () => {
+    document.title = "Sinapse - Editar Disciplina"
     getQuizzes();
     getSemesters();
   }, [])
@@ -52,7 +52,6 @@ export default function Home() {
 
   return (
   <div>
-    <Modal active={modalVisible} message="Nome do Quiz:" textButton="Criar Quiz" onClose={()=>{setModalVisible(false)}} onConfirm={()=>{createQuiz()}} subText="" showInput={true}/>
     <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
     
         <header className="flex flex-col md:justify-between justify-center border-black pl-2 md:pl-6 mb-2">

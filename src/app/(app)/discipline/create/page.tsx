@@ -25,6 +25,7 @@ export default function CreateDiscipline() {
   const [restrict, setRestrict] = useState("");
 
   useEffect( () => {
+    document.title = "Sinapse - Nova Disciplina"
     getSemesters();
   }, [])
 

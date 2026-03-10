@@ -41,6 +41,7 @@ export default function QuizEditPage() {
 
   
 useEffect( () => {
+  document.title = "Sinapse - Edição de Quiz"
   if(questions.length > 0){
     setSelectedQuestion(0)
   }

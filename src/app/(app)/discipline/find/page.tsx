@@ -1,11 +1,9 @@
 "use client"
-import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
 import { useAuth } from "@/contexts/AuthContext";
 import { LocalAPI, sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
-import { Modal } from "@/app/components/modal/Modal";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 
@@ -31,6 +29,7 @@ export default function Home() {
   const [disciplineName, setDisciplineName] = useState("");
 
   useEffect( () => {
+    document.title = "Sinapse - Encontrar Disciplinas"
     getQuizzes();
     getSemesters();
   }, [])
@@ -54,7 +53,6 @@ export default function Home() {
 
   return (
   <div>
-    <Modal active={modalVisible} message="Nome do Quiz:" textButton="Criar Quiz" onClose={()=>{setModalVisible(false)}} onConfirm={()=>{createQuiz()}} subText="" showInput={true}/>
     <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
     
         <header className="flex flex-col md:justify-between justify-center border-black pl-2 mb-2">
