@@ -79,8 +79,8 @@ export default function Home() {
                                     </select>
                                 </div>
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
-                                    <h2 className="text-lg font-bold">Nome:</h2>
-                                    <input className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
+                                    <h2 className="text-lg font-bold">Novo nome:</h2>
+                                    <input value={"Banco de dados"} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
                                 </div>
                                 <div className="flex md:flex-row md:mr-2 flex-col items-center md:w-100 w-full mb-6 md:mt-0 mt-2 md:justify-end">
                                     <h2 className="text-lg font-bold">Privar disciplina:</h2>
