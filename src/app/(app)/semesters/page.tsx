@@ -23,11 +23,11 @@ export default function Home() {
 
   useEffect( () => {
     document.title = "Sinapse - Semestres"
-    if ( !loading && !user?.is_admin){
-        router.push("/home")
-        showToast("Você não tem permissão para acessar esta página!", "error");
-        return
-    }
+    // if ( !loading && !user?.is_admin){
+    //     router.push("/home")
+    //     showToast("Você não tem permissão para acessar esta página!", "error");
+    //     return
+    // }
     getSemesters();
   }, [])
 

@@ -7,15 +7,14 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { redirect, useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext";
-import { Modal } from "@/app/components/modal/Modal"
 import { useToast } from "@/contexts/ToastContext"
 import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
 
 export default function Login(){
   const { user, login, loading } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState("rhuansoliveira1072@gmail.com");
-  const [password, setPassword] = useState("Rrr19283.");
+  const [email, setEmail] = useState("sinapse@email.com");
+  const [password, setPassword] = useState("123");
   const [modalVisible, setModalVisible] = useState(false);
   const { showToast } = useToast();
   const myTheme = useTheme();
