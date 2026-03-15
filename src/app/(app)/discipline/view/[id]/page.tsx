@@ -1,5 +1,5 @@
 "use client"
-import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { LocalAPI } from "@/services/api";
 import { useEffect, useState } from "react";
@@ -18,7 +18,6 @@ export default function Home() {
 
   useEffect( () => {
     document.title = "Sinapse - Detalhes da Disciplina"
-    getCategories();
   }, [])
 
   async function getCategories(){

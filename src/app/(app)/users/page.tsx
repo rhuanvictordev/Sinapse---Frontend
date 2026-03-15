@@ -37,24 +37,66 @@ const [modalEmail, setModalEmail] = useState("");
 const [modalPassword, setModalPassword] = useState("");
 const [modalADM, setModalADM] = useState("N");
 
+const [userSelected, setUserSelected] = useState<User | null>(null)
+
 
 useEffect( () => {
     document.title = "Sinapse - Usuários"
-    // if ( !loading && !user?.is_admin){
-    //     router.push("/home")
-    //     showToast("Você não tem permissão para acessar esta página!", "error");
-    //     return
-    // }
+    if ( !loading && !user?.is_admin){
+        router.push("/home")
+        showToast("Você não tem permissão para acessar esta página!", "error");
+        return
+    }
 } )
 
-
-
 function editUser(user: User){
+    setUserSelected(user)
     setModalLabelName(user.name)
     setModalName(user.name)
     setModalEmail(user.email)
     setModalPassword("")
+    setModalADM(user.is_admin ? "Y" : "N")
     setModalVisible(true)
+}
+
+
+function closeModal(){
+    setUserSelected(null)
+    setModalLabelName("")
+    setModalName("")
+    setModalEmail("")
+    setModalPassword("")
+    setModalADM("N")
+    setModalVisible(false)
+}
+
+async function updateUser(){
+
+if(modalName==""||modalEmail==""||modalPassword==""||modalADM==""){
+    showToast("Preencha todos os campos", "error")
+    console.log("ID do usuario logado: " + user?._id)
+}
+else{
+    const obj = {
+        name: modalName,
+        email: modalEmail,
+        password: modalPassword,
+        paying: true,
+        is_admin: modalADM == "Y" ? true : false,
+        answered_questions: user?.answered_questions,
+        points: user?.points
+    }
+        try {
+        const response = await sinapseAPI.patch(`/users/${userSelected?._id}`, obj)
+        if (response.status == 200){
+            showToast("Usuário atualizado com sucesso!")
+        }
+        } catch (error) {
+            showToast("Erro ao atualizar o usuário")
+        }
+        closeModal()
+        getUsers()
+    }
 }
 
 async function deleteUser(id: string){
@@ -186,8 +228,8 @@ return (
                         </select>
                     </div>
                     <div className="items-center justify-center flex mt-26 gap-8">
-                        <button onClick={()=>setModalVisible(false)} className="bg-(--button-delete) hover:bg-(--button-hover) cursor-pointer duration-300 text-(--button-fore) font-bold w-30 h-12 rounded-lg">Cancelar</button>
-                        <button onClick={()=>setModalVisible(false)} className="bg-(--button-back) hover:bg-(--button-hover) cursor-pointer duration-300 text-(--button-fore) font-bold w-30 h-12 rounded-lg">Salvar</button>
+                        <button onClick={()=>closeModal()} className="bg-(--button-delete) hover:bg-(--button-hover) cursor-pointer duration-300 text-(--button-fore) font-bold w-30 h-12 rounded-lg">Cancelar</button>
+                        <button onClick={()=>{updateUser()}} className="bg-(--button-back) hover:bg-(--button-hover) cursor-pointer duration-300 text-(--button-fore) font-bold w-30 h-12 rounded-lg">Salvar</button>
                     </div>
                 </div>
             </div>

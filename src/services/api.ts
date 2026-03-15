@@ -23,10 +23,7 @@ sinapseAPI.interceptors.request.use((config) => {
 
 LocalAPI.interceptors.response.use(
   (response) => {
-    console.log("AXIOS LOCAL RESPONSE OK", {
-      status: response.status,
-      url: response.config.url,
-    });
+    console.log({status: response.status,url: response.config.url,});
     return response;
   },
   (error) => {
@@ -46,10 +43,7 @@ LocalAPI.interceptors.response.use(
 
 sinapseAPI.interceptors.response.use(
   (response) => {
-    console.log("AXIOS SINAPSE RESPONSE OK", {
-      status: response.status,
-      url: response.config.url,
-    });
+    console.log({status: response.status,url: response.config.url,});
     return response;
   },
   (error) => {

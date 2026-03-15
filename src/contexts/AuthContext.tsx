@@ -61,20 +61,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function getByID(id: string){
     try {
-    const token = localStorage.getItem("token")
-      if (token){
       const response = await sinapseAPI.get(`/users/${id}`)
       if (response.data){
         setUser(response.data)
-        //console.log("Usuario: " + JSON.stringify(response.data))
+        console.log("Usuario obtido da api: " + JSON.stringify(response.data))
         setLoading(false)
       }
-    }
     } catch (error: any) {
-      //const message = error?.response?.data?.message || "Sessão expirada"
-      const message = "Sessão expirada"
-      logout();
-      showToast(message, "error")
+        console.log("Erro ao obter usuario no getByID")
+        logout();
+        showToast("Sessão expirada", "error")
     }
   }
 
@@ -95,7 +91,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       showToast(message, "error")
     }
   }
-
 
   async function register(name: string, email: string, password: string) {
     try {
