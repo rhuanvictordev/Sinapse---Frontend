@@ -1,12 +1,12 @@
 "use client"
-import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
+
 import { useAuth } from "@/contexts/AuthContext";
-import { LocalAPI } from "@/services/api";
+import { LocalAPI, sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
-import { Modal } from "@/app/components/modal/Modal";
 import { useToast } from "@/contexts/ToastContext";
+import { useRouter, useParams } from "next/navigation";
 
 type Answer = {
   id: number
@@ -23,11 +23,17 @@ type Question = {
 
 type Quiz = {
   _id: string
-  title: string
-  questions: Question[]
+  name: string
+  description: string
+  user_id: string
+  questions: []
+  categories_ids: []
 }
 
 export default function QuizEditPage() {
+  const router = useRouter();
+  const params = useParams();
+  const quizID = params.id;
   const { showToast } = useToast();
   const myTheme = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
@@ -42,11 +48,20 @@ export default function QuizEditPage() {
   
 useEffect( () => {
   document.title = "Sinapse - Edição de Quiz"
-  if(questions.length > 0){
-    setSelectedQuestion(0)
-  }
+  getQuiz()
 }, [])
 
+
+async function getQuiz(){
+  try {
+        const response = await sinapseAPI.get(`/quizzes/${quizID}`);
+        setQuiz(response.data);
+  
+      } catch (error) {
+          showToast("Erro ao obter detalhes do Quiz","error")
+          router.push("/home")
+      }
+}
 
 function openModal(){
     setNewQuestionText("")
@@ -91,35 +106,62 @@ function previousQuestion(){
 }
 
 
-function addQuestion(){
-    if (newQuestion.title.trim() === "") {
-      showToast("Digite o título da pergunta!", "info")
-      return
-    }
-    if (newQuestion.answers.length === 0) {
-      showToast("Adicione respostas!", "info")
-      return
-    }
-    
-    let answersWithNoCorrect = 0
-    newQuestion.answers.forEach((answer) => {
-      if (answer.isCorrect == true){
-          answersWithNoCorrect += 1
-      }
-    })
+async function addQuestion() {
+  if (newQuestion.title.trim() === "") {
+    showToast("Digite o título da pergunta!", "info");
+    return;
+  }
 
-    if (answersWithNoCorrect == 0){
-      showToast("Defina a resposta correta!", "info")
-      return
+  if (newQuestion.answers.length === 0) {
+    showToast("Adicione respostas!", "info");
+    return;
+  }
 
-    }else{
-      setQuestions(prev => [...prev, newQuestion])
-      setModalVisible(false)
-      setNewQuestionText("")
-      setNewAnswerText("")
-      setNewQuestion(prev => ({...prev, type: "", title: "", answers: []}))
+  let correctAnswersCount = 0;
+
+  newQuestion.answers.forEach((answer) => {
+    if (answer.isCorrect) {
+      correctAnswersCount++;
+    }
+  });
+
+  if (correctAnswersCount === 0) {
+    showToast("Defina a resposta correta!", "info");
+    return;
+  }
+
+  if (correctAnswersCount > 1 && newQuestion.type !== "MULTIPLE") {
+    showToast("Apenas uma resposta pode ser correta!", "info");
+    return;
+  }
+
+  // pegar posição da correta
+  let correctPosition = 0;
+
+  for (let i = 0; i < newQuestion.answers.length; i++) {
+    if (newQuestion.answers[i].isCorrect) {
+      correctPosition = i + 1; // base 1
+      break;
+    }
+  }
+
+  const answersNames = newQuestion.answers.map(a => a.text);
+
+  const obj = {
+    question: newQuestion.title,
+    possible_answers: answersNames,
+    answer: correctPosition,
+    boolean_answer: newQuestion.type === "MULTIPLE" ? false : true
+  };
+
+  try {
+    const response = await sinapseAPI.post(`/quizzes/question/${quiz!._id}`, obj)
+     if (response.status == 201){ 
       showToast("Pergunta adicionada!", "success")
-    }
+    } 
+  } catch (error) {
+    showToast("Ocorreu um erro ao tentar adicionar a pergunta ao Quiz", "error")
+  }
 }
 
 
@@ -191,7 +233,7 @@ function toggleQuestionType(type: string) {
                 <div className="flex md:flex-row flex-col md:pr-10 w-full mb-4 md:mb-0">
                     <div className="flex md:flex-row flex-col w-full mb-6">
                         <h2 className="font-bold md:text-xl text-ls pl-2 text-center md:text-left mb-2 md:mb-0">Nome:</h2>
-                        <input  maxLength={200} className="md:w-160 md:ml-4 ml-2 mr-2 md:mr-2 pl-2 w-fill bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
+                        <input value={quiz?.name} className="md:w-160 md:ml-4 ml-2 mr-2 md:mr-2 pl-2 w-fill bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
                         <button className="md:w-50 w-fill mt-4 md:mt-0 ml-2 mr-2 md:mr-0 md:text-lg text-sm md:ml-5 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={ () => console.log(questions) } >Salvar Alterações</button>
                     </div>
                     <h2 className="md:mt-8 mr-20 font-bold md:hidden text-center w-full">{questions.length == 1 ? "1 Pergunta" : questions.length + " Perguntas"}</h2>

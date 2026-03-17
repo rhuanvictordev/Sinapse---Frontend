@@ -144,6 +144,7 @@ export default function EditDiscipline() {
         try {
             const response = await sinapseAPI.post("/quizzes",obj)
             if(response.status == 201){
+                addQuizToCurrentDiscipline(obj)
                 showToast("Quiz criado com sucesso!", "success")
                 getQuizzes();
                 closeModal();
@@ -156,14 +157,10 @@ export default function EditDiscipline() {
   }
 
 
-  async function addQuizToCurrentDiscipline(_id: string){
+  async function addQuizToCurrentDiscipline(quiz: object){
+        
         try {
-            const response = await sinapseAPI.post(`/subjects/add-quiz/${discipline!._id}`,{quiz_id: _id})
-            if (response.status == 201){
-                showToast("Quiz adicionado com sucesso!", "success")
-                getQuizzes()
-                getDiscipline()
-            }
+            const response = await sinapseAPI.post(`/subjects/add-quiz/${discipline!._id}`,{quiz_id: "69b8b747e572a20b2df4688e"})
         } catch (error: any) {
             const msg = error?.response?.data?.message || "Erro ao tentar adicionar o Quiz à disciplina"
             showToast(msg, "error")
@@ -171,13 +168,12 @@ export default function EditDiscipline() {
   }
 
 
-  async function removeQuizFromCurrentDiscipline(idParam: string){
+  async function deleteQuiz(quiz: Quiz){
         try {
-            const newQuizzes = discipline?.quizzes_ids.filter((id) => id !== idParam);
-            const response = await sinapseAPI.patch(`/subjects/${discipline!._id}`,{quizzes_ids: newQuizzes});
+            const response = await sinapseAPI.delete(`/quizzes/${quiz._id}`)
             if(response.status == 200){
                 showToast("Quiz removido com sucesso!", "success")
-                getDiscipline();
+                getQuizzes();
             }
         } catch (error: any) {
             const msg = error?.response?.data?.message || "Erro ao tentar remover o Quiz"
@@ -185,13 +181,8 @@ export default function EditDiscipline() {
         }
   }
 
-  function getQuizById(id: string){
-    const quiz = quizzes.find( (quiz) => quiz._id == id)    
-    if (quiz) {
-        return quiz
-    }else{
-        return null
-    }
+  function getQuizzesByDisciplines(id: string){
+
   }
   
   return (
@@ -202,6 +193,7 @@ export default function EditDiscipline() {
             <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3">Editar Disciplina</h2>
             <h2 className="font-bold text-lg text-left md:text-left">{discipline?.name}</h2>
             <h2 className="font-normal text-sl">Código de convite: <strong className="font-bold">{discipline?.invitation_code}</strong></h2>
+            
         </header>
         
         <div className="w-full h-full bg-(--area-back) p-2">
@@ -246,6 +238,7 @@ export default function EditDiscipline() {
                     <div className="mt-8 mb-4 pl-2">
                         <div className="flex w-full justify-between pr-2 text-center items-center mt-16">
                             <h2 className="font-bold md:text-xl text-lg md:mb-2">Quizzes nesta disciplina</h2>
+                            <button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={()=>{openModal()}}>+ Novo Quiz</button>
                         </div>
                     </div>
                     <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
@@ -255,61 +248,7 @@ export default function EditDiscipline() {
                                     <th className="text-left border pl-2 md:py-3">Nome</th>
                                     <th className="text-center border pl-2 md:py-3 w-20">Iniciar</th>
                                     <th className="text-center border pl-2 md:py-3 w-20">Editar</th>
-                                    <th className="text-center border pl-2 md:py-3 w-20 px-2">Remover</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore)">
-                            {
-                                discipline?.quizzes_ids.map((id) => {
-                                const quiz:any = getQuizById(id);
-
-                                if (!quiz) return null;
-
-                                return (
-                                    <tr key={quiz._id}>
-                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
-                                        {quiz.name}
-                                    </td>
-
-                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer">
-                                        ▶
-                                    </td>
-
-                                    <td
-                                        className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
-                                        onClick={() => router.push(`/quiz/edit/${quiz._id}`)}
-                                    >
-                                        <img src={myTheme.mode == "light" ? Pencil.src : PencilLight.src} />
-                                    </td>
-
-                                    <td
-                                        className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
-                                        onClick={() => removeQuizFromCurrentDiscipline(quiz._id)}
-                                    >
-                                        <img src={myTheme.mode == "light" ? Trash.src : TrashLight.src} />
-                                    </td>
-                                    </tr>
-                                );
-                                })
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-
-                    
-                        <hr className="mt-8 mb-8" />
-                    
-
-                    <h2 className="pl-2 font-bold text-lg mb-4">Quizzes existentes</h2>
-                    <button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-6" onClick={()=>{openModal()}}>+ Novo Quiz</button>
-                    
-                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
-                        <table className="w-full h-fill border-collapse">
-                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
-                                <tr>
-                                    <th className="text-left border pl-2 md:py-3">Nome</th>
-                                    <th className="text-center border md:py-3">Descrição</th>
-                                    <th className="text-center border md:py-3 w-10 px-2">Adicionar</th>
+                                    <th className="text-center border pl-2 md:py-3 w-20">Excluir</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-(--area-back) text-(--area-fore)">
@@ -317,14 +256,41 @@ export default function EditDiscipline() {
                             quizzes.map((quiz) => (
                                 <tr key={quiz._id}>
                                     <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{quiz.name}</td>
-                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{quiz.description}</td>
-                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={(e)=>addQuizToCurrentDiscipline(quiz._id)}> + </td>
+                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer">▶</td>
+                                    <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>router.push("/quiz/edit")}><img src={myTheme.mode == "light"? Pencil.src : PencilLight.src} alt="trash" /></td>
+                                    <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={(e)=>{deleteQuiz(quiz)}}><img src={myTheme.mode == "light"? Trash.src : TrashLight.src} alt="trash" /></td>
                                 </tr>
                             ))
                             }
                             </tbody>
                         </table>
                     </div>
+
+
+                    
+                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border mt-10">
+                        <h2 className="text-center">Adicionar Quizzes à esta disciplina</h2>
+                        <table className="w-full h-fill border-collapse">
+                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+                                <tr>
+                                    <th className="text-left border pl-2 md:py-3">Nome</th>
+                                    <th className="text-center border md:py-3">Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-(--area-back) text-(--area-fore)">
+                            {
+                            quizzes.map((quiz) => (
+                                <tr key={quiz._id}>
+                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{quiz.name}</td>
+                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer">▶</td>
+                                </tr>
+                            ))
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+
+
                     </div>
             </div>
         </div>

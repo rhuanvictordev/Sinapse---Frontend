@@ -67,6 +67,11 @@ export default function Home() {
   setDisciplinesFiltered(filtered)
 }
 
+function getSemesterName(id: string){
+    const semester = semesters.find((semester) => semester._id == id)
+    return semester?.name
+}
+
 
 async function subscribe(discipline: Discipline){
     try {
@@ -140,7 +145,7 @@ async function subscribe(discipline: Discipline){
                             {
                             disciplinesFiltered.map((discipline) => (
                                 <tr key={discipline._id}>
-                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{discipline.semester_id}</td>
+                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{getSemesterName(discipline.semester_id)}</td>
                                     <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{discipline.name}</td>
                                     <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={(e)=>subscribe(discipline)}>▶</td>
                                 </tr>

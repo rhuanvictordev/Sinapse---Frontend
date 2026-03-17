@@ -35,7 +35,7 @@ export default function CreateDiscipline() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [semesterSelected, setSemesterSelected] = useState("");
-  const [restrict, setRestrict] = useState("");
+  const [restrict, setRestrict] = useState("N");
 
   useEffect( () => {
     document.title = "Sinapse - Nova Disciplina"
@@ -55,7 +55,7 @@ export default function CreateDiscipline() {
 
   async function createDiscipline(){
     
-    if (name == "" || semesterSelected == "" || restrict == ""){
+    if (name == "" || semesterSelected == "" || restrict == ""||description==""){
         showToast("Preencha todos os campos!","info")
     }else{
         try {
@@ -74,7 +74,7 @@ export default function CreateDiscipline() {
                 showToast("Disciplina criada com sucesso!","success")
             }
         } catch (error) {
-            showToast("Ocorreu um erro ao criar o semestre","error")
+            showToast("Ocorreu um erro ao criar a disciplina","error")
         }
     }
   }
@@ -109,14 +109,14 @@ export default function CreateDiscipline() {
                             <h2 className="font-bold text-xl">Descrição:</h2>
                             <textarea value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) text-(--input-fore) rounded-lg h-16 pl-2 w-full"/>
                         </div>
-                        <div>
+                        {/* <div>
                             <h2 className="font-bold text-xl">Privar:</h2>
                             <select value={restrict} onChange={(e)=>setRestrict(e.target.value)} className="bg-(--select-back) text-(--select-fore) w-30 rounded-lg h-10 cursor-pointer">
                             <option value="">Selecione</option>
                             <option value="Y">Sim</option>
                             <option value="N">Não</option>
                             </select>
-                        </div>
+                        </div> */}
                         <div className="mt-20">
                             <button className="bg-(--button-enter) hover:bg-(--button-hover) text-(--button-fore) rounded-lg cursor-pointer h-10 font-bold px-4" onClick={()=> createDiscipline()}>Criar Disciplina</button>
                         </div>
