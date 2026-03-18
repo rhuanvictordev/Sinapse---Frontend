@@ -30,6 +30,24 @@ type Quiz = {
   categories_ids: []
 }
 
+
+
+type QuestionResponse = {
+  question: string
+  possible_answers: string[]
+  answer: number
+  boolean_answer: boolean
+}
+
+type QuizResponse = {
+  _id: string
+  name: string
+  description: string
+  user_id: string
+  questions: QuestionResponse[]
+  categories_ids: []
+}
+
 export default function QuizEditPage() {
   const router = useRouter();
   const params = useParams();
@@ -37,13 +55,16 @@ export default function QuizEditPage() {
   const { showToast } = useToast();
   const myTheme = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
-  const [quiz, setQuiz] = useState<Quiz>();
+  const [quiz, setQuiz] = useState<QuizResponse>();
+  const [quizEdited, setQuizEdited] = useState<QuizResponse>();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
   const [newQuestion, setNewQuestion] = useState<Question>({id: questions.length, title: "", type: "MULTIPLE",answers: []});
   const [newQuestionText, setNewQuestionText] = useState("");
   const [newAnswerText, setNewAnswerText] = useState("");
+  const [newQuizName, setNewQuizName] = useState("");
+  const [newQuizDescription, setNewQuizDescription] = useState("");
 
   
 useEffect( () => {
@@ -56,6 +77,9 @@ async function getQuiz(){
   try {
         const response = await sinapseAPI.get(`/quizzes/${quizID}`);
         setQuiz(response.data);
+        setNewQuizName(response.data.name)
+        setNewQuizDescription(response.data.description)
+        console.log("Quiz obtido: ", response.data)
   
       } catch (error) {
           showToast("Erro ao obter detalhes do Quiz","error")
@@ -77,14 +101,16 @@ function removeQuestion() {
 }
 
 function nextQuestion(){
-    if (questions.length === 0) {
+    if (quiz?.questions.length === 0) {
       showToast("Não há perguntas!", "info")
       return
     }
 
-    if (selectedQuestion >= questions.length - 1) {
-      showToast("Última pergunta!", "info")
-      return
+    if (quiz?.questions){
+      if (selectedQuestion >= quiz?.questions.length - 1) {
+            showToast("Última pergunta!", "info")
+            return
+        }
     }
 
     setSelectedQuestion(prev => prev + 1)
@@ -92,7 +118,7 @@ function nextQuestion(){
 
 
 function previousQuestion(){
-    if (questions.length === 0) {
+    if (quiz?.questions.length === 0) {
       showToast("Não há perguntas!", "info")
       return
     }
@@ -158,6 +184,8 @@ async function addQuestion() {
     const response = await sinapseAPI.post(`/quizzes/question/${quiz!._id}`, obj)
      if (response.status == 201){ 
       showToast("Pergunta adicionada!", "success")
+      setModalVisible(false)
+      getQuiz()
     } 
   } catch (error) {
     showToast("Ocorreu um erro ao tentar adicionar a pergunta ao Quiz", "error")
@@ -221,37 +249,90 @@ function toggleQuestionType(type: string) {
 }
 
 
+
+async function saveQuizEdited(){
+  if (newQuizName == "" || newQuizDescription == ""){
+    showToast("Insira um nome e uma descrição para o Quiz!")
+    return
+  }
+
+  const updatedQuiz = {...quiz,
+    name: newQuizName,
+    description: newQuizDescription
+  }
+
+  try {
+    const response = await sinapseAPI.patch(`/quizzes/${quiz?._id}`, updatedQuiz)
+    if (response.status === 200){
+      showToast("Quiz atualizado!", "success")
+      getQuiz()
+    }
+
+  } catch (error) {
+    showToast("Erro ao atualizar o quiz", "error")
+  }
+}
+
+  
    return (
     <div className="">
         <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
         
-            <header className="flex flex-col md:justify-between justify-center border-black md:pl-6 md:mb-4">
+            <header className="flex-col md:justify-between justify-center border-black md:pl-6 md:mb-4 hidden md:block">
                 <div className="flex flex-row md:justify-between justify-center">
                     <h2 className="font-bold md:text-2xl text-lg mt-3 mb-4">Edição de Quiz</h2>
-                    <h2 className="md:mt-8 mr-20 font-bold hidden md:block">{questions.length == 1 ? "1 Pergunta" : questions.length + " Perguntas"}</h2>
+                    <h2 className="md:mt-8 mr-20 font-bold hidden md:block">{quiz?.questions.length == 1 ? "1 Pergunta" : quiz?.questions.length + " Perguntas"}</h2>
                 </div>
                 <div className="flex md:flex-row flex-col md:pr-10 w-full mb-4 md:mb-0">
-                    <div className="flex md:flex-row flex-col w-full mb-6">
+                    <div className="flex md:flex-row flex-col w-full mb-4">
                         <h2 className="font-bold md:text-xl text-ls pl-2 text-center md:text-left mb-2 md:mb-0">Nome:</h2>
-                        <input value={quiz?.name} className="md:w-160 md:ml-4 ml-2 mr-2 md:mr-2 pl-2 w-fill bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
-                        <button className="md:w-50 w-fill mt-4 md:mt-0 ml-2 mr-2 md:mr-0 md:text-lg text-sm md:ml-5 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={ () => console.log(questions) } >Salvar Alterações</button>
+                        <input value={newQuizName} onChange={(e)=>setNewQuizName(e.target.value)} className="md:w-160 md:ml-4 ml-2 mr-2 md:mr-2 pl-2 w-fill bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
+                        <button className="md:w-50 w-fill mt-4 md:mt-0 ml-2 mr-2 md:mr-0 md:text-lg text-sm md:ml-5 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={ () => saveQuizEdited() } >Salvar Alterações</button>
                     </div>
-                    <h2 className="md:mt-8 mr-20 font-bold md:hidden text-center w-full">{questions.length == 1 ? "1 Pergunta" : questions.length + " Perguntas"}</h2>
+                    <h2 className="md:mt-8 mr-20 font-bold md:hidden text-center w-full">{quiz?.questions.length == 1 ? "1 Pergunta" : quiz?.questions.length + " Perguntas"}</h2>
+                    <button onClick={()=>setModalVisible(true)} className="md:w-50 w-fill mr-20 md:mr-0 ml-20 md:ml-0 h-10 mt-4 md:mt-0 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" >+ Adicionar Pergunta</button>
+                </div>
+                      <div className="w-full">
+                        <h2 className="font-bold md:text-xl text-ls pl-2 text-center md:text-left mb-1">Descrição:</h2>
+                        <textarea value={newQuizDescription} onChange={(e)=>setNewQuizDescription(e.target.value)} className="md:w-180 w-full pl-2 bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
+                      </div>
+            </header>
+
+
+            <header className="flex-col md:justify-between justify-center border-black md:hidden">
+                <div className="flex flex-row md:justify-between justify-center">
+                    <h2 className="font-bold md:text-2xl text-lg mt-3 mb-4">Edição de Quiz</h2>
+                </div>
+                <div className="flex md:flex-row flex-col w-full mb-4 md:mb-0">
+                    <div className="flex md:flex-row flex-col w-full mb-4">
+                        <h2 className="font-bold md:text-xl text-ls pl-2 text-center md:text-left mb-2 md:mb-0">Nome:</h2>
+                        <input value={newQuizName} onChange={(e)=>setNewQuizName(e.target.value)} className="md:w-160 md:ml-4 ml-2 mr-2 md:mr-2 pl-2 w-fill bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
+                              
+                          <div className="w-full pl-2 pr-2">
+                            <h2 className="font-bold md:text-xl text-ls pl-2 text-center md:text-left mb-2 mt-4">Descrição:</h2>
+                            <textarea value={newQuizDescription} onChange={(e)=>setNewQuizDescription(e.target.value)} className="md:w-180 w-full pl-2 bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-15 font-bold" />
+                          </div>
+                        
+                        <button className="md:w-50 w-fill mt-4 md:mt-0 ml-2 mr-2 md:mr-0 md:text-lg text-sm md:ml-5 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={ () => saveQuizEdited() } >Salvar Alterações</button>
+                    </div>
+                    <h2 className="md:mt-8 mr-20 font-bold md:hidden text-center w-full">{quiz?.questions.length == 1 ? "1 Pergunta" : quiz?.questions.length + " Perguntas"}</h2>
                     <button onClick={()=>setModalVisible(true)} className="md:w-50 w-fill mr-20 md:mr-0 ml-20 md:ml-0 h-10 mt-4 md:mt-0 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" >+ Adicionar Pergunta</button>
                 </div>
             </header>
+
+
             
             <div className="w-full h-full bg-(--area-back) p-2 text-center">
                 <div className="flex flex-col items-center gap-4">
                   <div className="flex flex-row gap-2 justify-center items-center">
-                    <p className="font-bold">Pergunta {questions.length === 0 ? 0 : selectedQuestion + 1} de {questions.length} </p>
+                    <p className="font-bold">Pergunta {quiz?.questions.length === 0 ? 0 : selectedQuestion + 1} de {quiz?.questions.length} </p>
                     <img onClick={() => removeQuestion()} className="w-5 h-5 cursor-pointer" src={myTheme.mode == "light" ? Trash.src : TrashLight.src} alt="alt" />
                   </div>
                     <div className="justify-between gap-2 w-40 flex">
                         <button className="w-20 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) cursor-pointer" onClick={()=> previousQuestion() }>◀</button>
                         <button className="w-20 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) cursor-pointer" onClick={()=> nextQuestion() }>▶</button>
                     </div>
-                    <h2 className="font-bold mt-2">{questions.length === 0 ? "" : questions[selectedQuestion].title} </h2>
+                    <h2 className="font-bold mt-2">{quiz?.questions.length === 0 ? "" : quiz?.questions[selectedQuestion].question} </h2>
                 </div>
                 <div className="w-fill h-fill md:px-2">
                     <div className="h-fill">
@@ -269,17 +350,31 @@ function toggleQuestionType(type: string) {
                                 </thead>
                                 <tbody className="bg-(--area-back) text-(--area-fore)">
                                 {
-                                questions[selectedQuestion]?.answers.map((item) => (
-                                    <tr key={item.id} className="text-left">
-                                        <td className="text-center border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"> <input type="radio" name={"CorrectAnswerQuestion_" + selectedQuestion} checked={item.isCorrect ? true : false} /> </td>
-                                        <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.text}</td>
-                                    </tr>
-                                ))
-                                }
+                                quiz?.questions[selectedQuestion]?.possible_answers.map((item, index) => {
+                                      const correctIndex = (quiz?.questions[selectedQuestion]?.answer ?? 1) - 1;
+                                        return (
+                                          <tr key={item} className="text-left">
+                                            <td className="text-center border pl-2 py-2 bg-(--tbody-back)">
+                                              <input 
+                                                type="radio"
+                                                name={"CorrectAnswerQuestion_" + selectedQuestion}
+                                                checked={index === correctIndex}
+                                                readOnly
+                                              />
+                                            </td>
+
+                                            <td className="border pl-6 py-2 bg-(--tbody-back)">
+                                              {item}
+                                            </td>
+                                          </tr>
+                                        )
+                                      }
+                                    )
+                                  }
                                 </tbody>
                             </table>
                         </div>
-                        </div>
+                      </div>
                 </div>
             </div>
         </div>
@@ -318,7 +413,7 @@ function toggleQuestionType(type: string) {
 
                         {
                         (newQuestion.type != "") && (
-                        <div className="mt-2 w-86 md:w-full md:h-58 h-38 overflow-scroll">
+                        <div className="mt-2 w-full md:h-58 h-38 overflow-scroll">
                             <table className="w-full h-fill border-collapse text-xs">
                                 <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                     <tr>
