@@ -96,6 +96,11 @@ function openModal(){
     setModalVisible(true)
 }
 
+function closeModal(){
+  setNewQuestion(prev => ({...prev, id: questions.length, title: "", type: "",answers: []}))
+  setModalVisible(false)
+}
+
 function removeQuestion() {
   console.log("Removendo Pergunta atual")
 }
@@ -184,6 +189,7 @@ async function addQuestion() {
     const response = await sinapseAPI.post(`/quizzes/question/${quiz!._id}`, obj)
      if (response.status == 201){ 
       showToast("Pergunta adicionada!", "success")
+      setNewQuestion(prev => ({...prev, id: questions.length, title: "", type: "",answers: []}))
       setModalVisible(false)
       getQuiz()
     } 
@@ -447,7 +453,7 @@ async function saveQuizEdited(){
                         }
 
                         <div className="flex flex-row gap-4">
-                            <button onClick={()=>setModalVisible(false)} className="w-full mt-8 bg-blue-600 text-(--button-fore) hover:bg-(--button-hover) duration-300 h-8 rounded-lg cursor-pointer">Cancelar</button>
+                            <button onClick={()=> closeModal()} className="w-full mt-8 bg-blue-600 text-(--button-fore) hover:bg-(--button-hover) duration-300 h-8 rounded-lg cursor-pointer">Cancelar</button>
                             <button onClick={() => addQuestion()} className="w-full mt-8 bg-green-700 text-(--button-fore) hover:bg-(--button-hover) duration-300 h-8 rounded-lg cursor-pointer">Adicionar</button>
                         </div>
                     </div>

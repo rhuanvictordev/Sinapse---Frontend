@@ -1,0 +1,204 @@
+"use client"
+
+import { useRouter, useParams } from "next/navigation"
+import { useAuth } from "@/contexts/AuthContext"
+import { useToast } from "@/contexts/ToastContext"
+import { useEffect, useState } from "react"
+import { sinapseAPI } from "@/services/api"
+
+type User = {
+    _id: string
+    name: string
+    email: string
+    paying: boolean
+    is_admin: boolean
+    answered_questions: number
+    points: number
+}
+
+type Question = {
+    question: string
+    possible_answers: string[]
+    answer: number
+    boolean_answer: boolean
+}
+
+type QuizResponse = {
+    _id: string
+    name: string
+    description: string
+    user_id: string
+    questions: Question[]
+}
+
+
+const perguntas = [
+    {
+        "question": "Um conjunto de dados para mostrar informações",
+        "possible_answers": [
+          "Verdadeiro",
+          "Falso"
+        ],
+        "answer": 1,
+        "boolean_answer": true
+      },
+      {
+        "question": "Uma pessoa que tenta fazer algo",
+        "possible_answers": [
+          "Verdadeiro",
+          "Falso"
+        ],
+        "answer": 2,
+        "boolean_answer": true
+      },
+      {
+        "question": "Uma caixa para armazenar valores",
+        "possible_answers": [
+          "Verdadeiro",
+          "Falso"
+        ],
+        "answer": 2,
+        "boolean_answer": true
+      },
+      {
+        "question": "Uma divisão entre componentes",
+        "possible_answers": [
+          "Verdadeiro",
+          "Falso"
+        ],
+        "answer": 2,
+        "boolean_answer": true
+      },
+      {
+        "question": "Uma outra qualquer coisa",
+        "possible_answers": [
+          "Verdadeiro",
+          "Falso"
+        ],
+        "answer": 2,
+        "boolean_answer": true
+      }
+]
+
+export default function playQuizPage(){
+    const router = useRouter();
+    const { user } = useAuth();
+    const { showToast } = useToast();
+    const [quiz, setQuiz] = useState<QuizResponse>()
+    const params = useParams();
+    const [points, setPoints] = useState(0);
+    const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [answeredQuestions, setAnsweredQuestions] = useState(0);
+
+    useEffect(() => {
+        getQuiz(params.id)
+    }, [])
+
+    useEffect(() => {
+        if (user) {
+            setAnsweredQuestions(user.answered_questions ?? 0)
+        }
+    }, [user])
+
+    async function getQuiz(id: any){
+        try {
+            const response = await sinapseAPI.get(`/quizzes/${id}`)
+            if (response.data.questions.length == 0){
+                showToast("O quiz não possui perguntas!", "info")
+                router.push("/home")
+            }else{
+                setQuiz(response.data)
+                console.log("Quiz obtido: ", response.data)
+            }
+        } catch (error: any) {
+            showToast("Ocorreu um erro ao obter os dados do Quiz", "info")
+            router.push("/home")
+        }
+    }
+
+    async function finalizeQuiz(){
+        try {
+            const totalPoints = (user?.points ?? 0) + points;
+            const response = await sinapseAPI.patch(`/users/${user?._id}`,{ points: totalPoints })
+            if (response.status === 200){
+                showToast("Quiz finalizado, parabéns! Total de Pontos: " + points,"success")
+                router.push("/home")
+            }
+        } catch (error: any) {
+            showToast("Ocorreu um erro ao finalizar o quiz", "error")
+        }
+    }
+
+    function nextQuestion(){
+        if (currentQuestion >= quiz!.questions.length - 1){
+            finalizeQuiz()
+        }else{
+            setCurrentQuestion( prev => prev + 1 )
+        }
+    }
+
+    async function verifyAnswer(questionText: string, indexAnswer: number){
+        const newAnsweredQuestions = answeredQuestions + 1
+        setAnsweredQuestions(newAnsweredQuestions)
+        console.log("texto da questao:", questionText, "resposta:", indexAnswer)
+
+        try {
+            const response = await sinapseAPI.patch(`/users/${user?._id}`,{ answered_questions: newAnsweredQuestions })
+            if (response.status === 200){
+                const responseAnswer = await sinapseAPI.post(`/quizzes/answer/${quiz!._id}`,
+                    { userAnswer: indexAnswer + 1 },
+                    { params: { questionText } }
+                )
+                if (responseAnswer.data === true){
+                    setPoints(prev => prev + 13)
+                    showToast("Acertou","success")
+                    nextQuestion()
+                } else {
+                    showToast("Errou","error")
+                    setPoints(prev => prev >= 10 ? prev - 10 : prev)
+                }
+            }
+        } catch (error: any) {
+            showToast("Ocorreu um erro ao verificar a resposta", "error")
+        }
+    }
+
+
+
+
+
+
+
+
+
+    const totalQuestions = quiz?.questions?.length ?? 0
+    const progress = totalQuestions > 0 ? ((currentQuestion + 1) / totalQuestions) * 100 : 0
+    
+    if (quiz != null)
+    return (
+        <div className="w-full text-center items-center justify-center flex flex-col pb-10 text-(--foreground)">
+            <div className="flex w-full h-16 flex-row justify-between pl-10 pr-10 items-center bg-(--area-back)">
+                <h2 className="font-bold md:text-2xl">{quiz.name}</h2>
+                <h2 className="font-bold md:text-2xl">Pontuação: {points}</h2>
+            </div>
+            
+            <div className="h-6 bg-blue-200 md:w-300 w-full md:mt-10 mt-4 rounded-lg">
+                <div className="bg-green-500 h-6 rounded-lg transition-all duration-300" style={{ width: `${progress}%` }}></div>
+            </div>
+
+            <div className="mt-4 text-xl font-bold">
+                <h2 className="text-sm md:text-xl">Pergunta {currentQuestion + 1} de {quiz.questions.length}</h2>
+                <h2 className="md:mt-10 mt-4 font-bold md:text-4xl">{quiz.questions[currentQuestion].question}</h2>
+            </div>
+            <div className="bg-(--area-back) py-4 w-full h-fill mt-10 flex flex-col gap-6 text-center items-center justify-center">
+                {
+                   quiz.questions[currentQuestion].possible_answers.map( (answer, index) => (
+                        <div key={index} onClick={ (e)=> verifyAnswer(quiz.questions[currentQuestion].question, index) } className="md:h-18 h-fill py-2 md:w-200 w-full bg-blue-200 text-black items-center text-center justify-center flex rounded-4xl hover:bg-blue-400 duration-300 cursor-pointer">
+                            <h2 className="font-bold md:text-2xl text-xs">{answer}</h2>
+                        </div>
+                    ) )
+                }
+            </div>
+        </div>
+    )
+}

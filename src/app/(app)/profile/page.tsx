@@ -3,14 +3,16 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Moon, Pencil, Sun, Trash, User } from "@/app/components/icons"
 import { useTheme } from "@/contexts/ThemeContext";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const { user, login, logout } = useAuth();
   const myTheme = useTheme();
+  const router = useRouter();
 
   useEffect( () => {
     document.title = "Sinapse - Perfil"
-  } )
+  }, [])
 
   return(
     <div className="p-4 gap-4 flex flex-col items-center justify-center text-center text-(--foreground) pb-0">
@@ -19,7 +21,7 @@ export default function Profile() {
       <h1 className="text-xl text-gray-400">ID: {user?._id}</h1>
       <h1 className="text-xl">Nome: {user?.name}</h1>
       <h1 className="text-xl">E-mail: {user?.email}</h1>
-      <h1 className="text-xl">Quizzes respondidos: {user?.answered_questions}</h1>
+      <h1 className="text-xl">Perguntas respondidas: {user?.answered_questions}</h1>
       <h1 className="text-xl">Pontuação acumulada: {user?.points}</h1>
       <h1 className="text-xl">Status do Pagamento: {user?.paying == true? "Pendente" : "Pago"}</h1>
       <h2>ADM: {user?.is_admin ? "Sim" : "Não"}</h2>
