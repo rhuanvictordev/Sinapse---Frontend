@@ -66,15 +66,15 @@ export default function Login(){
         </div>
       </div>
 
-      <div className="flex md:w-100 w-80 justify-between gap-4">
+      <div className="flex md:w-100 w-80 justify-center gap-4">
         
-        <button className="flex items-center justify-center gap-3 w-60 h-10 p-2 border rounded-2xl hover:bg-blue-400 hover:text-white duration-300 cursor-pointer hover:text-bold">
+        {/* <button className="flex items-center justify-center gap-3 w-60 h-10 p-2 border rounded-2xl hover:bg-blue-400 hover:text-white duration-300 cursor-pointer hover:text-bold">
           <Image src={Google} alt="google_logo" width={20} height={20} />
           Login com o Google
-        </button>
+        </button> */}
 
         <button
-          className="w-32 h-10 p-2 bg-(--button-back) rounded-2xl text-white hover:bg-(--button-hover) hover:text-white hover:border-white transition duration-300 cursor-pointer"
+          className="w-full h-10 p-2 bg-(--button-back) rounded-2xl text-white hover:bg-(--button-hover) hover:text-white hover:border-white transition duration-300 cursor-pointer"
           onClick={validateFields}>
           Entrar
         </button>

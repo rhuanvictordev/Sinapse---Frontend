@@ -74,7 +74,7 @@ export default function CreateDiscipline() {
                 showToast("Disciplina criada com sucesso!","success")
             }
         } catch (error) {
-            showToast("Ocorreu um erro ao criar a disciplina","error")
+            showToast("Insira outro nome para a disciplina!","info")
         }
     }
   }

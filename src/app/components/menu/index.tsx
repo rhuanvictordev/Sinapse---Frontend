@@ -8,7 +8,7 @@ import { useTheme } from "@/contexts/ThemeContext"
 import { Categories, CategoriesLight, Folder, FolderLight, MenuIcon, Moon, Persons, PersonsLight, Power, PowerLight, Search, SearchLight, Settings, SettingsLight, Star, StarLight, Sun, Users, UsersLight } from "@/app/components/icons"
 
 export default function Menu() {
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
   const pathname = usePathname()
   const menu = useMenu()
   const myTheme = useTheme()
@@ -27,11 +27,11 @@ export default function Menu() {
           <Link href="/home" className={linkClass(pathname === "/home")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Folder.src : FolderLight.src)} alt="" /> Início</Link>
         </li>
 
-        <li>
+        <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
           <Link href="/semesters" className={linkClass(pathname === "/semesters")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Categories.src : CategoriesLight.src)} alt="" /> Semestres</Link>
         </li>
 
-        <li>
+        <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
           <Link href="/users" className={linkClass(pathname === "/users")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Users.src : UsersLight.src)} alt="" /> Usuários</Link>
         </li>
         
