@@ -1,8 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
+
+  async rewrites() {
+    return [
+      {
+        source: "/sinapse/:path*",
+        destination: `${process.env.NEXT_PUBLIC_BACKEND}/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

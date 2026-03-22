@@ -23,8 +23,8 @@ export default function Profile() {
       <h1 className="text-xl">E-mail: {user?.email}</h1>
       <h1 className="text-xl">Perguntas respondidas: {user?.answered_questions}</h1>
       <h1 className="text-xl">Pontuação acumulada: {user?.points}</h1>
-      <h1 className="text-xl">Status do Pagamento: {user?.paying == true? "Pendente" : "Pago"}</h1>
-      <h2>ADM: {user?.is_admin ? "Sim" : "Não"}</h2>
+      {/* <h1 className="text-xl">Status do Pagamento: {user?.paying == true? "Pendente" : "Pago"}</h1> */}
+      {/* <h2>ADM: {user?.is_admin ? "Sim" : "Não"}</h2> */}
       <div className="cursor-pointer flex flex-col text-center" onClick={myTheme.toggleTheme}>
         {/*
 

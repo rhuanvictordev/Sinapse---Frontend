@@ -45,15 +45,16 @@ export default function Register(){
         <Image src={Logo} alt="logo" width={150}/>
       </div>
 
-      <h3 className="text-center font-bold text-xl md:mb-8 mb-2"> Crie sua conta </h3>
+      <h3 className="text-center font-bold text-xl"> Crie sua conta </h3>
 
-      <div className="md:w-100 w-80">
+      <div className="md:w-100 w-80 mt-5">
         <div className="flex flex-col gap-4">
 
           <div className="md:w-100 w-80">
             
             <p className="font-bold">Nome de Usuário</p>
             <input type="text" className="md:w-100  w-80 h-10 rounded-2xl border pl-2" maxLength={42} value={userName} onChange={(event) => setUserName(event.target.value)}/>
+              <h3 className="text-left font-bold text-xs text-red-500 mt-2"> Guarde seu nome de usuário para futuramente conseguir recuperar sua conta! </h3>
           </div>
 
           <div>

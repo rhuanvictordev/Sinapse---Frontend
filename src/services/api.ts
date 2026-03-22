@@ -6,7 +6,7 @@ export const LocalAPI = axios.create({
 });
 
 export const sinapseAPI = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND
+  baseURL: "/sinapse"
 });
 
 export const RickAPI = axios.create({

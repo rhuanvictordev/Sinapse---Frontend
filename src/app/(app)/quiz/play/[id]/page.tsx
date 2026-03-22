@@ -164,22 +164,15 @@ export default function playQuizPage(){
     }
 
 
-
-
-
-
-
-
-
     const totalQuestions = quiz?.questions?.length ?? 0
     const progress = totalQuestions > 0 ? ((currentQuestion + 1) / totalQuestions) * 100 : 0
     
     if (quiz != null)
     return (
-        <div className="w-full text-center items-center justify-center flex flex-col pb-10 text-(--foreground)">
-            <div className="flex w-full h-16 flex-row justify-between pl-10 pr-10 items-center bg-(--area-back)">
-                <h2 className="font-bold md:text-2xl">{quiz.name}</h2>
-                <h2 className="font-bold md:text-2xl">Pontuação: {points}</h2>
+        <div className="w-full text-center items-center justify-center flex flex-col pb-10 text-(--foreground) pl-2 pr-2">
+            <div className="flex w-full h-16 flex-row justify-between items-center bg-(--area-back) rounded-lg overflow-auto gap-10">
+                <h2 className="font-bold md:text-2xl text-xs pl-2 text-left">{quiz.name}</h2>
+                <h2 className="font-bold md:text-2xl text-xs pr-2 text-right">Pontuação: {points}</h2>
             </div>
             
             <div className="h-6 bg-blue-200 md:w-300 w-full md:mt-10 mt-4 rounded-lg">
@@ -188,12 +181,12 @@ export default function playQuizPage(){
 
             <div className="mt-4 text-xl font-bold">
                 <h2 className="text-sm md:text-xl">Pergunta {currentQuestion + 1} de {quiz.questions.length}</h2>
-                <h2 className="md:mt-10 mt-4 font-bold md:text-4xl">{quiz.questions[currentQuestion].question}</h2>
+                <h2 className="md:mt-10 mt-4 font-bold md:text-3xl text-lg">{quiz.questions[currentQuestion].question}</h2>
             </div>
-            <div className="bg-(--area-back) py-4 w-full h-fill mt-10 flex flex-col gap-6 text-center items-center justify-center">
+            <div className="bg-(--area-back) rounded-lg py-4 w-full h-fill mt-10 flex flex-col gap-3 md:gap-6 text-center items-center justify-center">
                 {
                    quiz.questions[currentQuestion].possible_answers.map( (answer, index) => (
-                        <div key={index} onClick={ (e)=> verifyAnswer(quiz.questions[currentQuestion].question, index) } className="md:h-18 h-fill py-2 md:w-200 w-full bg-blue-200 text-black items-center text-center justify-center flex rounded-4xl hover:bg-blue-400 duration-300 cursor-pointer">
+                        <div key={index} onClick={ (e)=> verifyAnswer(quiz.questions[currentQuestion].question, index) } className="md:h-18 h-fill py-3 md:w-200 w-full bg-blue-200 text-black items-center text-center justify-center flex rounded-xl hover:bg-blue-400 duration-300 cursor-pointer">
                             <h2 className="font-bold md:text-2xl text-xs">{answer}</h2>
                         </div>
                     ) )

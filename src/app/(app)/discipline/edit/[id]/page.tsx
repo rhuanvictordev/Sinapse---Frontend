@@ -253,7 +253,6 @@ export default function EditDiscipline() {
                             <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                 <tr>
                                     <th className="text-left border pl-2 md:py-3">Nome</th>
-                                    <th className="text-center border pl-2 md:py-3 w-20">Iniciar</th>
                                     <th className="text-center border pl-2 md:py-3 w-20">Editar</th>
                                     <th className="text-center border pl-2 md:py-3 w-20 px-2">Remover</th>
                                 </tr>
@@ -269,10 +268,6 @@ export default function EditDiscipline() {
                                     <tr key={quiz._id}>
                                     <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
                                         {quiz.name}
-                                    </td>
-
-                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer">
-                                        ▶
                                     </td>
 
                                     <td

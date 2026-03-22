@@ -26,6 +26,7 @@ import MenuIconLight from "@/../assets/images/config_icon_light.png"
 import SettingsLight from "@/../assets/images/settings_light.png"
 import Users from "@/../assets/images/users.png"
 import UsersLight from "@/../assets/images/users_light.png"
+import LoadingIcon from "@/../assets/images/loading.gif"
 
 export {
   Folder,
@@ -55,5 +56,6 @@ export {
   MenuIconLight,
   SettingsLight,
   Users,
-  UsersLight
+  UsersLight,
+  LoadingIcon
 }

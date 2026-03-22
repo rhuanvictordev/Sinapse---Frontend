@@ -1,5 +1,5 @@
 "use client"
-import { ScrollToTopButton } from "@/app/components/scroll/ScrollTop";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { LocalAPI, sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
@@ -13,10 +13,17 @@ type Semester = {
   name: string
 }
 
+type Discipline = {
+    _id: string
+    name: string
+    semester_id: string
+}
+
 export default function Home() {
   const { user, login, logout, loading } = useAuth();
   const router = useRouter();
   const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [disciplines, setDisciplines] = useState<Discipline[]>([]);
   const myTheme = useTheme();
   const { showToast } = useToast();
   const [name, setName] = useState("");
@@ -52,16 +59,32 @@ export default function Home() {
     }
   }
 
-  async function deleteSemester(id: string){
-    if (confirm("Deseja excluir este Semestre?")){
+    async function deleteSemester(semesterID: string) {
+        if (!confirm("Deseja excluir este Semestre?")) return;
+
         try {
-        await sinapseAPI.delete(`/semesters/${id}`, { data: { userId: user!._id }})
-        showToast("Semestre removido com sucesso!", "success")
-        getSemesters();
+            const { data: disciplines } = await sinapseAPI.get("/subjects");
+
+            const toDelete = disciplines.filter(
+            (d: any) => d.semester_id === semesterID
+            );
+            await Promise.all(
+                toDelete.map((d: any) =>
+                    sinapseAPI.delete(`/subjects/${d._id}`)
+                )
+            );
+
+            await sinapseAPI.delete(`/semesters/${semesterID}`, {
+            data: { userId: user!._id },
+            });
+
+            showToast("Semestre removido com sucesso!", "success");
+            getSemesters();
+
         } catch (error: any) {
-            const message = error?.response?.data?.message || "Erro ao remover o Semestre"
-            showToast(message, "error")
-        }
+            const message =
+            error?.response?.data?.message || "Erro ao remover o Semestre";
+            showToast(message, "error");
         }
     }
 
@@ -75,9 +98,9 @@ export default function Home() {
             return
         }
         try {
-        await sinapseAPI.put(`/semesters/${id}`, {userId: user!._id, name: name})
-        showToast("Semestre renomeado!", "success")
-        getSemesters();
+            await sinapseAPI.put(`/semesters/${id}`, {userId: user!._id, name: name})
+            showToast("Semestre renomeado!", "success")
+            getSemesters();
         } catch (error: any) {
             const message = error?.response?.data?.message || "Erro ao renomear o Semestre"
             showToast(message, "error")
