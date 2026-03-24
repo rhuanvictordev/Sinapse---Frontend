@@ -25,6 +25,7 @@ const { user, loading } = useAuth();
 const {showToast} = useToast();
 const myTheme = useTheme();
 const [users, setUsers] = useState<User[]>([]);
+const [filtredUsers, setFiltredUsers] = useState<User[]>([]);
 
 const [modalVisible, setModalVisible] = useState(false)
 const [id, setId] = useState("");
@@ -42,6 +43,7 @@ const [userSelected, setUserSelected] = useState<User | null>(null)
 
 useEffect( () => {
     document.title = "Sinapse - Usuários"
+    getUsers();
     if ( !loading && !user?.is_admin){
         router.push("/home")
         showToast("Você não tem permissão para acessar esta página!", "error");
@@ -125,6 +127,17 @@ async function getUsers(){
     }
 }
 
+function filterUsers() {
+    const list = users.filter((user) =>
+        (user.name || "").toLowerCase().includes(name.toLowerCase()) &&
+        (user.email || "").toLowerCase().includes(email.toLowerCase()) &&
+        (user._id || "").toLowerCase().includes(id.toLowerCase())
+    );
+
+    setFiltredUsers(list);
+}
+
+
 return (
 <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
     <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4  text-center border md:h-20 border-black">
@@ -154,7 +167,7 @@ return (
                     </div>
                 </div>
                 <div className="mt-4 justify-center flex">
-                    <button onClick={()=>getUsers()} className="px-4 py-1 mb-4 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) font-bold cursor-pointer">Buscar</button>
+                    <button onClick={()=>filterUsers()} className="px-4 py-1 mb-4 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) font-bold cursor-pointer">Buscar</button>
                 </div>
                 <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border md:mt-0 mt-8">
                     <table className="w-full h-fill border-collapse">
@@ -170,7 +183,7 @@ return (
 
                         <tbody className="bg-(--area-back) text-(--area-fore)">
                         {
-                        users.map((item) => (
+                        filtredUsers.map((item) => (
                         <tr key={item._id}>
                             <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.name} </td>
 
