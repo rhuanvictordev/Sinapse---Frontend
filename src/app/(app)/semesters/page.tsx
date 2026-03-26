@@ -145,8 +145,8 @@ export default function Home() {
                                 semesters.map((item) => (
                                     <tr key={item._id}>
                                         <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.name}</td>
-                                        <td className="border pl-10 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>{renameSemester(item._id)}} ><img src={myTheme.mode == "light" ? Pencil.src : PencilLight.src } alt="trash" /></td>
-                                        <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>deleteSemester(item._id)} ><img src={myTheme.mode == "light" ? Trash.src : TrashLight.src } alt="trash" /></td>
+                                        <td className="border pl-10 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>{renameSemester(item._id)}}> <Pencil/> </td>
+                                        <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>deleteSemester(item._id)}> <Trash/> </td>
                                     </tr>
                                 ))
                                 }

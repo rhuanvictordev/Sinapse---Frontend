@@ -135,6 +135,7 @@ type ThemeContextType = {
   theme: ThemeColors
   mode: ThemeMode
   toggleTheme: () => void
+  iconColor: string
 }
 
 const ThemeContext = createContext<ThemeContextType | null>(null)
@@ -151,6 +152,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     })
   }
 
+  const iconColor = mode === "light" ? "#000" : "#FFF";
   const theme = mode === "light" ? lightTheme : darkTheme
 
   useEffect(() => {
@@ -207,7 +209,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme])
 
   return (
-    <ThemeContext.Provider value={{ theme, mode, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, mode, toggleTheme, iconColor }}>
       {children}
     </ThemeContext.Provider>
   )
@@ -224,8 +226,8 @@ export function useTheme() {
 export function ThemeIcon() {
   const { mode, toggleTheme } = useTheme()
   return (
-    <div className="bg-white fixed bottom-4 right-4 w-8 h-8 rounded-full cursor-pointer" onClick={toggleTheme}>
-      <img src={mode === "light" ? Moon.src : Sun.src} alt="" className="flex justify-center items-center ml-1 mt-1"/>
+    <div className="fixed bottom-4 right-4 w-8 h-8 cursor-pointer" onClick={toggleTheme}>
+      {mode === "light" ? <Moon size={22}/> : <Sun size={22}/>}
     </div>
   )
 }

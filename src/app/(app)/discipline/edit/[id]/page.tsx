@@ -274,14 +274,14 @@ export default function EditDiscipline() {
                                         className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
                                         onClick={() => router.push(`/quiz/edit/${quiz._id}`)}
                                     >
-                                        <img src={myTheme.mode == "light" ? Pencil.src : PencilLight.src} />
+                                        <Pencil/>
                                     </td>
 
                                     <td
                                         className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
                                         onClick={() => removeQuizFromCurrentDiscipline(quiz._id)}
                                     >
-                                        <img src={myTheme.mode == "light" ? Trash.src : TrashLight.src} />
+                                        <Trash/>
                                     </td>
                                     </tr>
                                 );

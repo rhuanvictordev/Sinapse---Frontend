@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { useMenu } from "@/contexts/StateContext"
 import { useTheme } from "@/contexts/ThemeContext"
-import { Categories, CategoriesLight, Folder, FolderLight, MenuIcon, Moon, Persons, PersonsLight, Power, PowerLight, Search, SearchLight, Settings, SettingsLight, Star, StarLight, Sun, Users, UsersLight } from "@/app/components/icons"
+import { Categories, CategoriesLight, Folder, FolderLight, Home, MenuIcon, Moon, Persons, PersonsLight, Power, PowerLight, Search, SearchLight, Settings, SettingsLight, Star, StarLight, Sun, Users, UsersLight } from "@/app/components/icons"
 
 export default function Menu() {
   const { logout, user } = useAuth()
@@ -24,39 +24,39 @@ export default function Menu() {
       <ul className="font-bold bg-(--screen-back) text-lg md:text-xl text-left border md:border-0">
         
         <li>
-          <Link href="/home" className={linkClass(pathname === "/home")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Folder.src : FolderLight.src)} alt="" /> Início</Link>
+          <Link href="/home" className={linkClass(pathname === "/home")} style={{color:myTheme.theme.menuButtonFore}}> <Home/> Início</Link>
         </li>
 
         <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
-          <Link href="/semesters" className={linkClass(pathname === "/semesters")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Categories.src : CategoriesLight.src)} alt="" /> Semestres</Link>
+          <Link href="/semesters" className={linkClass(pathname === "/semesters")} style={{color:myTheme.theme.menuButtonFore}}> <Categories/> Semestres</Link>
         </li>
 
         <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
-          <Link href="/users" className={linkClass(pathname === "/users")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Users.src : UsersLight.src)} alt="" /> Usuários</Link>
+          <Link href="/users" className={linkClass(pathname === "/users")} style={{color:myTheme.theme.menuButtonFore}}> <Users/> Usuários</Link>
         </li>
         
         <li>
-          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Search.src : SearchLight.src)} alt="" /> Disciplinas</Link>
+          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <Search/> Disciplinas</Link>
         </li>
         
         <li>
-          <Link href="/ranking" className={linkClass(pathname === "/ranking")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Star.src : StarLight.src)} alt="" /> Ranking</Link>
+          <Link href="/ranking" className={linkClass(pathname === "/ranking")} style={{color:myTheme.theme.menuButtonFore}}> <Star/> Ranking</Link>
         </li>
         
         <li>
-          <Link href="/duel" className={linkClass(pathname === "/duel")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Persons.src : PersonsLight.src)} alt="" /> Duelo</Link>
+          <Link href="/duel" className={linkClass(pathname === "/duel")} style={{color:myTheme.theme.menuButtonFore}}> <Persons/> Duelo</Link>
         </li>
 
         <li>
-          <Link href="/profile" className={linkClass(pathname === "/profile")} style={{color:myTheme.theme.menuButtonFore}}> <img className="w-6" src={(myTheme.mode=="light" ? Settings.src : SettingsLight.src)} alt="" /> Perfil </Link>
+          <Link href="/profile" className={linkClass(pathname === "/profile")} style={{color:myTheme.theme.menuButtonFore}}> <Settings/> Perfil </Link>
         </li>
 
         <li onClick={()=>myTheme.toggleTheme()}>
-          <h2 className={linkClass(pathname === "")} style={{color:myTheme.theme.menuButtonFore}}> <img className="w-5 bg-white rounded-full p-1" src={(myTheme.mode=="light" ? Moon.src : Sun.src)} alt="" /> {myTheme.mode == "dark" ? "Modo Claro" : "Modo Escuro"} </h2>
+          <h2 className={linkClass(pathname === "")} style={{color:myTheme.theme.menuButtonFore}}> {myTheme.mode == "light" ? <Moon/> : <Sun/>} {myTheme.mode == "dark" ? "Modo Claro" : "Modo Escuro"} </h2>
         </li>
         
         <li>
-          <Link href="/login" onClick={logout} className={linkClass(pathname === "/login")} style={{color:myTheme.theme.menuButtonFore}}> <img src={(myTheme.mode=="light" ? Power.src : PowerLight.src)} alt="" /> Sair</Link>
+          <Link href="/login" onClick={logout} className={linkClass(pathname === "/login")} style={{color:myTheme.theme.menuButtonFore}}> <Power/>  Sair</Link>
         </li>
       </ul>
 

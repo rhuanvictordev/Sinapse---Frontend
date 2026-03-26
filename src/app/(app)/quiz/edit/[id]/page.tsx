@@ -332,7 +332,7 @@ async function saveQuizEdited(){
                 <div className="flex flex-col items-center gap-4">
                   <div className="flex flex-row gap-2 justify-center items-center">
                     <p className="font-bold">Pergunta {quiz?.questions.length === 0 ? 0 : selectedQuestion + 1} de {quiz?.questions.length} </p>
-                    <img onClick={() => removeQuestion()} className="w-5 h-5 cursor-pointer" src={myTheme.mode == "light" ? Trash.src : TrashLight.src} alt="alt" />
+                    <Trash onClick={()=> removeQuestion()}/>
                   </div>
                     <div className="justify-between gap-2 w-40 flex">
                         <button className="w-20 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) cursor-pointer" onClick={()=> previousQuestion() }>◀</button>
@@ -361,12 +361,7 @@ async function saveQuizEdited(){
                                         return (
                                           <tr key={item} className="text-left">
                                             <td className="text-center border pl-2 py-2 bg-(--tbody-back)">
-                                              <input 
-                                                type="radio"
-                                                name={"CorrectAnswerQuestion_" + selectedQuestion}
-                                                checked={index === correctIndex}
-                                                readOnly
-                                              />
+                                              <input type="checkbox" checked={index === correctIndex} readOnly />
                                             </td>
 
                                             <td className="border pl-6 py-2 bg-(--tbody-back)">
@@ -436,11 +431,11 @@ async function saveQuizEdited(){
                                 {
                                 newQuestion.answers.map((item) => (
                                 <tr key={item.id} className="text-left">
-                                    <td className="text-center border bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"> <input type="radio" name="answer" checked={item.isCorrect} onChange={(()=>setCorrectAnswer(item.id))} /></td>
+                                    <td className="text-center border bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>setCorrectAnswer(item.id)}> <input type="checkbox" name="answer" checked={item.isCorrect} readOnly /></td>
                                     <td className="border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.text}</td>
                                     {
                                     (newQuestion.type == "MULTIPLE") && (
-                                        <td className="border bg-(--tbody-back) py-2 text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) text-center items-center justify-center flex" onClick={()=>{removeAnswer(item.id)}}> <img className="w-4" src={myTheme.mode == "light" ? Trash.src : TrashLight.src} alt="trash" /> </td>
+                                        <td className="border bg-(--tbody-back) py-2 text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) text-center items-center justify-center flex cursor-pointer" onClick={()=>{removeAnswer(item.id)}}> <Trash size={16}/> </td>
                                     )    
                                     }
                                 </tr>

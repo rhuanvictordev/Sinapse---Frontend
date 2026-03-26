@@ -149,10 +149,7 @@ export default function Home() {
                     className="h-10 bg-(--button-edit) hover:bg-(--button-edit-hover) duration-300 flex items-center text-lg gap-2 md:gap-4 px-2 rounded-lg cursor-pointer"
                     onClick={() => router.push(`/discipline/edit/${item._id}`)}
                   >
-                    <img
-                      src={myTheme.mode === "light" ? Pencil.src : PencilLight.src}
-                      className="w-5 h-5"
-                    />
+                    <Pencil/>
                     Editar
                   </button>
 
@@ -160,10 +157,7 @@ export default function Home() {
                     className="h-10 bg-(--button-delete) hover:bg-(--button-delete-hover) duration-300 flex items-center text-lg gap-2 md:gap-4 px-2 rounded-lg cursor-pointer"
                     onClick={() => deleteDiscipline(item._id)}
                   >
-                    <img
-                      src={myTheme.mode === "light" ? Trash.src : TrashLight.src}
-                      className="w-5 h-5"
-                    />
+                    <Trash/>
                     Excluir
                   </button>
 

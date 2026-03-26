@@ -192,11 +192,11 @@ return (
                             <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.points} </td>
 
                             <td className="text-center border py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=> editUser(item)}>
-                                <img className="inline-block" src={myTheme.mode == "light" ? Pencil.src : PencilLight.src} alt="pencil"/>
+                                <Pencil/>
                             </td>
 
                             <td className="text-center border py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=> deleteUser(item._id)}>
-                                <img className="inline-block" src={myTheme.mode == "light" ? Trash.src : TrashLight.src} alt="trash"/>
+                                <Trash/>
                             </td>
                         </tr>
                         ))

@@ -31,8 +31,7 @@ export default function Header() {
         <div className="flex flex-row items-center justify-between w-full">
             <div>
               <button className="p-1 fixed top-2 rounded-full cursor-pointer" onClick={menu.toggleMenu}> 
-                <img src={myTheme.mode == "light" ? MenuIcon.src : MenuIconLight.src} alt="menu" className="w-10 mt-2 md:hidden"/>
-                <img src={myTheme.mode == "light" ? MenuIcon.src : MenuIconLight.src} alt="menu" className="w-10 mt-3 hidden md:block"/>
+                <MenuIcon color={myTheme.iconColor} size={52}/>
                 </button>
             </div>
             <div className="cursor-pointer" onClick={()=>handleLogoClick()}>
