@@ -3,14 +3,15 @@
 import Image from "next/image";
 import UserImage from "../../../../assets/images/user.png";
 import { useAuth } from "@/contexts/AuthContext";
-import { useMenu } from "@/contexts/StateContext";
+import { useMenu, useProfileMenu } from "@/contexts/StateContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Logo, MenuIcon, MenuIconLight, Trash } from "@/app/components/icons"
 import { useRouter } from "next/navigation";
+import { LogoHorizontalDark, LogoHorizontalLight, MenuIcon, User } from "../icons";
 
 export default function Header() {
   const { user } = useAuth();
   const menu = useMenu();
+  const profileMenu = useProfileMenu();
   const myTheme = useTheme();
   const router = useRouter();
 
@@ -23,27 +24,44 @@ export default function Header() {
       if (menu.menuActive){
         menu.toggleMenu()
       }
+      if (profileMenu.profileMenuActive){
+        profileMenu.toggleProfileMenu()
+      }
+  }
+
+  function changeMenu(){
+      menu.toggleMenu()
+      if (profileMenu.profileMenuActive){
+        profileMenu.toggleProfileMenu()
+      }
+  }
+
+  function changeProfileMenu(){
+      profileMenu.toggleProfileMenu()
+      if (menu.menuActive){
+        menu.toggleMenu()
+      }
   }
 
 
   return (
-    <div className="w-full h-20 border text-center flex md:px-10 px-4" style={{color:myTheme.theme.screenFore, backgroundColor:myTheme.theme.screenBack}}>
+    <div className="w-full h-20 text-center flex md:px-10 px-4" style={{color:myTheme.theme.screenFore, backgroundColor:myTheme.theme.screenBack}}>
         <div className="flex flex-row items-center justify-between w-full">
             <div>
-              <button className="p-1 fixed top-2 rounded-full cursor-pointer" onClick={menu.toggleMenu}> 
-                <MenuIcon color={myTheme.iconColor} size={52}/>
+              <button className="p-1 fixed top-2 rounded-full cursor-pointer" onClick={()=>changeMenu()}> 
+                <MenuIcon color={myTheme.iconColor} size={38} className="bg-(--screen-back) p-1 border border-white shadow-xl mt-2 rounded-lg"/>
                 </button>
             </div>
             <div className="cursor-pointer" onClick={()=>handleLogoClick()}>
-              <Image src={Logo} alt="logo" className="w-32 ml-10 mt-2 md:ml-34"/>
+              <Image src={myTheme.mode=="light" ? LogoHorizontalLight : LogoHorizontalDark} alt="logo" className="w-32 ml-10 mt-2 md:ml-34"/>
             </div>
-            <div className="flex flex-row justify-center items-center gap-2 cursor-pointer" onClick={()=> router.push("/profile")}>
+            <div className="flex flex-row justify-center items-center gap-2 cursor-pointer" onClick={() => changeProfileMenu()}>
                 <div className="flex-col text-end hidden md:block">
                   <h2>{user.name}</h2>
                   <h2>Nivel {user.points}</h2>
                 </div>
                 <div>
-                  <img className="rounded-full w-12" src={user.image ? user.image : UserImage.src} alt="user_image" />
+                  <User size={40} className="border rounded-full"/>
                 </div>
             </div>
         </div>

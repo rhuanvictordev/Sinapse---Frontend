@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import Logo from "../../assets/images/logo.png"
+import Logo from "../../assets/images/logo_light.png"
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 

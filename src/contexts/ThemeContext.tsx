@@ -2,6 +2,8 @@
 
 import { Moon, Sun } from "@/app/components/icons"
 import { createContext, useContext, useEffect, useState } from "react"
+import bg_light from "@/app/(app)/images/bg_light.png";
+import bg_dark from "@/app/(app)/images/bg_dark.png";
 
 type ThemeMode = "light" | "dark"
 
@@ -50,9 +52,9 @@ type ThemeColors = {
 const lightTheme: ThemeColors = {
   background: "#FFFFFF",
   foreground: "#000000",
-  screenBack: "#EEEEF6",
-  screenFore: "#000000",
-  areaBack: "#FFFFFF",
+  screenFore: "#000",
+  screenBack: "#e9ecff",
+  areaBack: "rgba(180, 180, 180, 0.1)",
   areaFore: "#000000",
   tableHeaderBack: "#F5F5F5",
   tableHeaderBackHover: "#D5D5D5",
@@ -62,29 +64,29 @@ const lightTheme: ThemeColors = {
   tableBodyBackHover: "#BABABA",
   tableBodyFore: "#000F40",
   tableBodyForeHover: "#000F40",
-  cardBack: "#FFFFFF",
+  cardBack: "#eff2fc",
   cardFore: "#000000",
   cardHover: "#E5E5E5",
   buttonBack: "#0058BC",
   buttonFore: "#FFFFFF",
   buttonHover: "#4B68A6",
-  buttonEnter: "#4B68A6",
+  buttonEnter: "#447cdd",
   buttonEnterHover: "#313F5F",
-  buttonEdit: "#EEEDE7",
+  buttonEdit: "#eae9f3",
   buttonEditHover: "#B8B8B8",
-  buttonDelete: "#A29BFF",
-  buttonDeleteHover: "#B8B8B8",
+  buttonDelete: "#f5b8bd",
+  buttonDeleteHover: "#f6939d",
   menuButtonBack: "#EEEEF6",
   menuButtonHover: "#BDC1DE",
   menuButtonFore: "#000000",
-  selectBack: "#2C79D0",
-  selectFore: "#FFFFFF",
+  selectBack: "#f6f8fe",
+  selectFore: "#000",
   success: "#346C49",
   error: "#B10E11",
   warning: "#C99811",
   info: "#2770C2",
-  inputBack: "#2C79D0",
-  inputFore: "#FFFFFF",
+  inputBack: "#FFF",
+  inputFore: "#000",
   modalBack: "#CADBFF",
   modalFore: "#000000"
 }
@@ -92,9 +94,9 @@ const lightTheme: ThemeColors = {
 const darkTheme: ThemeColors = {
   background: "#0F1115",        // quase preto azulado
   foreground: "#F5F5F5",        // branco suave
-  screenBack: "#1A1D24",        // superfície principal
-  screenFore: "#F5F5F5",
-  areaBack: "#323232",
+   screenFore: "#FFF",
+  screenBack: "#142b59",
+  areaBack: "rgba(23, 47, 94, 0.1)",
   areaFore: "#FFFFFF",
   tableHeaderBack: "#0D3C62",
   tableHeaderBackHover: "#0B263D",
@@ -104,7 +106,7 @@ const darkTheme: ThemeColors = {
   tableBodyBackHover: "#021321",
   tableBodyFore: "#9CEDFF",
   tableBodyForeHover: "#9CEDFF",
-  cardBack: "#22252E",          // cards mais claros que fundo
+  cardBack: "#132543",          // cards mais claros que fundo
   cardFore: "#FFFFFF",
   cardHover: "#2C313C",
   buttonBack: "#3A7BFF",        // azul mais vibrante
@@ -114,19 +116,19 @@ const darkTheme: ThemeColors = {
   buttonEnterHover: "#5C7EBB",
   buttonEdit: "#3A3D45",        // neutro escuro
   buttonEditHover: "#80889E",
-  buttonDelete: "#5C1F1F",      // vermelho escuro suave
-  buttonDeleteHover: "#952525",
+  buttonDelete: "#b46362",      // vermelho escuro suave
+  buttonDeleteHover: "#c37f7e",
   menuButtonBack: "#1A1D24",
   menuButtonHover: "#0A1B8E",
   menuButtonFore: "#FFFFFF",
-  selectBack: "#3A7BFF",
+  selectBack: "#121212",
   selectFore: "#FFFFFF",
   success: "#4FA36C",           // verde mais claro
   error: "#E05252",             // vermelho mais visível
   warning: "#E3B341",           // amarelo quente
   info: "#4C9FFF",               // azul informativo claro
-  inputBack: "#0F70DE",
-  inputFore: "#FFCC00",
+  inputBack: "#121212",
+  inputFore: "#FFF",
   modalBack: "#161D2B",
   modalFore: "#000000"
 }
@@ -162,15 +164,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setMode(storedTheme)
     }
 
-    document.documentElement.style.backgroundColor = theme.screenBack
-    document.body.style.backgroundColor = theme.screenBack
+    document.body.style.backgroundImage = mode=="light" ? `url(${bg_light.src})` : `url(${bg_dark.src})`
+    document.body.className = "bg-cover bg-center"
     
     const root = document.documentElement
 
     root.style.setProperty("--background", theme.background)
     root.style.setProperty("--foreground", theme.foreground)
     root.style.setProperty("--screen-back", theme.screenBack)
-    root.style.setProperty("--screen-fore", theme.screenFore)
     root.style.setProperty("--area-fore", theme.areaFore)
     root.style.setProperty("--area-back", theme.areaBack)
     root.style.setProperty("--theader-back", theme.tableHeaderBack)

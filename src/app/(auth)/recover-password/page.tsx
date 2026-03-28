@@ -1,13 +1,13 @@
 "use client"
 
 import Image from "next/image"
-import Logo from "../../../../assets/images/logo.png"
+import Logo from "../../../../assets/images/logo_light.png"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
 import { useToast } from "@/contexts/ToastContext"
 import { sinapseAPI } from "@/services/api"
-import { LoadingIcon } from "@/app/components/icons"
+import { LoadingIcon, LogoDark, LogoLight } from "@/app/components/icons"
 
 export default function Register(){
 const { showToast } = useToast();
@@ -54,48 +54,48 @@ async function sendConfirmation(){
     
 }
 
-  return(
 
-    <div>
-        <div className="w-screen flex flex-col items-center mt-8 md:mt-40" style={{color:myTheme.theme.foreground}}>
-        <div className="">
-            <Image src={Logo} alt="logo" width={200}/>
-        </div>
+return (
+      <div style={{color:myTheme.theme.foreground}} className="items-center text-center justify-center self-center flex flex-col h-screen">
         
-            <h3 className="text-center font-bold text-xl mb-8">Recuperação de Senha</h3>
-            
-            <div className="md:w-100 w-80 text-center">
-                
-                <div className="text-left">
-                    <p className="font-bold">Nome de usuário</p>
-                    <input type="text" className="w-80 md:w-100 h-12 pl-2 rounded-2xl border" maxLength={42} value={userName} onChange={(event) => setUserName(event.target.value)}/>
-                </div>
+          <Image src={myTheme.mode=="light"? LogoLight.src : LogoDark.src} alt="logo" width={170} height={20}/>
+        
 
-                <div className="text-left mt-4">
-                    <p className="font-bold">E-mail</p>
-                    <input type="text" className="w-80 md:w-100 h-12 pl-2 rounded-2xl border" maxLength={42} value={userEmail} onChange={(event) => setUserEmail(event.target.value)}/>
-                </div>
-                
-                <p className="mt-5 mb-5 md:w-100 w-80">
+          <div className=" w-[90%] h-fill pl-8 pr-8 md:w-130 rounded-2xl flex flex-col bg-(--screen-back) shadow-2xl py-6 my-3">
+            <h2 className="text-2xl font-bold mb-8">Recuperação de Senha</h2>
+              <div className="w-full text-left md:mb-5 mb-2">
+                <p className="font-bold">Nome de usuário</p>
+                <input type="text" className="w-full h-8 md:h-12 border border-blue-900 rounded-2xl bg-(--input-back) pl-2" maxLength={80} value={userName} onChange={(event) => setUserName(event.target.value)}/>
+              </div>
+
+              <div className="w-full text-left md:mb-5 mb-2">
+                <p className="font-bold">E-mail</p>
+                <input type="text" className="w-full h-8 md:h-12 border border-blue-900 rounded-2xl bg-(--input-back) pl-2" maxLength={80} value={userEmail} onChange={(event) => setUserEmail(event.target.value)}/>
+              </div>
+
+              <p className="mt-5 mb-5 md:w-100 w-80 self-center">
                     Caso o E-mail informado corresponda a um <strong>usuário do Sinapse</strong>, enviaremos os próximos passos para a alteração da senha.
-                </p>
+              </p>
 
-                <button className="bg-(--button-back) text-white font-bold rounded-2xl justify-between w-80 pl-6 pr-6 p-2  cursor-pointer hover:bg-(--button-hover) duration-300" onClick={sendConfirmation}> Enviar código </button>
+            <button className="bg-(--button-back) text-white font-bold rounded-2xl justify-between md:h-12 h-10 cursor-pointer hover:bg-(--button-hover) duration-300" onClick={sendConfirmation}> Enviar código </button>
 
-                <div className="text-center mt-8">
-                    <Link href={"/login"} className="mt-4 text-center">Voltar</Link>
+            <div className="text-center mt-8">
+                <Link href={"/login"} className="mt-4 text-center">Voltar</Link>
+            </div>
+            
+
+          </div>
+
+              <div className={`fixed inset-0 flex items-center justify-center bg-black/60 transition-opacity duration-500 ${modalVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                <div className="text-(--foreground) bg-(--screen-back) w-80 h-40 rounded-lg text-center items-center flex flex-col justify-center">
+                    <h2 className="font-bold">Processando</h2>
+                    <img className="mt-4 w-10" src={LoadingIcon.src} alt="" />
+                    <h2 className="mt-4">Aguarde...</h2>
                 </div>
             </div>
-        <ThemeIcon/>
 
-    </div>
-        <div className={`fixed inset-0 flex items-center justify-center bg-black/60 transition-opacity duration-500 ${modalVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-            <div className="bg-(--screen-back) text-(--foreground) w-80 h-40 rounded-lg text-center items-center flex flex-col justify-center">
-                <h2 className="font-bold">Processando</h2>
-                <img className="mt-4 w-10" src={LoadingIcon.src} alt="" />
-                <h2 className="mt-4">Aguarde...</h2>
-            </div>
-        </div>
-    </div>
+  <ThemeIcon/>
+
+      </div>
   )
 }

@@ -212,7 +212,7 @@ export default function EditDiscipline() {
                             <div className="md:w-220 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-lg font-bold">Semestre:</h2>
-                                    <select value={semesterSelected} onChange={(e)=>setSemesterSelected(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                    <select value={semesterSelected} onChange={(e)=>setSemesterSelected(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 text-xs md:text-lg font-bold cursor-pointer">
                                         <option value="">Selecione</option>
                                         {
                                         semesters.map( (semester)=>(
@@ -223,11 +223,11 @@ export default function EditDiscipline() {
                                 </div>
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-lg font-bold">Nome:</h2>
-                                    <input value={newDisciplineName} onChange={(e)=>setNewDisciplineName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
+                                    <input value={newDisciplineName} onChange={(e)=>setNewDisciplineName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-xs md:text-lg text-(--input-fore) h-10 font-bold"></input>
                                 </div>
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-lg font-bold">Descrição:</h2>
-                                    <textarea value={newDisciplineDescription} onChange={(e)=>setNewDisciplineDescription(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></textarea>
+                                    <textarea value={newDisciplineDescription} onChange={(e)=>setNewDisciplineDescription(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) text-xs md:text-lg rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></textarea>
                                 </div>
                                 {/* <div className="flex md:flex-row md:mr-2 flex-col items-center md:w-100 w-full mb-6 md:mt-0 mt-2 md:justify-end">
                                     <h2 className="text-lg font-bold">Privar disciplina:</h2>
@@ -250,14 +250,14 @@ export default function EditDiscipline() {
                     </div>
                     <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
                         <table className="w-full h-fill border-collapse">
-                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+                            <thead className="bg-(--theader-back) text-xs md:text-xl text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                 <tr>
                                     <th className="text-left border pl-2 md:py-3">Nome</th>
                                     <th className="text-center border pl-2 md:py-3 w-20">Editar</th>
                                     <th className="text-center border pl-2 md:py-3 w-20 px-2">Remover</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore)">
+                            <tbody className="bg-(--area-back) text-(--area-fore) text-xs md:text-xl">
                             {
                                 discipline?.quizzes_ids.map((id) => {
                                 const quiz:any = getQuizById(id);
@@ -300,14 +300,14 @@ export default function EditDiscipline() {
                     
                     <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
                         <table className="w-full h-fill border-collapse">
-                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+                            <thead className="bg-(--theader-back) text-xs md:text-xl text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                 <tr>
                                     <th className="text-left border pl-2 md:py-3">Nome</th>
                                     <th className="text-center border md:py-3">Descrição</th>
                                     <th className="text-center border md:py-3 w-10 px-2">Adicionar</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore)">
+                            <tbody className="bg-(--area-back) text-(--area-fore) text-xs md:text-xl">
                             {
                             quizzes.map((quiz) => (
                                 <tr key={quiz._id}>

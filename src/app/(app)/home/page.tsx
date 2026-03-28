@@ -3,10 +3,10 @@
 import { LocalAPI, sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons"
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
+import { Pencil, Trash } from "@/app/components/icons";
 
 type Discipline = {
   _id: string
@@ -72,38 +72,33 @@ export default function Home() {
   )
 
   return (
-  <div className="flex flex-col h-full" style={{ color: myTheme.theme.foreground }}>
+  <div style={{ color: myTheme.theme.foreground }}>
 
-    <header className="flex flex-col md:flex-row md:justify-between justify-center md:pl-4 text-center md:border border-0">
-      <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0 border md:border-0">
-        Disciplinas disponíveis
-      </h2>
+     <header className="flex flex-col md:flex-row md:justify-between justify-center md:pl-4 text-center">
+      <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0"> Disciplinas disponíveis </h2>
 
-      <button
-        className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 rounded-lg"
-        onClick={() => router.push("/discipline/create")}
-      >
+      <button onClick={() => router.push("/discipline/create")} className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 rounded-lg">
         + Criar Disciplina
       </button>
     </header>
 
-    <div style={{ backgroundColor: myTheme.theme.screenBack }}>
-  <div className="flex flex-wrap justify-center gap-2 py-4">
+  <div>
+  <div className="flex flex-wrap justify-center gap-4 py-4">
 
     {myDisciplines.length > 0 ? (
       myDisciplines.map((item) => (
         <div
           key={item._id}
-          className="md:w-130 w-84 border h-fill pb-4 bg-(--card-back) rounded-lg font-bold text-xl overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
+          className="md:w-130 w-84 h-fill pb-4 bg-(--card-back) rounded-lg font-bold text-xl overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.35)]"
         >
 
           <div className="ml-4 mr-5 mt-4 flex flex-row justify-between">
-            <h2 className="bg-(--card-hover) rounded-lg pl-2 pr-2 md:h-auto border overflow-hidden text-sm">
+            <h2 className="rounded-sm pl-2 pr-2 md:h-auto border overflow-hidden text-sm">
               {getSemesterName(item.semester_id)}
             </h2>
           </div>
 
-          <div className="md:mt-4 mt-2 mr-2 md:ml-18 ml-10">
+          <div className="md:mt-4 mt-2 mr-2 md:ml-14 ml-4">
             <h2 className="overflow-hidden text-base md:text-2xl">{item.name}</h2>
 
             {item.quizzes_ids.length === 0 ? (
@@ -155,9 +150,10 @@ export default function Home() {
 
                   <button
                     className="h-10 bg-(--button-delete) hover:bg-(--button-delete-hover) duration-300 flex items-center text-lg gap-2 md:gap-4 px-2 rounded-lg cursor-pointer"
+                    style={{color: myTheme.mode == "light" ? "#960a0f" : "#5f0609"}}
                     onClick={() => deleteDiscipline(item._id)}
                   >
-                    <Trash/>
+                    <Trash style={{color: myTheme.mode == "light" ? "#960a0f" : "#5f0609"}}/>
                     Excluir
                   </button>
 

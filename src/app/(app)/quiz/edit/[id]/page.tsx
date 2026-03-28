@@ -4,9 +4,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LocalAPI, sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
 import { useToast } from "@/contexts/ToastContext";
 import { useRouter, useParams } from "next/navigation";
+import { Trash } from "@/app/components/icons";
 
 type Answer = {
   id: number
@@ -361,9 +361,10 @@ async function saveQuizEdited(){
                                         return (
                                           <tr key={item} className="text-left">
                                             <td className="text-center border pl-2 py-2 bg-(--tbody-back)">
-                                              <input type="checkbox" checked={index === correctIndex} readOnly />
+                                              {index === correctIndex && (
+                                                <input type="checkbox" checked readOnly />
+                                              )}
                                             </td>
-
                                             <td className="border pl-6 py-2 bg-(--tbody-back)">
                                               {item}
                                             </td>

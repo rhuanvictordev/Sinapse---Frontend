@@ -17,7 +17,7 @@ export default function Profile() {
   return(
     <div className="p-4 gap-4 flex flex-col items-center justify-center text-center text-(--foreground) pb-0">
       <h1 className="text-2xl mb-10 font-bold mt-2">Perfil do Usuário</h1>
-      <img src={user?.image == null ? User.src : user.image} alt="logo_user" />
+      <User size={80} className="border rounded-full"/>
       <h1 className="text-xl text-gray-400">ID: {user?._id}</h1>
       <h1 className="text-xl">Nome: {user?.name}</h1>
       <h1 className="text-xl">E-mail: {user?.email}</h1>
@@ -27,12 +27,10 @@ export default function Profile() {
       {/* <h2>ADM: {user?.is_admin ? "Sim" : "Não"}</h2> */}
       <div className="cursor-pointer flex flex-col text-center" onClick={myTheme.toggleTheme}>
         {/*
-
-      <div className="flex flex-row justify-center items-center gap-4">
+        <div className="flex flex-row justify-center items-center gap-4">
         <h2>Alternar Tema:</h2>
         <img src={myTheme.mode == "light"? Moon.src : Sun.src} alt="" className="flex justify-center items-center bg-white rounded-full p-1" />
-      </div>
-        
+        </div>
         */}
       </div>
     </div>

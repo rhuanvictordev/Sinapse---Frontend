@@ -82,7 +82,7 @@ export default function CreateDiscipline() {
   
   if (!created){ return (
     <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
-        <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center border md:h-20 border-black">
+        <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center md:h-20">
         <h2 className="font-bold md:text-2xl text-lg mt-3 py-2">Criação de nova disciplina</h2> {/* titulo externo */}
         </header>
         <div className="p-2"> {/* paddind da area interna */}
@@ -92,7 +92,7 @@ export default function CreateDiscipline() {
                     <div className="md:w-300 w-full flex flex-col text-center md:text-left justify-center gap-4">
                         <div>
                             <h2 className="font-bold text-xl">Semestre:</h2>
-                            <select value={semesterSelected} onChange={ (e)=>setSemesterSelected(e.target.value)} className="bg-(--select-back) text-(--select-fore) w-full rounded-lg h-10 cursor-pointer">
+                            <select value={semesterSelected} onChange={ (e)=>setSemesterSelected(e.target.value)} className="bg-(--select-back) border text-(--select-fore) w-full rounded-lg h-10 cursor-pointer">
                             <option value="">Selecione</option>
                             {
                             semesters.map( (item) => (
@@ -103,11 +103,11 @@ export default function CreateDiscipline() {
                         </div>
                         <div>
                             <h2 className="font-bold text-xl">Nome:</h2>
-                            <input value={name} onChange={(e)=>setName(e.target.value)} maxLength={100} className="bg-(--input-back) text-(--input-fore) rounded-lg h-10 pl-2 w-full" type="text" />
+                            <input value={name} onChange={(e)=>setName(e.target.value)} maxLength={100} className="bg-(--input-back) border text-(--input-fore) rounded-lg h-10 pl-2 w-full" type="text" />
                         </div>
                         <div>
                             <h2 className="font-bold text-xl">Descrição:</h2>
-                            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) text-(--input-fore) rounded-lg h-16 pl-2 w-full"/>
+                            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) border text-(--input-fore) rounded-lg h-16 pl-2 w-full"/>
                         </div>
                         {/* <div>
                             <h2 className="font-bold text-xl">Privar:</h2>
