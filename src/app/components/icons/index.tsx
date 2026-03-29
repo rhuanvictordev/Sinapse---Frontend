@@ -23,6 +23,7 @@ import { GoSun as Sun } from "react-icons/go";
 import { HiHome as Home } from "react-icons/hi2";
 import LogoLight from "@/../assets/images/logo_light.png"
 import LogoDark from "@/../assets/images/logo_dark.png"
+import { IoMdAddCircle as Add } from "react-icons/io";
 
 export {
   Folder,
@@ -46,5 +47,6 @@ export {
   LoadingIcon,
   Home,
   LogoLight,
-  LogoDark
+  LogoDark,
+  Add
 }

@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LocalAPI, sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
+import { Add, Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
 import { useRouter, useParams } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 
@@ -55,6 +55,8 @@ export default function EditDiscipline() {
 
     const [semesterSelected, setSemesterSelected] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [showAllQuizzes, setShowAllQuizzes] = useState(false);
 
   useEffect( () => {
     document.title = "Sinapse - Editar Disciplina"
@@ -244,82 +246,100 @@ export default function EditDiscipline() {
                         </div>
                     </div>
                     <div className="mt-8 mb-4 pl-2">
-                        <div className="flex w-full justify-between pr-2 text-center items-center mt-16">
-                            <h2 className="font-bold md:text-xl text-lg md:mb-2">Quizzes nesta disciplina</h2>
+                        <div className="flex w-full gap-2 pr-2 text-center items-center mt-16">
+                            <h2 onClick={ () => setShowAllQuizzes(false) } className="font-bold text-sx md:mb-2  p-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-xl">Quizzes nesta disciplina</h2>
+                             <h2 onClick={ () => setShowAllQuizzes(true) } className="font-bold text-sx md:mb-2  p-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-xl">Quizzes Existentes</h2>
                         </div>
                     </div>
-                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
-                        <table className="w-full h-fill border-collapse">
-                            <thead className="bg-(--theader-back) text-xs md:text-xl text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
-                                <tr>
-                                    <th className="text-left border pl-2 md:py-3">Nome</th>
-                                    <th className="text-center border pl-2 md:py-3 w-20">Editar</th>
-                                    <th className="text-center border pl-2 md:py-3 w-20 px-2">Remover</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore) text-xs md:text-xl">
-                            {
-                                discipline?.quizzes_ids.map((id) => {
-                                const quiz:any = getQuizById(id);
+                    
+{
+(!showAllQuizzes) && (
+<div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden rounded-lg">
+<h2 className="pl-2 font-bold text-lg mb-4">Quizzes nesta disciplina</h2>
+<button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-6" onClick={()=>{openModal()}}>+ Novo Quiz</button>
+<table className="w-full h-fill border-collapse">
+<thead className="bg-(--theader-back) text-lg text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+<tr className="h-12">
+<th className="text-left pl-2">Nome</th>
+<th className="text-center w-30">Editar</th>
+<th className="text-center w-30">Remover</th>
+</tr>
+</thead>
+<tbody className="bg-(--area-back) text-(--area-fore) text-sm">
+{
+discipline?.quizzes_ids.map((id) => {
+const quiz:any = getQuizById(id);
 
-                                if (!quiz) return null;
+if (!quiz) return null;
 
-                                return (
-                                    <tr key={quiz._id}>
-                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
-                                        {quiz.name}
-                                    </td>
+return (
+<tr key={quiz._id}>
+<td className="text-left border border-gray-400  pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
+{quiz.name}
+</td>
 
-                                    <td
-                                        className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
-                                        onClick={() => router.push(`/quiz/edit/${quiz._id}`)}
-                                    >
-                                        <Pencil/>
-                                    </td>
+<td
+className="border pl-6 border-gray-400 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
+onClick={() => router.push(`/quiz/edit/${quiz._id}`)}
+>
+<Pencil/>
+</td>
 
-                                    <td
-                                        className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
-                                        onClick={() => removeQuizFromCurrentDiscipline(quiz._id)}
-                                    >
-                                        <Trash/>
-                                    </td>
-                                    </tr>
-                                );
-                                })
-                            }
-                            </tbody>
-                        </table>
-                    </div>
+<td
+className="border border-gray-400 pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
+onClick={() => removeQuizFromCurrentDiscipline(quiz._id)}
+>
+<Trash/>
+</td>
+</tr>
+);
+})
+}
+</tbody>
+</table>
+</div>
+)    
+}
+
+ 
+
+{
+(showAllQuizzes) && (
+<div>
+<h2 className="pl-2 font-bold text-lg mb-4">Quizzes existentes</h2>
+<button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-6" onClick={()=>{openModal()}}>+ Novo Quiz</button>
+
+<div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden rounded-lg">
+<table className="w-full h-fill text-lg">
+<thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+<tr className="h-12">
+<th className="text-left pl-2">Nome</th>
+<th>Descrição</th>
+<th className="w-30">Adicionar</th>
+</tr>
+</thead>
+<tbody className="bg-(--area-back) text-(--area-fore) text-sm">
+{
+quizzes.map((quiz) => (
+<tr key={quiz._id}>
+<td className="border border-gray-400 pl-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{quiz.name}</td>
+<td className="border border-gray-400 text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{quiz.description}</td>
+<td className="border border-gray-400 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer text-center text-3xl items-center" onClick={(e)=>addQuizToCurrentDiscipline(quiz._id)}> + </td>
+</tr>
+))
+}
+</tbody>
+</table>
+</div>
+
+</div>
+)
+}
+
+                        
+
 
                     
-                        <hr className="mt-8 mb-8" />
-                    
-
-                    <h2 className="pl-2 font-bold text-lg mb-4">Quizzes existentes</h2>
-                    <button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-6" onClick={()=>{openModal()}}>+ Novo Quiz</button>
-                    
-                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
-                        <table className="w-full h-fill border-collapse">
-                            <thead className="bg-(--theader-back) text-xs md:text-xl text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
-                                <tr>
-                                    <th className="text-left border pl-2 md:py-3">Nome</th>
-                                    <th className="text-center border md:py-3">Descrição</th>
-                                    <th className="text-center border md:py-3 w-10 px-2">Adicionar</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore) text-xs md:text-xl">
-                            {
-                            quizzes.map((quiz) => (
-                                <tr key={quiz._id}>
-                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{quiz.name}</td>
-                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{quiz.description}</td>
-                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={(e)=>addQuizToCurrentDiscipline(quiz._id)}> + </td>
-                                </tr>
-                            ))
-                            }
-                            </tbody>
-                        </table>
-                    </div>
                     </div>
             </div>
         </div>
@@ -329,7 +349,7 @@ export default function EditDiscipline() {
 
 
         <div className={`fixed inset-0 flex items-center justify-center bg-black/60 transition-opacity duration-500 ${modalVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-            <div className="border-4 border-blue-700 bg-(--screen-back) text-(--foreground) m-4 md:w-240 w-120 md:h-160 h-140 rounded-2xl shadow-xl overflow-scroll">
+            <div className="border-4 border-blue-700 bg-(--screen-back) text-(--foreground) m-4 md:w-240 w-120 md:h-160 h-140 rounded-2xl shadow-xl">
                 <div className="mt-6 text-center font-bold">
                     <h2 className="text-2xl">Criar novo Quiz</h2>
                     <div className="mt-8">

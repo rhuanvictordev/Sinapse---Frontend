@@ -107,7 +107,7 @@ export default function CreateDiscipline() {
                         </div>
                         <div>
                             <h2 className="font-bold text-xl">Descrição:</h2>
-                            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) border text-(--input-fore) rounded-lg h-16 pl-2 w-full"/>
+                            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) border text-(--input-fore) rounded-lg h-16 md:h-30 pl-2 w-full"/>
                         </div>
                         {/* <div>
                             <h2 className="font-bold text-xl">Privar:</h2>
