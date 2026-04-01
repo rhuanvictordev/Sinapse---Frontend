@@ -89,6 +89,9 @@ export default function playQuizPage(){
     const [points, setPoints] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answeredQuestions, setAnsweredQuestions] = useState(0);
+    
+    const correctSound = new Audio("/sounds/correct.mp3")
+    const wrongSound = new Audio("/sounds/wrong.mp3")
 
     useEffect(() => {
         getQuiz(params.id)
@@ -99,6 +102,7 @@ export default function playQuizPage(){
             setAnsweredQuestions(user.answered_questions ?? 0)
         }
     }, [user])
+
 
     async function getQuiz(id: any){
         try {
@@ -150,12 +154,15 @@ export default function playQuizPage(){
                     { params: { questionText } }
                 )
                 if (responseAnswer.data === true){
-                    setPoints(prev => prev + 13)
+                    setPoints(prev => prev + 4)
                     showToast("Acertou","success")
+                    correctSound.play()
                     nextQuestion()
                 } else {
                     showToast("Errou","error")
-                    setPoints(prev => prev >= 10 ? prev - 10 : prev)
+                    wrongSound.play()
+                    setPoints(prev => prev >= 2 ? prev - 2 : prev)
+                    nextQuestion()
                 }
             }
         } catch (error: any) {

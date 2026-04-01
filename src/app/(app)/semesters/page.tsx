@@ -109,7 +109,7 @@ export default function Home() {
 
   return (
   <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
-    <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4  text-center border md:h-20 border-black">
+    <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4  text-center md:h-20">
       <h2 className="font-bold md:text-2xl text-lg mt-3 py-2">Semestres</h2>
     </header>
       
@@ -123,7 +123,7 @@ export default function Home() {
                                 <h2 className="text-lg font-bold">Criar Semestre</h2>
                             </div>
                             <div className="flex md:flex-row flex-col md:gap-4 gap-4">
-                                <input type="text" className="border bg-(--input-back) pl-2 text-(--input-fore) font-bold md:w-200 w-fill h-10 rounded-lg md:mb-0 mb-2 md:mt-0 mt-2" maxLength={50} value={name} onChange={(e) => setName(e.target.value)}/>
+                                <input type="text" className="bg-(--input-back) pl-2 text-(--input-fore) font-bold md:w-200 w-fill h-10 rounded-lg md:mb-0 mb-2 md:mt-0 mt-2" maxLength={50} value={name} onChange={(e) => setName(e.target.value)}/>
                                 <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) font-bold rounded-lg cursor-pointer duration-300 md:px-4 md:py-2 h-10" onClick={()=>createSemester()}>Criar</button>
                             </div>
                             <div className="md:mt-14 mt-2">
@@ -131,22 +131,22 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border md:mt-0 mt-8">
-                        <table className="w-full h-fill border-collapse">
+                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg md:mt-0 mt-8">
+                        <table className="w-full h-fill">
                             <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                 <tr>
-                                    <th className="text-left border pl-2 md:py-3">Nome</th>
-                                    <th className="text-center border pl-2 md:py-3 w-24">Renomear</th>
-                                    <th className="text-left border pl-2 md:py-3 w-20">Remover</th>
+                                    <th className="text-left  pl-2 md:py-3">Nome</th>
+                                    <th className="text-center  pl-2 md:py-3 w-24">Renomear</th>
+                                    <th className="text-left  pl-2 md:py-3 w-20">Remover</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-(--area-back) text-(--area-fore)">
                                 {
                                 semesters.map((item) => (
                                     <tr key={item._id}>
-                                        <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.name}</td>
-                                        <td className="border pl-10 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>{renameSemester(item._id)}}> <Pencil/> </td>
-                                        <td className="border pl-6 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>deleteSemester(item._id)}> <Trash/> </td>
+                                        <td className="text-left pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.name}</td>
+                                        <td className="  bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>{renameSemester(item._id)}}> <Pencil className="mx-auto"/> </td>
+                                        <td className="  bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>deleteSemester(item._id)}> <Trash className="mx-auto"/> </td>
                                     </tr>
                                 ))
                                 }

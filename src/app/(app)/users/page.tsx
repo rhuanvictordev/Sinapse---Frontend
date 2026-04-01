@@ -49,7 +49,7 @@ useEffect( () => {
         showToast("Você não tem permissão para acessar esta página!", "error");
         return
     }
-} )
+}, [] )
 
 function editUser(user: User){
     setUserSelected(user)

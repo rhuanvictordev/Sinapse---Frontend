@@ -19,9 +19,9 @@ export default function Menu() {
   }
 
   return (
-    <div className="h-full w-full" style={{ backgroundColor: myTheme.theme.screenBack}} onClick={ () => menu.toggleMenu() }>
+    <div className="h-full w-full" onClick={ () => menu.toggleMenu() }>
       
-      <ul className="font-bold bg-(--screen-back) text-lg md:text-xl text-left">
+      <ul className="font-bold text-lg md:text-xl text-left">
         
         <li>
           <Link href="/home" className={linkClass(pathname === "/home")} style={{color:myTheme.theme.menuButtonFore}}> <Home/> Início</Link>

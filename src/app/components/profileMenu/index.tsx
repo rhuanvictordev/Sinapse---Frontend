@@ -19,8 +19,8 @@ export default function ProfileMenu() {
   }
 
   return (
-    <div className="h-full w-full" style={{ backgroundColor: myTheme.theme.screenBack}} onClick={ () => profileMenu.toggleProfileMenu() }>
-      <ul className="font-bold bg-(--screen-back) text-lg md:text-xl text-left border md:border-0">
+    <div className="h-full w-full" onClick={ () => profileMenu.toggleProfileMenu() }>
+      <ul className="font-bold text-lg md:text-xl text-left">
        
         <li>
           <Link href="/profile" className={linkClass(pathname === "/profile")} style={{color:myTheme.theme.menuButtonFore}}> <Settings/> Perfil </Link>

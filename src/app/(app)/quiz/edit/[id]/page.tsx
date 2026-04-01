@@ -101,8 +101,27 @@ function closeModal(){
   setModalVisible(false)
 }
 
-function removeQuestion() {
-  console.log("Removendo Pergunta atual")
+function removeCurrentQuestion() {
+  setQuiz(prev => {
+    if (!prev) return prev;
+
+    const updatedQuestions = prev.questions.filter(
+      (_, index) => index !== selectedQuestion
+    );
+
+    return {
+      ...prev,
+      questions: updatedQuestions
+    };
+  });
+
+  if (selectedQuestion > 1){
+    setSelectedQuestion(prev => prev - 1)
+    showToast("Pergunta removida, salve as alterações!","info")
+  }else{
+    setSelectedQuestion(0)
+    showToast("Pergunta removida, salve as alterações!","info")
+  }
 }
 
 function nextQuestion(){
@@ -302,6 +321,18 @@ async function saveQuizEdited(){
                         <h2 className="font-bold md:text-xl text-ls pl-2 text-center md:text-left mb-1">Descrição:</h2>
                         <textarea value={newQuizDescription} onChange={(e)=>setNewQuizDescription(e.target.value)} className="md:w-180 w-full pl-2 bg-(--input-back) rounded-lg text-(--input-fore) text-sx h-10 font-bold" />
                       </div>
+                  <div className="my-2 hidden md:block">
+                        <h2>Navegação Rápida:</h2>
+                        <div className="bg-(--screen-back) flex-row justify-self-start md:flex w-fill h-fill scroll-auto gap-2 rounded-lg my-1 p-2">
+                          {
+                            quiz?.questions.map((q, index)=>(
+                              <div key={q.question}>
+                                <h2 onClick={ () => setSelectedQuestion(index) } className="w-10 text-center justify-center flex flex-col text-(--button-fore) rounded-lg h-10 bg-(--button-back) hover:bg-(--button-hover) duration-300 cursor-pointer">{index + 1}</h2>
+                              </div>
+                            ))
+                          }
+                        </div>
+                  </div>
             </header>
 
 
@@ -332,7 +363,7 @@ async function saveQuizEdited(){
                 <div className="flex flex-col items-center gap-4">
                   <div className="flex flex-row gap-2 justify-center items-center">
                     <p className="font-bold">Pergunta {quiz?.questions.length === 0 ? 0 : selectedQuestion + 1} de {quiz?.questions.length} </p>
-                    <Trash onClick={()=> removeQuestion()}/>
+                    <Trash size={28} className="border p-1 rounded-lg cursor-pointer hover:text-red-500 duration-300" onClick={()=> removeCurrentQuestion()}/>
                   </div>
                     <div className="justify-between gap-2 w-40 flex">
                         <button className="w-20 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) cursor-pointer" onClick={()=> previousQuestion() }>◀</button>

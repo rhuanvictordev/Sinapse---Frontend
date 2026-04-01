@@ -27,6 +27,15 @@ export default function AppLayout({children,}: {children: React.ReactNode;}) {
   if (loading) return null;
   if (!user) return null;
 
+  function closeMenus(){
+    if (profileMenu.profileMenuActive){
+        profileMenu.toggleProfileMenu()
+    }
+    if (menu.menuActive){
+        menu.toggleMenu()
+    }
+  }
+
 
   return (
     
@@ -43,7 +52,7 @@ export default function AppLayout({children,}: {children: React.ReactNode;}) {
             <div className={`mt-20 fixed right-0 w-fill flex transition-transform duration-500 ${profileMenu.profileMenuActive ? "translate-x-0" : "translate-x-full"}`}>
                 <ProfileMenu/>
             </div>
-            <div className="mt-20 w-full h-[calc(100vh-80px)]">
+            <div className="mt-20 w-full h-[calc(100vh-80px)]" onClick={ () => closeMenus() }>
               {children}
             </div>
         </div>
