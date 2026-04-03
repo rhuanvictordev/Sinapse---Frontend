@@ -72,7 +72,7 @@ export default function Home() {
   )
 
   return (
-  <div style={{ color: myTheme.theme.foreground }}>
+  <div style={{ color: myTheme.theme.foreground }} className="text-xs md:text-lg">
 
      <header className="flex flex-col md:flex-row md:justify-between justify-center md:pl-4 text-center">
       <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0"> Disciplinas disponíveis </h2>
@@ -165,7 +165,7 @@ export default function Home() {
         </div>
       ))
     ) : (
-      <div className="text-xl">
+      <div className="text-xs md:text-lg">
         <h2 className="mt-40 font-bold mb-2">Não há disciplinas disponíveis...</h2>
         <h2 className="font-bold">Encontre disciplinas <strong className="text-blue-500 cursor-pointer hover:text-blue-800" onClick={(e)=>router.push("/discipline/find")}>&nbsp;clicando aqui.</strong>
         </h2>

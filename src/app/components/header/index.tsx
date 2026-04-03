@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useMenu, useProfileMenu } from "@/contexts/StateContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "next/navigation";
-import { LogoHorizontalDark, LogoHorizontalLight, MenuIcon, User } from "../icons";
+import { LogoHorizontalDark, LogoHorizontalLight, MenuIcon, Settings, User } from "../icons";
 
 export default function Header() {
   const { user } = useAuth();
@@ -58,10 +58,10 @@ export default function Header() {
             <div className="flex flex-row justify-center items-center gap-2 cursor-pointer" onClick={() => changeProfileMenu()}>
                 <div className="flex-col text-end hidden md:block">
                   <h2>{user.name}</h2>
-                  <h2>Nivel {user.points}</h2>
+                  <h2>Pontos: {user.points}</h2>
                 </div>
                 <div>
-                  <User size={40} className="border rounded-full"/>
+                  <Settings size={38} className="border rounded-lg p-1"/>
                 </div>
             </div>
         </div>

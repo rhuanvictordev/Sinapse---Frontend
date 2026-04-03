@@ -18,6 +18,7 @@ type Question = {
   id: number
   title: string
   type: string
+  weight: number
   answers: Answer[]
 }
 
@@ -30,12 +31,11 @@ type Quiz = {
   categories_ids: []
 }
 
-
-
 type QuestionResponse = {
   question: string
   possible_answers: string[]
-  answer: number
+  answer: number[]
+  weight: number
   boolean_answer: boolean
 }
 
@@ -60,7 +60,7 @@ export default function QuizEditPage() {
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
-  const [newQuestion, setNewQuestion] = useState<Question>({id: questions.length, title: "", type: "MULTIPLE",answers: []});
+  const [newQuestion, setNewQuestion] = useState<Question>({id: questions.length, title: "", type: "MULTIPLE",answers: [], weight: 0});
   const [newQuestionText, setNewQuestionText] = useState("");
   const [newAnswerText, setNewAnswerText] = useState("");
   const [newQuizName, setNewQuizName] = useState("");
@@ -92,7 +92,7 @@ function openModal(){
     setNewAnswerText("")
     console.log("Criando nova questão. ID: " + questions.length + 1)
 
-    setNewQuestion({id: questions.length + 1, title: "", type: "", answers: []})
+    setNewQuestion({id: questions.length + 1, title: "", type: "", answers: [], weight: 0})
     setModalVisible(true)
 }
 
@@ -167,6 +167,11 @@ async function addQuestion() {
     return;
   }
 
+  if (newQuestion.weight == 0){
+    showToast("Adicione o peso da pergunta!", "info");
+    return;
+  }
+
   let correctAnswersCount = 0;
 
   newQuestion.answers.forEach((answer) => {
@@ -185,23 +190,16 @@ async function addQuestion() {
     return;
   }
 
-  // pegar posição da correta
-  let correctPosition = 0;
-
-  for (let i = 0; i < newQuestion.answers.length; i++) {
-    if (newQuestion.answers[i].isCorrect) {
-      correctPosition = i + 1; // base 1
-      break;
-    }
-  }
+  const correctPositions = newQuestion.answers.map((a, index) => a.isCorrect ? index : -1).filter(index => index !== -1);
 
   const answersNames = newQuestion.answers.map(a => a.text);
 
   const obj = {
     question: newQuestion.title,
     possible_answers: answersNames,
-    answer: correctPosition,
-    boolean_answer: newQuestion.type === "MULTIPLE" ? false : true
+    answer: correctPositions,
+    weight: newQuestion.weight,
+    boolean_answer: newQuestion.type === "BOOLEAN"
   };
 
   try {
@@ -246,10 +244,16 @@ function removeAnswer(id: number){
 }
 
 
-function setCorrectAnswer(id: number){
-    setNewQuestion(prev => ({...prev, answers: prev.answers.map(answer => ({
-        ...answer, isCorrect: answer.id == id
-    }))}))
+function addCorrectAnswer(id: number) {
+
+  setNewQuestion(prev => ({
+    ...prev,
+    answers: prev.answers.map(answer =>
+      answer.id === id
+        ? { ...answer, isCorrect: !answer.isCorrect }
+        : answer
+    )
+  }))
 }
 
 
@@ -377,34 +381,36 @@ async function saveQuizEdited(){
                         <div className="flex w-full justify-between pr-2 text-center items-center">
                             <h2 className="font-bold md:text-xl text-lx">Respostas:</h2>
                         </div>
-                        <div className="w-full h-fill overflow-x-scroll font-bold rounded-lg border">
+                        <div className="w-full h-fill overflow-auto font-bold rounded-lg">
                             <table className="w-full h-fill border-collapse">
                                 <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                     <tr>
-                                        <th className="text-center border py-2 w-10">?</th>
-                                        <th className="text-center border py-2">Respostas</th>
+                                        <th className="text-center py-2 w-10"></th>
+                                        <th className="text-center py-2">Alternativas</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-(--area-back) text-(--area-fore)">
-                                {
-                                quiz?.questions[selectedQuestion]?.possible_answers.map((item, index) => {
-                                      const correctIndex = (quiz?.questions[selectedQuestion]?.answer ?? 1) - 1;
-                                        return (
-                                          <tr key={item} className="text-left">
-                                            <td className="text-center border pl-2 py-2 bg-(--tbody-back)">
-                                              {index === correctIndex && (
-                                                <input type="checkbox" checked readOnly />
-                                              )}
-                                            </td>
-                                            <td className="border pl-6 py-2 bg-(--tbody-back)">
-                                              {item}
-                                            </td>
-                                          </tr>
-                                        )
-                                      }
-                                    )
+                                  {
+                                    quiz?.questions[selectedQuestion]?.possible_answers.map((item, index) => {
+                                      const correctAnswers = quiz?.questions[selectedQuestion]?.answer ?? [];
+
+                                      return (
+                                        <tr key={item} className="text-left">
+                                          <td className="text-center  pl-2 py-2 bg-(--tbody-back)">
+                                            <input
+                                              type="checkbox"
+                                              checked={correctAnswers.includes(index)}
+                                              readOnly
+                                            />
+                                          </td>
+                                          <td className=" pl-6 py-2 bg-(--tbody-back)">
+                                            {item}
+                                          </td>
+                                        </tr>
+                                      )
+                                    })
                                   }
-                                </tbody>
+                              </tbody>
                             </table>
                         </div>
                       </div>
@@ -423,8 +429,21 @@ async function saveQuizEdited(){
                     <div className="ml-2 mr-2 text-left">
                         <h2 className="font-bold">Nome:</h2>
                         <input value={newQuestion.title} onChange={ (e)=> setNewQuestion(prev => ({...prev, title: e.target.value})) }  className="bg-(--input-back) text-(--input-fore) w-full pl-2 h-8 rounded-lg" type="text" />
-                        <h2 className="mt-2 font-bold">Tipo da Resposta:</h2>
                         
+                        <h2 className="font-bold">Peso:</h2>
+                        <select value={newQuestion.weight} onChange={ (e)=> setNewQuestion(prev => ({...prev, weight: Number(e.target.value)})) }  className="bg-(--input-back) text-(--input-fore) w-full pl-2 h-6 rounded-lg">
+                          <option value={0}>Selecione</option>
+                          <option value={1}>1 ponto</option>
+                          <option value={3}>3 pontos</option>
+                          <option value={4}>4 pontos</option>
+                          <option value={6}>6 pontos</option>
+                          <option value={8}>8 pontos</option>
+                          <option value={10}>10 pontos</option>
+                          <option value={12}>12 pontos</option>
+                          <option value={15}>15 pontos</option>
+                        </select>
+                        
+                        <h2 className="mt-2 font-bold">Tipo da Resposta:</h2>
                         <select value={newQuestion.type} onChange={(e)=>toggleQuestionType(e.target.value)}  className="w-full h-8 bg-(--select-back) text-(--select-fore) rounded-lg cursor-pointer">
                             <option value="">Selecione</option>
                             <option value={"MULTIPLE"}>Múltipla Escolha</option>
@@ -442,11 +461,10 @@ async function saveQuizEdited(){
                             
                         )
                         }
-                        
 
                         {
                         (newQuestion.type != "") && (
-                        <div className="mt-2 w-full md:h-58 h-38 overflow-scroll">
+                        <div className="mt-2 w-full md:h-44 h-24 overflow-auto">
                             <table className="w-full h-fill border-collapse text-xs">
                                 <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                     <tr>
@@ -463,7 +481,7 @@ async function saveQuizEdited(){
                                 {
                                 newQuestion.answers.map((item) => (
                                 <tr key={item.id} className="text-left">
-                                    <td className="text-center border bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>setCorrectAnswer(item.id)}> <input type="checkbox" name="answer" checked={item.isCorrect} readOnly /></td>
+                                    <td className="text-center border bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>addCorrectAnswer(item.id)}> <input type="checkbox" name="answer" checked={item.isCorrect} readOnly /></td>
                                     <td className="border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.text}</td>
                                     {
                                     (newQuestion.type == "MULTIPLE") && (

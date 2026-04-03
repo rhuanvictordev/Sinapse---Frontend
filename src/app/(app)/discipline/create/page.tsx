@@ -81,7 +81,7 @@ export default function CreateDiscipline() {
 
   
   if (!created){ return (
-    <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
+    <div className="flex flex-col h-full text-xs md:text-lg" style={{color:myTheme.theme.foreground}}>
         <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center md:h-20">
         <h2 className="font-bold md:text-2xl text-lg mt-3 py-2">Criação de nova disciplina</h2> {/* titulo externo */}
         </header>
@@ -91,8 +91,8 @@ export default function CreateDiscipline() {
                 <div className="w-full h-full p-2">
                     <div className="md:w-300 w-full flex flex-col text-center md:text-left justify-center gap-4">
                         <div>
-                            <h2 className="font-bold text-xl">Semestre:</h2>
-                            <select value={semesterSelected} onChange={ (e)=>setSemesterSelected(e.target.value)} className="bg-(--select-back) border text-(--select-fore) w-full rounded-lg h-10 cursor-pointer">
+                            <h2 className="font-bold text-sm md:text-lg">Semestre:</h2>
+                            <select value={semesterSelected} onChange={ (e)=>setSemesterSelected(e.target.value)} className="bg-(--select-back) text-xs  text-(--select-fore) w-full rounded-lg h-8 cursor-pointer">
                             <option value="">Selecione</option>
                             {
                             semesters.map( (item) => (
@@ -102,12 +102,12 @@ export default function CreateDiscipline() {
                             </select>
                         </div>
                         <div>
-                            <h2 className="font-bold text-xl">Nome:</h2>
-                            <input value={name} onChange={(e)=>setName(e.target.value)} maxLength={100} className="bg-(--input-back) border text-(--input-fore) rounded-lg h-10 pl-2 w-full" type="text" />
+                            <h2 className="font-bold text-sm md:text-lg">Nome:</h2>
+                            <input value={name} onChange={(e)=>setName(e.target.value)} maxLength={100} className="bg-(--input-back) text-xs  text-(--input-fore) rounded-lg h-8 pl-2 w-full" type="text" />
                         </div>
                         <div>
-                            <h2 className="font-bold text-xl">Descrição:</h2>
-                            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) border text-(--input-fore) rounded-lg h-16 md:h-30 pl-2 w-full"/>
+                            <h2 className="font-bold text-sm md:text-lg">Descrição:</h2>
+                            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) text-xs  text-(--input-fore) rounded-lg h-8 md:h-16 pl-2 w-full"/>
                         </div>
                         {/* <div>
                             <h2 className="font-bold text-xl">Privar:</h2>
@@ -118,7 +118,7 @@ export default function CreateDiscipline() {
                             </select>
                         </div> */}
                         <div className="mt-20">
-                            <button className="bg-(--button-enter) hover:bg-(--button-hover) text-(--button-fore) rounded-lg cursor-pointer h-10 font-bold px-4" onClick={()=> createDiscipline()}>Criar Disciplina</button>
+                            <button className="bg-(--button-enter) hover:bg-(--button-hover) text-(--button-fore) rounded-lg cursor-pointer h-10 font-bold px-4 duration-300" onClick={()=> createDiscipline()}>Criar Disciplina</button>
                         </div>
                     </div>
                 </div>

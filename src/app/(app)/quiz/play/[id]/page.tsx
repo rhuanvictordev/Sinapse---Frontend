@@ -3,7 +3,7 @@
 import { useRouter, useParams } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { useToast } from "@/contexts/ToastContext"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { sinapseAPI } from "@/services/api"
 
 type User = {
@@ -20,6 +20,7 @@ type Question = {
     question: string
     possible_answers: string[]
     answer: number
+    weight: number
     boolean_answer: boolean
 }
 
@@ -30,55 +31,6 @@ type QuizResponse = {
     user_id: string
     questions: Question[]
 }
-
-
-const perguntas = [
-    {
-        "question": "Um conjunto de dados para mostrar informações",
-        "possible_answers": [
-          "Verdadeiro",
-          "Falso"
-        ],
-        "answer": 1,
-        "boolean_answer": true
-      },
-      {
-        "question": "Uma pessoa que tenta fazer algo",
-        "possible_answers": [
-          "Verdadeiro",
-          "Falso"
-        ],
-        "answer": 2,
-        "boolean_answer": true
-      },
-      {
-        "question": "Uma caixa para armazenar valores",
-        "possible_answers": [
-          "Verdadeiro",
-          "Falso"
-        ],
-        "answer": 2,
-        "boolean_answer": true
-      },
-      {
-        "question": "Uma divisão entre componentes",
-        "possible_answers": [
-          "Verdadeiro",
-          "Falso"
-        ],
-        "answer": 2,
-        "boolean_answer": true
-      },
-      {
-        "question": "Uma outra qualquer coisa",
-        "possible_answers": [
-          "Verdadeiro",
-          "Falso"
-        ],
-        "answer": 2,
-        "boolean_answer": true
-      }
-]
 
 export default function playQuizPage(){
     const router = useRouter();
@@ -120,12 +72,12 @@ export default function playQuizPage(){
         }
     }
 
-    async function finalizeQuiz(){
+    async function finalizeQuiz(finalPoints: number){
         try {
-            const totalPoints = (user?.points ?? 0) + points;
+            const totalPoints = (user?.points ?? 0) + finalPoints;
             const response = await sinapseAPI.patch(`/users/${user?._id}`,{ points: totalPoints })
             if (response.status === 200){
-                showToast("Quiz finalizado, parabéns! Total de Pontos: " + points,"success")
+                showToast("Quiz finalizado, parabéns! Total de Pontos: " + finalPoints,"success")
                 router.push("/home")
             }
         } catch (error: any) {
@@ -133,11 +85,11 @@ export default function playQuizPage(){
         }
     }
 
-    function nextQuestion(){
+    function nextQuestion(updatedPoints?: number){
         if (currentQuestion >= quiz!.questions.length - 1){
-            finalizeQuiz()
+            finalizeQuiz(updatedPoints ?? points)
         }else{
-            setCurrentQuestion( prev => prev + 1 )
+            setCurrentQuestion(prev => prev + 1)
         }
     }
 
@@ -150,19 +102,21 @@ export default function playQuizPage(){
             const response = await sinapseAPI.patch(`/users/${user?._id}`,{ answered_questions: newAnsweredQuestions })
             if (response.status === 200){
                 const responseAnswer = await sinapseAPI.post(`/quizzes/answer/${quiz!._id}`,
-                    { userAnswer: indexAnswer + 1 },
+                    { userAnswer: indexAnswer },
                     { params: { questionText } }
                 )
                 if (responseAnswer.data === true){
-                    setPoints(prev => prev + 4)
+                    const newPoints = points + Number(quiz?.questions[currentQuestion].weight)
+                    setPoints(newPoints)
                     showToast("Acertou","success")
                     correctSound.play()
-                    nextQuestion()
+                    nextQuestion(newPoints)
                 } else {
+                    const newPoints = points >= Number(quiz?.questions[currentQuestion].weight) ? points - Number(quiz?.questions[currentQuestion].weight) : points
+                    setPoints(newPoints)
                     showToast("Errou","error")
                     wrongSound.play()
-                    setPoints(prev => prev >= 2 ? prev - 2 : prev)
-                    nextQuestion()
+                    nextQuestion(newPoints)
                 }
             }
         } catch (error: any) {

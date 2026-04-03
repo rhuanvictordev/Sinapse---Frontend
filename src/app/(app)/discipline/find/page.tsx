@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LocalAPI, sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
+import { Add, Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 
@@ -105,7 +105,7 @@ async function subscribe(discipline: Discipline){
                             <div className="md:w-220 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-sl font-bold">Semestre:</h2>
-                                    <select value={selectedSemester} onChange={(e)=>{setSelectedSemester(e.target.value)}} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-10 font-bold cursor-pointer">
+                                    <select value={selectedSemester} onChange={(e)=>{setSelectedSemester(e.target.value)}} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-8 text-xs font-bold cursor-pointer">
                                         <option value="">Todos</option>
                                         {
                                         semesters.map( (item)=>(
@@ -116,12 +116,12 @@ async function subscribe(discipline: Discipline){
                                 </div>
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-sl font-bold">Nome:</h2>
-                                    <input value={searchName} maxLength={100} onChange={(e)=>setSearchName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
+                                    <input value={searchName} maxLength={100} onChange={(e)=>setSearchName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-8 text-xs font-bold"></input>
                                 </div>
 
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-sl font-bold">Código:</h2>
-                                    <input value={searchCode} maxLength={8} onChange={(e)=>setSearchCode(e.target.value)} className="md:w-60 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-10 font-bold"></input>
+                                    <input value={searchCode} maxLength={8} onChange={(e)=>setSearchCode(e.target.value)} className="md:w-60 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-8 text-xs font-bold"></input>
                                 </div>
                                 
                                 {/* <div>
@@ -132,22 +132,22 @@ async function subscribe(discipline: Discipline){
                     </div>
                     <div className="mt-8 mb-4 pl-2">
                     </div>
-                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
+                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg">
                         <table className="w-150 md:w-full h-fill border-collapse text-sm overflow-scroll">
-                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-lg">
+                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-sm">
                                 <tr>
-                                    <th className="border text-left pl-2">Semestre</th>
-                                    <th className="border">Disciplina</th>
-                                    <th className="border">Juntar-se</th>
+                                    <th className="text-left pl-2">Semestre</th>
+                                    <th className="">Disciplina</th>
+                                    <th className="w-20 px-2">Obter</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-(--area-back) text-(--area-fore)">
                             {
                             disciplinesFiltered.map((discipline) => (
                                 <tr key={discipline._id}>
-                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{getSemesterName(discipline.semester_id)}</td>
-                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{discipline.name}</td>
-                                    <td className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={(e)=>subscribe(discipline)}>▶</td>
+                                    <td className="text-left pl-2 py-1 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{getSemesterName(discipline.semester_id)}</td>
+                                    <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{discipline.name}</td>
+                                    <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={(e)=>subscribe(discipline)}><Add className="align-middle w-full"/></td>
                                 </tr>
                             ))
                             }

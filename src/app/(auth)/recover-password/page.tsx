@@ -46,7 +46,7 @@ async function sendConfirmation(){
             setModalVisible(false)
         }
     } catch (error) {
-        showToast("Usuário não encontrado!", "info")
+        showToast("Ocorreu um erro", "info")
         setUserEmail("")
         setUserName("")
         setModalVisible(false)
@@ -58,29 +58,28 @@ async function sendConfirmation(){
 return (
       <div style={{color:myTheme.theme.foreground}} className="items-center text-center justify-center self-center flex flex-col h-screen">
         
-          <Image src={myTheme.mode=="light"? LogoLight.src : LogoDark.src} alt="logo" width={170} height={20}/>
+          <Image className="w-40" src={myTheme.mode=="light"? LogoLight.src : LogoDark.src} alt="logo" width={200} height={200}/>
         
 
-          <div className=" w-[90%] h-fill pl-8 pr-8 md:w-130 rounded-2xl flex flex-col bg-(--screen-back) shadow-2xl py-6 my-3">
-            <h2 className="text-2xl font-bold mb-8">Recuperação de Senha</h2>
-              <div className="w-full text-left md:mb-5 mb-2">
-                <p className="font-bold">Nome de usuário</p>
-                <input type="text" className="w-full h-8 md:h-12 border border-blue-900 rounded-2xl bg-(--input-back) pl-2" maxLength={80} value={userName} onChange={(event) => setUserName(event.target.value)}/>
+          <div className=" w-[90%] h-fill pl-8 pr-8 md:w-100 rounded-2xl flex flex-col bg-(--screen-back) shadow-2xl py-4">
+            <h2 className="md:text-lg font-bold">Recuperação de Senha</h2>
+              <div className="w-full text-left mt-4">
+                <p className="font-bold text-sm">Nome de usuário</p>
+                <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userName} onChange={(event) => setUserName(event.target.value)}/>
               </div>
 
-              <div className="w-full text-left md:mb-5 mb-2">
-                <p className="font-bold">E-mail</p>
-                <input type="text" className="w-full h-8 md:h-12 border border-blue-900 rounded-2xl bg-(--input-back) pl-2" maxLength={80} value={userEmail} onChange={(event) => setUserEmail(event.target.value)}/>
-              </div>
-
-              <p className="mt-5 mb-5 md:w-100 w-80 self-center">
+              <div className="w-full text-left my-2">
+                <p className="font-bold text-sm">E-mail</p>
+                <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userEmail} onChange={(event) => setUserEmail(event.target.value)}/>
+                <p className="text-sm my-2 text-center">
                     Caso o E-mail informado corresponda a um <strong>usuário do Sinapse</strong>, enviaremos os próximos passos para a alteração da senha.
-              </p>
+                </p>
+              </div>
 
-            <button className="bg-(--button-back) text-white font-bold rounded-2xl justify-between md:h-12 h-10 cursor-pointer hover:bg-(--button-hover) duration-300" onClick={sendConfirmation}> Enviar código </button>
+            <button className="bg-(--button-back) text-white font-bold w-30 self-center rounded-lg text-sm justify-between h-8 cursor-pointer hover:bg-(--button-hover) duration-300" onClick={sendConfirmation}> Enviar código </button>
 
-            <div className="text-center mt-8">
-                <Link href={"/login"} className="mt-4 text-center">Voltar</Link>
+            <div className="text-center mt-3">
+                <Link href={"/login"} className="text-center text-sm font-bold">Voltar</Link>
             </div>
             
 

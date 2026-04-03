@@ -108,7 +108,7 @@ export default function Home() {
     }
 
   return (
-  <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
+  <div className="flex flex-col h-full text-xs md:text-lg" style={{color:myTheme.theme.foreground}}>
     <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4  text-center md:h-20">
       <h2 className="font-bold md:text-2xl text-lg mt-3 py-2">Semestres</h2>
     </header>
@@ -123,8 +123,8 @@ export default function Home() {
                                 <h2 className="text-lg font-bold">Criar Semestre</h2>
                             </div>
                             <div className="flex md:flex-row flex-col md:gap-4 gap-4">
-                                <input type="text" className="bg-(--input-back) pl-2 text-(--input-fore) font-bold md:w-200 w-fill h-10 rounded-lg md:mb-0 mb-2 md:mt-0 mt-2" maxLength={50} value={name} onChange={(e) => setName(e.target.value)}/>
-                                <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) font-bold rounded-lg cursor-pointer duration-300 md:px-4 md:py-2 h-10" onClick={()=>createSemester()}>Criar</button>
+                                <input type="text" className="bg-(--input-back) pl-2 text-(--input-fore) font-bold md:w-200 w-fill md:h-10 h-8 rounded-lg md:mb-0 md:mt-0 mt-2" maxLength={50} value={name} onChange={(e) => setName(e.target.value)}/>
+                                <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) font-bold rounded-lg cursor-pointer duration-300 md:px-4 md:py-2 md:h-10 h-6" onClick={()=>createSemester()}>Criar</button>
                             </div>
                             <div className="md:mt-14 mt-2">
                                 <h2 className="font-bold md:text-xl text-lg">Semestres existentes</h2>
@@ -135,16 +135,16 @@ export default function Home() {
                         <table className="w-full h-fill">
                             <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                 <tr>
-                                    <th className="text-left  pl-2 md:py-3">Nome</th>
-                                    <th className="text-center  pl-2 md:py-3 w-24">Renomear</th>
-                                    <th className="text-left  pl-2 md:py-3 w-20">Remover</th>
+                                    <th className="text-left  pl-2">Nome</th>
+                                    <th className="text-center w-2 px-2">Editar</th>
+                                    <th className="text-center w-2 px-2">Remover</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-(--area-back) text-(--area-fore)">
                                 {
                                 semesters.map((item) => (
                                     <tr key={item._id}>
-                                        <td className="text-left pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.name}</td>
+                                        <td className="text-left pl-2 py-1 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{item.name}</td>
                                         <td className="  bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>{renameSemester(item._id)}}> <Pencil className="mx-auto"/> </td>
                                         <td className="  bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=>deleteSemester(item._id)}> <Trash className="mx-auto"/> </td>
                                     </tr>

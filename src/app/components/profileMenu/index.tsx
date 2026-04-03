@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { useProfileMenu } from "@/contexts/StateContext"
 import { useTheme } from "@/contexts/ThemeContext"
-import { Moon, Power, Settings, Star, Sun } from "../icons"
+import { Moon, Power, Settings, Star, Sun, User } from "../icons"
 
 export default function ProfileMenu() {
   const { logout, user } = useAuth()
@@ -23,7 +23,7 @@ export default function ProfileMenu() {
       <ul className="font-bold text-lg md:text-xl text-left">
        
         <li>
-          <Link href="/profile" className={linkClass(pathname === "/profile")} style={{color:myTheme.theme.menuButtonFore}}> <Settings/> Perfil </Link>
+          <Link href="/profile" className={linkClass(pathname === "/profile")} style={{color:myTheme.theme.menuButtonFore}}> <User/> Perfil </Link>
         </li>
 
         <li onClick={()=>myTheme.toggleTheme()}>

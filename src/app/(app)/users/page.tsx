@@ -74,16 +74,16 @@ function closeModal(){
 
 async function updateUser(){
 
-if(modalName==""||modalEmail==""||modalPassword==""||modalADM==""){
+if(modalADM==""){
     showToast("Preencha todos os campos", "error")
     console.log("ID do usuario logado: " + user?._id)
 }
 else{
     const obj = {
-        name: modalName,
-        email: modalEmail,
-        password: modalPassword,
-        paying: true,
+        // name: modalName,
+        // email: modalEmail,
+        // password: modalPassword,
+        // paying: true,
         is_admin: modalADM == "Y" ? true : false,
         answered_questions: user?.answered_questions,
         points: user?.points
@@ -121,6 +121,7 @@ async function getUsers(){
     try {
         const response = await sinapseAPI.get("/users")
         setUsers(response.data)
+        setFiltredUsers(response.data)
     } catch (error) {
         showToast("Ocorreu um erro ao buscar os usuários!", "error")
         console.log("Erro ao buscar usuarios")
@@ -154,49 +155,49 @@ return (
                     <div className="w-full items-center flex flex-col md:flex-col md:gap-2 gap-2">
                         <div className="w-full">
                             <h2 className="font-bold">Id:</h2>
-                            <input value={id} onChange={(e)=>setId(e.target.value)} type="text" className="border bg-(--input-back) text-(--input-fore) pl-1 h-8 text-sm font-normal rounded-lg w-full"/>
+                            <input value={id} onChange={(e)=>setId(e.target.value)} type="text" className=" bg-(--input-back) text-(--input-fore) pl-1 h-8 text-xs md:text-lg font-normal rounded-lg w-60"/>
                         </div>
                         <div className="w-full">
                             <h2 className="font-bold">Nome:</h2>
-                            <input value={name} onChange={(e)=>setName(e.target.value)} type="text" className="border bg-(--input-back) text-(--input-fore) pl-1 h-8 text-sm font-normal rounded-lg w-full"/>
+                            <input value={name} onChange={(e)=>setName(e.target.value)} type="text" className=" bg-(--input-back) text-(--input-fore) pl-1 h-8 text-xs md:text-lg font-normal rounded-lg w-full md:w-140"/>
                         </div>
                         <div className="w-full">
                             <h2 className="font-bold">E-mail:</h2>
-                            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" className="border bg-(--input-back) text-(--input-fore) pl-1 h-8 text-sm font-normal rounded-lg w-full"/> 
+                            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" className=" bg-(--input-back) text-(--input-fore) pl-1 h-8 text-xs md:text-lg font-normal rounded-lg w-full md:w-140"/> 
                         </div>
                     </div>
                 </div>
                 <div className="mt-4 justify-center flex">
                     <button onClick={()=>filterUsers()} className="px-4 py-1 mb-4 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) font-bold cursor-pointer">Buscar</button>
                 </div>
-                <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border md:mt-0 mt-8">
+                <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg  md:mt-0 mt-8">
                     <table className="w-full h-fill border-collapse">
-                        <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+                        <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-lg">
                             <tr>
-                                <th className="text-left border pl-2 md:py-3">Nome</th>
-                                <th className="text-center border px-2">Email</th>
-                                <th className="text-left border px-2">Pontuação</th>
-                                <th className="text-center border px-2 w-10">Editar</th>
-                                <th className="text-center border px-2 w-10">Remover</th>
+                                <th className="text-left  pl-2 md:py-3">Nome</th>
+                                <th className="text-center  px-2">Email</th>
+                                <th className="text-center  px-2">Pontuação</th>
+                                <th className="text-center  px-2 w-10">Editar</th>
+                                <th className="text-center  px-2 w-10">Remover</th>
                             </tr>
                         </thead>
 
-                        <tbody className="bg-(--area-back) text-(--area-fore)">
+                        <tbody className="bg-(--area-back) text-(--area-fore) text-sm md:text-lg">
                         {
                         filtredUsers.map((item) => (
                         <tr key={item._id}>
-                            <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.name} </td>
+                            <td className="text-left  pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.name} </td>
 
-                            <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.email} </td>
+                            <td className="text-center  pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.email} </td>
 
-                            <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.points} </td>
+                            <td className="text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.points} </td>
 
-                            <td className="text-center border py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=> editUser(item)}>
-                                <Pencil/>
+                            <td className="text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=> editUser(item)}>
+                                <Pencil className="align-middle w-full"/>
                             </td>
 
-                            <td className="text-center border py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=> deleteUser(item._id)}>
-                                <Trash/>
+                            <td className="text-center  py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=> deleteUser(item._id)}>
+                                <Trash className="align-middle w-full"/>
                             </td>
                         </tr>
                         ))
@@ -221,7 +222,7 @@ return (
                     <h2 className="text-lg mt-2">{modalLabelName}</h2>
                 </div>
                 <div className="flex flex-col ml-2 mr-2 mt-4">
-                    <div className="ml-2 mr-2">
+                    {/* <div className="ml-2 mr-2">
                         <h2 className="font-bold mb-1">Nome:</h2>
                         <input value={modalName} onChange={(e) => setModalName(e.target.value)} type="text" className="bg-(--input-back) text-(--input-fore) pl-2 w-full h-8 md:mb-6 mb-3 rounded-lg" />
                     </div>
@@ -232,7 +233,7 @@ return (
                     <div className="ml-2 mr-2">
                         <h2 className="font-bold mb-1">Senha:</h2>
                         <input value={modalPassword} onChange={(e) => setModalPassword(e.target.value)} type="text" className="bg-(--input-back) text-(--input-fore) pl-2 w-full h-8 md:mb-6 mb-3 rounded-lg" />
-                    </div>
+                    </div> */}
                     <div className="ml-2 mr-2">
                         <h2 className="font-bold mb-1">Administrador:</h2>
                         <select value={modalADM} onChange={(e)=>setModalADM(e.target.value)} className="bg-(--select-back) text-(--select-fore) w-full h-8 md:mb-6 mb-3 rounded-lg">

@@ -216,15 +216,15 @@ export default function EditDiscipline() {
                             <h2 className="font-bold md:text-xl text-lg md:mb-2">Quizzes disponíveis</h2>
                         </div>
                     </div>
-                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg border">
+                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg ">
                         <table className="w-full h-fill border-collapse">
-                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm">
                                 <tr>
-                                    <th className="text-left border pl-2 md:py-3">Nome</th>
-                                    <th className="text-center border pl-2 md:py-3 w-20 px-2">Iniciar</th>
+                                    <th className="text-left  pl-2 py-1">Nome</th>
+                                    <th className="text-center  pl-2 w-20 px-2">Iniciar</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore)">
+                            <tbody className="bg-(--area-back) text-(--area-fore) text-xs">
                             {
                                 discipline?.quizzes_ids.map((id) => {
                                 const quiz:any = getQuizById(id);
@@ -233,11 +233,11 @@ export default function EditDiscipline() {
 
                                 return (
                                     <tr key={quiz._id}>
-                                    <td className="text-left border pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
+                                    <td className="text-left  pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
                                         {quiz.name}
                                     </td>
 
-                                    <td onClick={ (e) => { playQuiz(quiz._id) } } className="border text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer">
+                                    <td onClick={ (e) => { playQuiz(quiz._id) } } className=" text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer">
                                         ▶
                                     </td>
                                     </tr>
@@ -247,7 +247,7 @@ export default function EditDiscipline() {
                             </tbody>
                         </table>
                     </div>
-                        <hr className="mt-8 mb-8" />
+                        
                     </div>
             </div>
         </div>

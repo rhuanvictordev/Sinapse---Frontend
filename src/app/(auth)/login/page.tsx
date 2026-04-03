@@ -43,32 +43,32 @@ export default function Login(){
   return (
       <div style={{color:myTheme.theme.foreground}} className="items-center text-center justify-center self-center flex flex-col h-screen">
         
-          <Image src={myTheme.mode=="light"? LogoLight.src : LogoDark.src} alt="logo" width={200} height={20}/>
+          <Image className="w-40" src={myTheme.mode=="light"? LogoLight.src : LogoDark.src} alt="logo" width={200} height={200}/>
         
-
-          <div className=" w-[90%] h-fill pl-8 pr-8 md:w-130 rounded-2xl flex flex-col bg-(--screen-back) shadow-2xl py-6 my-3">
+          <div className=" w-[90%] h-fill pl-8 pr-8 md:w-100 rounded-2xl flex flex-col bg-(--screen-back) shadow-2xl py-4 mb-0">
             
-              <div className="w-full text-left md:mb-5 mb-2">
-                <p className="font-bold">Email</p>
-                <input type="text" className="w-full h-8 md:h-12 border border-blue-900 rounded-2xl bg-(--input-back) pl-2" maxLength={80} value={email} onChange={(event) => setEmail(event.target.value)}/>
+              <div className="w-full text-left mb-2">
+                <p className="font-bold text-sm">Email</p>
+                <input type="text" className="w-full h-8 md:h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={email} onChange={(event) => setEmail(event.target.value)}/>
               </div>
 
-              <div className="w-full text-left md:mb-5 mb-2">
-                <p className="font-bold">Senha</p>
-                <input type="text" className="w-full h-8 md:h-12 border border-blue-900 rounded-2xl bg-(--input-back) pl-2" maxLength={80} value={password} onChange={(event) => setPassword(event.target.value)}/>
+              <div className="w-full text-left mb-2">
+                <p className="font-bold text-sm">Senha</p>
+                <input type="text" className="w-full h-8 md:h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={password} onChange={(event) => setPassword(event.target.value)}/>
               </div>
 
-              <div className="text-center mt-2 mb-4 text-lg">
+              <div className="text-center my-2 text-sm">
                 Esqueceu a senha? &nbsp;
                 <Link href={"/recover-password"}> <strong className="text-blue-700">Recuperar senha</strong> </Link>
              </div>
              
              <button
-              className="ml-2 mr-2 h-10 p-2 bg-(--button-back) rounded-2xl font-bold text-white hover:bg-(--button-hover) hover:text-white hover:border-white transition duration-300 cursor-pointer"
-              onClick={validateFields}> Entrar
+              className="ml-2 mr-2 my-2 h-6 bg-(--button-back) rounded-lg font-bold text-white hover:bg-(--button-hover) hover:text-white hover:border-white transition duration-300 cursor-pointer"
+              onClick={validateFields}>
+                <p className="text-sm">Entrar</p>
             </button>
 
-            <div className="mt-14 text-lg">
+            <div className="mt-5 text-sm">
               Não tem conta? 
               <Link href={"/register"}> &nbsp;
               <strong className="text-blue-700">Registre-se</strong>
