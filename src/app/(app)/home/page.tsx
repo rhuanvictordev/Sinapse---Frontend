@@ -1,6 +1,6 @@
 "use client"
 
-import { LocalAPI, sinapseAPI } from "@/services/api";
+import {  sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "next/navigation";

@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuth } from "@/contexts/AuthContext";
-import { LocalAPI, sinapseAPI } from "@/services/api";
+import {  sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/contexts/ToastContext";

@@ -1,9 +1,9 @@
 "use client"
 import { useAuth } from "@/contexts/AuthContext";
-import { LocalAPI, sinapseAPI } from "@/services/api";
+import {  sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Add, Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
+import { Add, Pencil, Trash, } from "@/app/components/icons";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 

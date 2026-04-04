@@ -1,6 +1,6 @@
 "use client"
 import { useAuth } from "@/contexts/AuthContext";
-import { LocalAPI, sinapseAPI } from "@/services/api";
+import { sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Trash } from "@/app/components/icons";
@@ -64,7 +64,9 @@ export default function CreateDiscipline() {
                 description: description,
                 user_id: user!._id,
                 quizzes_ids: [],
-                students_ids: [],
+                students_ids: [
+                    user?._id
+                ],
                 semester_id: semesterSelected,
                 ranking: []
             }

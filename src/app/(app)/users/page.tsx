@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { sinapseAPI } from "@/services/api";
-import { Pencil, PencilLight, Trash, TrashLight } from "@/app/components/icons";
+import { Pencil, Trash } from "@/app/components/icons";
 
 type User = {
     _id: string

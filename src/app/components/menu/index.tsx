@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { useMenu } from "@/contexts/StateContext"
 import { useTheme } from "@/contexts/ThemeContext"
-import { Categories, CategoriesLight, Folder, FolderLight, Home, MenuIcon, Moon, Persons, PersonsLight, Power, PowerLight, Search, SearchLight, Settings, SettingsLight, Star, StarLight, Sun, Users, UsersLight } from "@/app/components/icons"
+import { Categories, Folder, Home, MenuIcon, Moon, Persons, Power, Search, Settings, Star, Sun, Users } from "@/app/components/icons"
 
 export default function Menu() {
   const { logout, user } = useAuth()
