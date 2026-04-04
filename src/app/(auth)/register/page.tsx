@@ -25,15 +25,21 @@ export default function Register(){
 
   function createUser(){
     if (userName == "" || email == "" || password == "" || password2 == ""){
-      toast.showToast("Preecha todos os campos!", "error")
+      toast.showToast("Preecha todos os campos!", "info")
       return;
     }
+
+    if (password.length < 8){
+      toast.showToast("A senha deve conter 8 ou mais caracteres!", "info")
+      return;
+    }
+
     if (password != password2){
-      toast.showToast("As senhas não coincidem!", "error")
+      toast.showToast("As senhas não coincidem!", "info")
       return;
     }
     if (!email.includes("@") || !email.includes(".")){
-      toast.showToast("Insira um email válido!", "error")
+      toast.showToast("Insira um email válido!", "info")
       return
     }
     register(userName, email, password)

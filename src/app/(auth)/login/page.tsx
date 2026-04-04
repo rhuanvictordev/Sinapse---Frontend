@@ -8,17 +8,17 @@ import { redirect, useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext"
 import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
-import { Logo, LogoDark, LogoLight } from "@/app/components/icons"
+import { EyeClosed, EyeOpened, LogoDark, LogoLight } from "@/app/components/icons"
 
 export default function Login(){
   const { user, login, loading } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState("sinapse@email.com");
-  const [password, setPassword] = useState("123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const { showToast } = useToast();
   const myTheme = useTheme();
-
+  const [eyeOpen, setEyeOpen] = useState(false);
 
   useEffect(() => {
     document.title = "Sinapse - Login"
@@ -54,7 +54,12 @@ export default function Login(){
 
               <div className="w-full text-left mb-2">
                 <p className="font-bold text-sm">Senha</p>
-                <input type="text" className="w-full h-8 md:h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={password} onChange={(event) => setPassword(event.target.value)}/>
+                <div className="flex items-center justify-center gap-1">
+                  <input type={eyeOpen ? "text" : "password"} className="w-full h-8 md:h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={password} onChange={(event) => setPassword(event.target.value)}/>
+                  {
+                    eyeOpen ? (<EyeOpened className="cursor-pointer" onClick={ ()=> setEyeOpen(!eyeOpen) }/> ): (<EyeClosed className="cursor-pointer" onClick={ ()=> setEyeOpen(!eyeOpen) } />)
+                  }
+                </div>
               </div>
 
               <div className="text-center my-2 text-sm">

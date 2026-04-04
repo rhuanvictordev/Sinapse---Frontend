@@ -22,21 +22,22 @@ type Question = {
   answers: Answer[]
 }
 
-type Quiz = {
-  _id: string
-  name: string
-  description: string
-  user_id: string
-  questions: []
-  categories_ids: []
-}
-
 type QuestionResponse = {
   question: string
   possible_answers: string[]
   answer: number[]
   weight: number
   boolean_answer: boolean
+}
+
+type Quiz = {
+  _id: string
+  name: string
+  description: string
+  user_id: string
+  requesterId: string
+  questions: QuestionResponse[]
+  categories_ids: []
 }
 
 type QuizResponse = {
@@ -50,6 +51,7 @@ type QuizResponse = {
 
 export default function QuizEditPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const params = useParams();
   const quizID = params.id;
   const { showToast } = useToast();
@@ -286,9 +288,12 @@ async function saveQuizEdited(){
   }
 
   const updatedQuiz = {...quiz,
+  requesterId: user?._id,
+  quiz: {...quiz,
     name: newQuizName,
     description: newQuizDescription
   }
+}
 
   try {
     const response = await sinapseAPI.patch(`/quizzes/${quiz?._id}`, updatedQuiz)
@@ -298,7 +303,7 @@ async function saveQuizEdited(){
     }
 
   } catch (error) {
-    showToast("Erro ao atualizar o quiz", "error")
+    showToast("Não foi possível salvar alterações no Quiz porque você não tem permissão para alterar o quiz de outro usuário.", "error")
   }
 }
 

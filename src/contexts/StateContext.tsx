@@ -21,7 +21,6 @@ export function MenuStateProvider({ children }: { children: React.ReactNode }) {
 
   function toggleProfileMenu() {
     setProfileMenuActive(!profileMenuActive);
-    console.log(profileMenuActive)
   }
 
 

@@ -35,7 +35,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // VALIDA SE O USUARIO EXISTE AO RECARREGAR A PAGINA
   useEffect(() => {
-    console.log("effect do authContext")
     setLoading(true)
     const storedToken = localStorage.getItem("token");
     const storedUserID = localStorage.getItem("userID");
@@ -64,7 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await sinapseAPI.get(`/users/${id}`)
       if (response.data){
         setUser(response.data)
-        console.log("Usuario obtido da api: " + JSON.stringify(response.data))
+        //console.log("Usuario obtido da api: " + JSON.stringify(response.data))
         setLoading(false)
       }
     } catch (error: any) {
