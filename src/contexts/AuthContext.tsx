@@ -22,6 +22,7 @@ type AuthContextType = {
   login: (email: string, password: string) => void;
   register: (name: string, email: string, password: string) => void;
   logout: () => void;
+  reloadUser: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,6 +36,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // VALIDA SE O USUARIO EXISTE AO RECARREGAR A PAGINA
   useEffect(() => {
+    reloadUser()
+  }, []);
+
+
+  async function reloadUser(){
     setLoading(true)
     const storedToken = localStorage.getItem("token");
     const storedUserID = localStorage.getItem("userID");
@@ -55,15 +61,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }else{
       setLoading(false)
     }
-  }, []);
-
+  }
 
   async function getByID(id: string){
     try {
       const response = await sinapseAPI.get(`/users/${id}`)
       if (response.data){
         setUser(response.data)
-        //console.log("Usuario obtido da api: " + JSON.stringify(response.data))
+        console.log("Usuario obtido da api: " + JSON.stringify(response.data))
         setLoading(false)
       }
     } catch (error: any) {
@@ -112,8 +117,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/login");
   }
 
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, register }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register, reloadUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -15,19 +15,19 @@ sinapseAPI.interceptors.request.use((config) => {
 
 sinapseAPI.interceptors.response.use(
   (response) => {
-    //console.log({status: response.status,url: response.config.url,});
+    console.log({status: response.status,url: response.config.url,});
     return response;
   },
   (error) => {
-    // if (error.response) {
-    //   console.log("AXIOS SINAPSE RESPONSE ERROR:", {
-    //     status: error.response.status,
-    //     data: error.response.data,
-    //     url: error.config?.url,
-    //   });
-    // } else {
-    //   console.log("AXIOS SINAPSE NETWORK ERROR:", error.message);
-    // }
+    if (error.response) {
+      console.log("AXIOS SINAPSE RESPONSE ERROR:", {
+        status: error.response.status,
+        data: error.response.data,
+        url: error.config?.url,
+      });
+    } else {
+      console.log("AXIOS SINAPSE NETWORK ERROR:", error.message);
+    }
     return Promise.reject(error);
   }
 );

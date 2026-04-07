@@ -49,7 +49,7 @@ export default function Register(){
     <div style={{color:myTheme.theme.foreground}} className="items-center text-center justify-center self-center flex flex-col h-screen">
         
         <Image className="w-40" src={myTheme.mode=="light"? LogoLight.src : LogoDark.src} alt="logo" width={200} height={200}/>
-        <h3 className="font-bold text-lg"> Crie sua conta </h3>
+        <h3 className="font-bold text-lg mb-2"> Crie sua conta </h3>
       
 
         <div className="w-[90%] h-fill pl-8 pr-8 md:w-100 rounded-2xl flex flex-col bg-(--screen-back) shadow-xl py-4">
@@ -57,7 +57,7 @@ export default function Register(){
             <div className="w-full text-left">
               <p className="font-bold text-sm">Nome de Usuário</p>
               <input type="text" className="w-full h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userName} onChange={(event) => setUserName(event.target.value)}/>
-              <h3 className="text-left font-bold text-xs md:text-xs text-red-500"> Guarde seu nome de usuário para conseguir recuperar a sua conta! </h3>
+              {/* <h3 className="text-left font-bold text-xs md:text-xs text-red-500"> Guarde seu nome de usuário para conseguir recuperar a sua conta! </h3> */}
             </div>
 
             <div className="w-full text-left">
@@ -76,7 +76,7 @@ export default function Register(){
             </div>
 
             <div className="flex flex-col w-full items-center gap-4 mt-3">
-              <button className=" bg-(--button-back) text-(--button-fore) px-4 py-1 font-bold rounded-lg justify-between cursor-pointer hover:bg-(--button-hover) duration-300" onClick={createUser}>
+              <button className=" bg-(--button-back) text-(--button-fore) px-6 py-1 font-bold rounded-lg justify-between cursor-pointer hover:bg-(--button-hover) duration-300" onClick={createUser}>
                 <p className="text-sm">Criar Conta</p>
               </button>
               <Link href={"/login"} className=" text-center font-bold text-sm">Voltar</Link>

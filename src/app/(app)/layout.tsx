@@ -44,8 +44,8 @@ export default function AppLayout({children,}: {children: React.ReactNode;}) {
             <Header />  {/* height of header: ( H-20 ) */}
         </div>
         <div className="flex md:flex-row flex-col">
-            <div className={`fixed left-0 top-0 h-fill md:w-64 w-full flex transition-transform duration-500 ${menu.menuActive ? "translate-x-0" : "-translate-x-full"}`}>
-                <div className="fixed w-full md:h-full h-fill mt-20 flex">
+            <div className={`fixed md:relative md:top-20 left-0 top-0 h-fill md:w-58 w-full flex transition-transform duration-500 ${menu.menuActive ? "md:block translate-x-0" : "md:hidden -translate-x-full"}`}>
+                <div className="fixed w-full md:h-full h-fill flex mt-20 md:mt-0">
                     <Menu/>
                 </div>
             </div>

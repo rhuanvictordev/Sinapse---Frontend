@@ -15,7 +15,7 @@ export default function ProfileMenu() {
 
 
   function linkClass(isActive: boolean) {
-    return `py-1 md:rounded-lg border md:border-0 p-2 flex flex-row gap-2 items-center md:m-1 m-2 rounded-lg md:w-60 cursor-pointer duration-500 text-(--foreground) ${isActive ? " bg-(--menu-button-hover)" : " bg-(--menu-button-back) hover:bg-(--menu-button-hover)"}`
+    return `py-2 border md:border-0 p-2 flex flex-row gap-2 items-center md:w-60 cursor-pointer duration-500 text-(--foreground) ${isActive ? " bg-(--menu-button-hover)" : " bg-(--menu-button-back) hover:bg-(--menu-button-hover)"}`
   }
 
   return (

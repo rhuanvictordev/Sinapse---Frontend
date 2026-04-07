@@ -78,7 +78,7 @@ export default function playQuizPage(){
             const response = await sinapseAPI.patch(`/users/${user?._id}`,{ points: totalPoints })
             if (response.status === 200){
                 showToast("Quiz finalizado, parabéns! Total de Pontos: " + finalPoints,"success")
-                router.push("/home")
+                window.location.href = "/home"  // redireciona e recarrega os pontos do usuario
             }
         } catch (error: any) {
             showToast("Ocorreu um erro ao finalizar o quiz", "error")

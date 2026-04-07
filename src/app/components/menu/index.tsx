@@ -15,13 +15,13 @@ export default function Menu() {
 
 
   function linkClass(isActive: boolean) {
-    return `py-1 md:rounded-lg border md:border-0 p-2 flex flex-row gap-2 items-center m-1 cursor-pointer duration-500 text-(--foreground) ${isActive ? " bg-(--menu-button-hover)" : " bg-(--menu-button-back) hover:bg-(--menu-button-hover)"}`
+    return `py-2 border md:border-0 p-2 flex flex-row gap-2 items-center m-0 cursor-pointer duration-500 text-(--foreground) ${isActive ? " bg-(--menu-button-hover)" : " bg-(--menu-button-back) hover:bg-(--menu-button-hover)"}`
   }
 
   return (
-    <div className="h-full w-full" onClick={ () => menu.toggleMenu() }>
+    <div className="h-full w-full md:w-50" onClick={ () => menu.toggleMenu() }>
       
-      <ul className="font-bold text-lg md:text-xl text-left">
+      <ul className="font-bold text-lg md:text-xl text-left md:h-screen bg-(--menu-button-back)">
         
         <li>
           <Link href="/home" className={linkClass(pathname === "/home")} style={{color:myTheme.theme.menuButtonFore}}> <Home/> Início</Link>

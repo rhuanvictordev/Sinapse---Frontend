@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import {  sinapseAPI } from "@/services/api";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/contexts/ToastContext";
 import { useRouter, useParams } from "next/navigation";
@@ -90,6 +90,12 @@ async function getQuiz(){
 }
 
 function openModal(){
+
+    if (quiz?.user_id != user?._id){
+      showToast("Você não tem permissão para alterar o quiz de outros usuários", "error");
+      return
+    }
+
     setNewQuestionText("")
     setNewAnswerText("")
     console.log("Criando nova questão. ID: " + questions.length + 1)
@@ -104,6 +110,12 @@ function closeModal(){
 }
 
 function removeCurrentQuestion() {
+  
+  if (quiz?.user_id != user?._id){
+    showToast("Você não tem permissão para alterar o quiz de outros usuários!", "error");
+    return
+  }
+
   setQuiz(prev => {
     if (!prev) return prev;
 
@@ -159,6 +171,12 @@ function previousQuestion(){
 
 
 async function addQuestion() {
+
+  if (quiz?.user_id != user?._id){
+    showToast("Você não tem permissão para alterar o quiz de outros usuários!", "error");
+    return;
+  }
+
   if (newQuestion.title.trim() === "") {
     showToast("Digite o título da pergunta!", "info");
     return;
@@ -282,18 +300,19 @@ function toggleQuestionType(type: string) {
 
 
 async function saveQuizEdited(){
+
   if (newQuizName == "" || newQuizDescription == ""){
     showToast("Insira um nome e uma descrição para o Quiz!")
     return
   }
 
   const updatedQuiz = {...quiz,
-  requesterId: user?._id,
-  quiz: {...quiz,
-    name: newQuizName,
-    description: newQuizDescription
+    requesterId: user?._id,
+    quiz: {...quiz,
+      name: newQuizName,
+      description: newQuizDescription
+    }
   }
-}
 
   try {
     const response = await sinapseAPI.patch(`/quizzes/${quiz?._id}`, updatedQuiz)
@@ -324,7 +343,7 @@ async function saveQuizEdited(){
                         <button className="md:w-50 w-fill mt-4 md:mt-0 ml-2 mr-2 md:mr-0 md:text-lg text-sm md:ml-5 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" onClick={ () => saveQuizEdited() } >Salvar Alterações</button>
                     </div>
                     <h2 className="md:mt-8 mr-20 font-bold md:hidden text-center w-full">{quiz?.questions.length == 1 ? "1 Pergunta" : quiz?.questions.length + " Perguntas"}</h2>
-                    <button onClick={()=>setModalVisible(true)} className="md:w-50 w-fill mr-20 md:mr-0 ml-20 md:ml-0 h-10 mt-4 md:mt-0 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" >+ Adicionar Pergunta</button>
+                    <button onClick={()=> openModal()} className="md:w-50 w-fill mr-20 md:mr-0 ml-20 md:ml-0 h-10 mt-4 md:mt-0 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300" >+ Adicionar Pergunta</button>
                 </div>
                       <div className="w-full">
                         <h2 className="font-bold md:text-xl text-ls pl-2 text-center md:text-left mb-1">Descrição:</h2>
@@ -432,10 +451,10 @@ async function saveQuizEdited(){
                 <div className="mt-2">
                     <h2 onClick={()=>openModal()} className="text-center mb-2 font-bold">Adicionar Pergunta</h2>
                     <div className="ml-2 mr-2 text-left">
-                        <h2 className="font-bold">Nome:</h2>
+                        <h2 className="font-bold">Sua Pergunta:</h2>
                         <input value={newQuestion.title} onChange={ (e)=> setNewQuestion(prev => ({...prev, title: e.target.value})) }  className="bg-(--input-back) text-(--input-fore) w-full pl-2 h-8 rounded-lg" type="text" />
                         
-                        <h2 className="font-bold">Peso:</h2>
+                        <h2 className="font-bold">Peso da pergunta:</h2>
                         <select value={newQuestion.weight} onChange={ (e)=> setNewQuestion(prev => ({...prev, weight: Number(e.target.value)})) }  className="bg-(--input-back) text-(--input-fore) w-full pl-2 h-6 rounded-lg">
                           <option value={0}>Selecione</option>
                           <option value={1}>1 ponto</option>
@@ -458,9 +477,9 @@ async function saveQuizEdited(){
                         {
                         (newQuestion.type == "MULTIPLE") && (
                             <div className="mt-2">
-                                <h2 className="font-bold">Resposta:</h2>
+                                <h2 className="font-bold">Acrescentar opções de resposta:</h2>
                                 <input value={newAnswerText} onChange={(e)=>setNewAnswerText(e.target.value)}  maxLength={150} className="bg-(--input-back) text-(--input-fore) w-full h-8 pl-2 rounded-lg" type="text" />
-                                <button onClick={()=>addAnswer()} className="w-full bg-(--button-back) text-(--button-fore) hover:bg-(--button-hover) duration-300 mt-6 rounded-lg h-8 cursor-pointer">Acrescentar</button>
+                                <button onClick={()=>addAnswer()} className="w-full bg-(--button-back) text-(--button-fore) hover:bg-(--button-hover) duration-300 mt-6 rounded-lg h-8 cursor-pointer text-xs md:text-lg font-bold">Acrescentar</button>
                             <h2 className="mt-4 font-bold">Respostas Adicionadas:</h2>
                             </div>
                             
@@ -503,8 +522,8 @@ async function saveQuizEdited(){
                         }
 
                         <div className="flex flex-row gap-4">
-                            <button onClick={()=> closeModal()} className="w-full mt-8 bg-blue-600 text-(--button-fore) hover:bg-(--button-hover) duration-300 h-8 rounded-lg cursor-pointer">Cancelar</button>
-                            <button onClick={() => addQuestion()} className="w-full mt-8 bg-green-700 text-(--button-fore) hover:bg-(--button-hover) duration-300 h-8 rounded-lg cursor-pointer">Adicionar</button>
+                            <button onClick={()=> closeModal()} className="w-full mt-8 bg-blue-600 text-(--button-fore) hover:bg-(--button-hover) duration-300 h-8 rounded-lg cursor-pointer text-xs md:text-lg font-bold">Cancelar</button>
+                            <button onClick={() => addQuestion()} className="w-full mt-8 bg-green-700 text-(--button-fore) hover:bg-(--button-hover) duration-300 h-8 rounded-lg cursor-pointer text-xs md:text-lg font-bold">Adicionar Pergunta</button>
                         </div>
                     </div>
                 </div>

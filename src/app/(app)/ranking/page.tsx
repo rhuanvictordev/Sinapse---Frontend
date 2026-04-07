@@ -43,7 +43,17 @@ export default function Ranking() {
   async function getAllDisciplines(){
     const response = await sinapseAPI.get("/subjects");
     setAllDisciplines(response.data);
+    filterDisciplinesByUser(response.data)
   }
+
+  function filterDisciplinesByUser(disciplines: Discipline[]) {
+    const filtered = disciplines.filter(d =>
+        d.user_id === user?._id ||
+        d.students_ids.includes(user?._id || "")
+    )
+
+    setAllDisciplines(filtered)
+    }
 
   async function getRanking(){
     if (disciplineSelected == ""){
