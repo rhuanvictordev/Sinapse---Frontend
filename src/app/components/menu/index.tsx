@@ -43,9 +43,9 @@ export default function Menu() {
           <Link href="/ranking" className={linkClass(pathname === "/ranking")} style={{color:myTheme.theme.menuButtonFore}}> <Star/> Ranking</Link>
         </li>
         
-        <li>
+        {/* <li>
           <Link href="/duel" className={linkClass(pathname === "/duel")} style={{color:myTheme.theme.menuButtonFore}}> <Persons/> Duelo</Link>
-        </li>
+        </li> */}
         
       </ul>
 
