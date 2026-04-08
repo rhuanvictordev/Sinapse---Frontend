@@ -77,8 +77,10 @@ export default function playQuizPage(){
             const totalPoints = (user?.points ?? 0) + finalPoints;
             const response = await sinapseAPI.patch(`/users/${user?._id}`,{ points: totalPoints })
             if (response.status === 200){
-                showToast("Quiz finalizado, parabéns! Total de Pontos: " + finalPoints,"success")
-                window.location.href = "/home"  // redireciona e recarrega os pontos do usuario
+                showToast("Quiz finalizado, Total de Pontos: " + finalPoints,"success")
+                setTimeout(() => {
+                    window.location.href = "/home"; // redireciona e recarrega os pontos do usuario
+                }, 3000);
             }
         } catch (error: any) {
             showToast("Ocorreu um erro ao finalizar o quiz", "error")

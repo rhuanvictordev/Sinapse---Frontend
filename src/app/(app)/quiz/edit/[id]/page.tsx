@@ -133,8 +133,13 @@ function removeCurrentQuestion() {
     setSelectedQuestion(prev => prev - 1)
     showToast("Pergunta removida, salve as alterações!","info")
   }else{
-    setSelectedQuestion(0)
-    showToast("Pergunta removida, salve as alterações!","info")
+      if (selectedQuestion == 0){
+        
+      }else{
+        setSelectedQuestion(0)
+        showToast("Pergunta removida, salve as alterações!","info")
+      } 
+    
   }
 }
 
@@ -310,7 +315,8 @@ async function saveQuizEdited(){
     requesterId: user?._id,
     quiz: {...quiz,
       name: newQuizName,
-      description: newQuizDescription
+      description: newQuizDescription,
+      user_id: user?._id
     }
   }
 

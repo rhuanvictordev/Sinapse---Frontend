@@ -100,9 +100,18 @@ export default function EditDiscipline() {
         }
     }
 
+    // async function getQuizzes() {
+    //     try {
+    //         const response = await sinapseAPI.get(`/quizzes/user-quizzes/${user?._id}`);
+    //         setQuizzes(response.data);
+    //     } catch (error) {
+    //         showToast("Erro ao obter os quizzes", "error")
+    //     }
+    // }
+
     async function getQuizzes() {
         try {
-            const response = await sinapseAPI.get(`/quizzes/user-quizzes/${user?._id}`);
+            const response = await sinapseAPI.get("/quizzes");
             setQuizzes(response.data);
         } catch (error) {
             showToast("Erro ao obter os quizzes", "error")
@@ -248,7 +257,7 @@ export default function EditDiscipline() {
                             <div className="mt-8 mb-4 pl-2">
                                 <div className="flex w-full gap-2 pr-2 text-center items-center mt-16">
                                     <h2 onClick={() => setShowAllQuizzes(false)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Quizzes nesta disciplina</h2>
-                                    <h2 onClick={() => setShowAllQuizzes(true)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Meus Quizzes</h2>
+                                    <h2 onClick={() => setShowAllQuizzes(true)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Todos os Quizzes</h2>
                                 </div>
                             </div>
 
@@ -306,7 +315,7 @@ export default function EditDiscipline() {
                             {   
                                 (showAllQuizzes) && (
                                     <div>
-                                        <h2 className="pl-2 font-bold text-lg mb-4">Quizzes existentes</h2>
+                                        <h2 className="pl-2 font-bold text-lg mb-4">Todos os Quizzes</h2>
                                         <button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-6" onClick={() => { openModal() }}>+ Novo Quiz</button>
 
                                         <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden rounded-lg">
