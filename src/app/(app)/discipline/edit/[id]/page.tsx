@@ -102,7 +102,7 @@ export default function EditDiscipline() {
 
     async function getQuizzes() {
         try {
-            const response = await sinapseAPI.get("/quizzes");
+            const response = await sinapseAPI.get(`/quizzes/user-quizzes/${user?._id}`);
             setQuizzes(response.data);
         } catch (error) {
             showToast("Erro ao obter os quizzes", "error")
@@ -248,7 +248,7 @@ export default function EditDiscipline() {
                             <div className="mt-8 mb-4 pl-2">
                                 <div className="flex w-full gap-2 pr-2 text-center items-center mt-16">
                                     <h2 onClick={() => setShowAllQuizzes(false)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Quizzes nesta disciplina</h2>
-                                    <h2 onClick={() => setShowAllQuizzes(true)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Quizzes Existentes</h2>
+                                    <h2 onClick={() => setShowAllQuizzes(true)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Meus Quizzes</h2>
                                 </div>
                             </div>
 
@@ -266,7 +266,7 @@ export default function EditDiscipline() {
                                                     <th className="text-center w-30">Remover</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="bg-(--area-back) text-(--area-fore) text-xs font-bold">
+                                            <tbody className="bg-(--area-back) text-(--area-fore) md:text-sm text-xs font-bold">
                                                 {
                                                     discipline?.quizzes_ids.map((id) => {
                                                         const quiz: any = getQuizById(id);

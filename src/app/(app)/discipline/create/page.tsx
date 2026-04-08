@@ -74,6 +74,7 @@ export default function CreateDiscipline() {
             if (response.status == 201){
                 setCreated(true)
                 showToast("Disciplina criada com sucesso!","success")
+                router.push("/home")
             }
         } catch (error) {
             showToast("Insira outro nome para a disciplina!","info")
