@@ -160,34 +160,34 @@ export default function EditDiscipline() {
   }
 
 
-  async function addQuizToCurrentDiscipline(_id: string){
-        try {
-            const response = await sinapseAPI.post(`/subjects/add-quiz/${discipline!._id}`,{quiz_id: _id})
-            if (response.status == 201){
-                showToast("Quiz adicionado com sucesso!", "success")
-                getQuizzes()
-                getDiscipline()
-            }
-        } catch (error: any) {
-            const msg = error?.response?.data?.message || "Erro ao tentar adicionar o Quiz à disciplina"
-            showToast(msg, "error")
-        }
-  }
+//   async function addQuizToCurrentDiscipline(_id: string){
+//         try {
+//             const response = await sinapseAPI.post(`/subjects/add-quiz/${discipline!._id}`,{quiz_id: _id})
+//             if (response.status == 201){
+//                 showToast("Quiz adicionado com sucesso!", "success")
+//                 getQuizzes()
+//                 getDiscipline()
+//             }
+//         } catch (error: any) {
+//             const msg = error?.response?.data?.message || "Erro ao tentar adicionar o Quiz à disciplina"
+//             showToast(msg, "error")
+//         }
+//   }
 
 
-  async function removeQuizFromCurrentDiscipline(idParam: string){
-        try {
-            const newQuizzes = discipline?.quizzes_ids.filter((id) => id !== idParam);
-            const response = await sinapseAPI.patch(`/subjects/${discipline!._id}`,{quizzes_ids: newQuizzes});
-            if(response.status == 200){
-                showToast("Quiz removido com sucesso!", "success")
-                getDiscipline();
-            }
-        } catch (error: any) {
-            const msg = error?.response?.data?.message || "Erro ao tentar remover o Quiz"
-            showToast(msg, "error")
-        }
-  }
+//   async function removeQuizFromCurrentDiscipline(idParam: string){
+//         try {
+//             const newQuizzes = discipline?.quizzes_ids.filter((id) => id !== idParam);
+//             const response = await sinapseAPI.patch(`/subjects/${discipline!._id}`,{quizzes_ids: newQuizzes});
+//             if(response.status == 200){
+//                 showToast("Quiz removido com sucesso!", "success")
+//                 getDiscipline();
+//             }
+//         } catch (error: any) {
+//             const msg = error?.response?.data?.message || "Erro ao tentar remover o Quiz"
+//             showToast(msg, "error")
+//         }
+//   }
 
   function getQuizById(id: string){
     const quiz = quizzes.find( (quiz) => quiz._id == id)    

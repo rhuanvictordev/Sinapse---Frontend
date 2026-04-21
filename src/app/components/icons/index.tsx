@@ -6,6 +6,7 @@ import ArrowToTop from "@/../assets/images/arrowToTop.png"
 import ArrowToTopLight from "@/../assets/images/arrowToTop_light.png"
 import LoadingIcon from "@/../assets/images/loading.gif"
 import { HiMiniUser as User } from "react-icons/hi2";
+import { MdChromeReaderMode as CoursesIcon } from "react-icons/md";
 
 import { FaPen as Pencil } from "react-icons/fa";
 import { TiThMenu as MenuIcon } from "react-icons/ti";
@@ -52,5 +53,6 @@ export {
   LogoDark,
   Add,
   EyeOpened,
-  EyeClosed
+  EyeClosed,
+  CoursesIcon
 }

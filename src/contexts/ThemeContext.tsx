@@ -54,7 +54,7 @@ const lightTheme: ThemeColors = {
   foreground: "#000000",
   screenFore: "#000",
   screenBack: "#d8dcf9",
-  areaBack: "rgba(180, 180, 180, 0.1)",
+  areaBack: "rgba(180, 180, 180, 0.2)",
   areaFore: "#000000",
   tableHeaderBack: "#f7f7fc",
   tableHeaderBackHover: "#D5D5D5",

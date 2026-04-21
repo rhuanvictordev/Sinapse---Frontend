@@ -22,10 +22,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   function calculateDuration(message: string) {
     const length = message.length
-    if (length <= 20) return 2000
-    if (length <= 45) return 3000
+    if (length <= 15) return 800
+    if (length <= 30) return 900
     if (length <= 70) return 4000
-    return 6000
+    if (length <= 120) return 7000
+    return 10000
   }
 
   function showToast(message: string, type: ToastType = "info", duration?: number) {

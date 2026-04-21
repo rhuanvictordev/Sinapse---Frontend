@@ -100,21 +100,36 @@ export default function EditDiscipline() {
         }
     }
 
+    async function getQuizzes() {
+        try {
+            const response = await sinapseAPI.get(`/quizzes/user-quizzes/${user?._id}`);
+            setQuizzes(response.data);
+        } catch (error) {
+            showToast("Erro ao obter os quizzes", "error")
+        }
+    }
+
+
     // async function getQuizzes() {
     //     try {
-    //         const response = await sinapseAPI.get(`/quizzes/user-quizzes/${user?._id}`);
+    //         const response = await sinapseAPI.get("/quizzes");
     //         setQuizzes(response.data);
     //     } catch (error) {
     //         showToast("Erro ao obter os quizzes", "error")
     //     }
     // }
 
-    async function getQuizzes() {
-        try {
-            const response = await sinapseAPI.get("/quizzes");
-            setQuizzes(response.data);
-        } catch (error) {
-            showToast("Erro ao obter os quizzes", "error")
+    async function deleteQuiz(id: string){
+        try{
+            const response = await sinapseAPI.delete(`/quizzes/${id}`)
+            if (response.status == 200){
+                removeQuizFromCurrentDiscipline(id);
+                getQuizzes()
+                showToast("Quiz apagado com sucesso!", "success")
+            }
+        }catch (error: any) {
+            const msg = error?.response?.data?.message || "Erro ao tentar apagar o Quiz"
+            showToast(msg, "error")
         }
     }
 
@@ -156,7 +171,10 @@ export default function EditDiscipline() {
                 const response = await sinapseAPI.post("/quizzes", obj)
                 if (response.status == 201) {
                     showToast("Quiz criado com sucesso!", "success")
+                    const createdQuiz = response.data
+                    await addQuizToCurrentDiscipline(createdQuiz._id)
                     getQuizzes();
+                    setShowAllQuizzes(false);
                     closeModal();
                 }
             } catch (error: any) {
@@ -171,7 +189,7 @@ export default function EditDiscipline() {
         try {
             const response = await sinapseAPI.post(`/subjects/add-quiz/${discipline!._id}`, { quiz_id: _id })
             if (response.status == 201) {
-                showToast("Quiz adicionado com sucesso!", "success")
+                showToast("Quiz adicionado a disciplina!", "success")
                 getQuizzes()
                 getDiscipline()
             }
@@ -187,7 +205,7 @@ export default function EditDiscipline() {
             const newQuizzes = discipline?.quizzes_ids.filter((id) => id !== idParam);
             const response = await sinapseAPI.patch(`/subjects/${discipline!._id}`, { quizzes_ids: newQuizzes });
             if (response.status == 200) {
-                showToast("Quiz removido com sucesso!", "success")
+                showToast("Quiz removido da disciplina!", "success")
                 getDiscipline();
             }
         } catch (error: any) {
@@ -196,6 +214,7 @@ export default function EditDiscipline() {
         }
     }
 
+    
     function getQuizById(id: string) {
         const quiz = quizzes.find((quiz) => quiz._id == id)
         if (quiz) {
@@ -257,15 +276,15 @@ export default function EditDiscipline() {
                             <div className="mt-8 mb-4 pl-2">
                                 <div className="flex w-full gap-2 pr-2 text-center items-center mt-16">
                                     <h2 onClick={() => setShowAllQuizzes(false)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Quizzes nesta disciplina</h2>
-                                    <h2 onClick={() => setShowAllQuizzes(true)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Todos os Quizzes</h2>
+                                    <h2 onClick={() => setShowAllQuizzes(true)} className="font-bold text-xs md:text-sm px-4 py-2 cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-white duration-300 rounded-lg">Meus Quizzes</h2>
                                 </div>
                             </div>
 
                             {
                                 (!showAllQuizzes) && (
                                     <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden rounded-lg">
-                                        <h2 className="pl-2 font-bold text-lg mb-4">Quizzes nesta disciplina</h2>
-                                        <button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-6" onClick={() => { openModal() }}>+ Novo Quiz</button>
+                                        <h2 className="pl-2 font-bold text-sm mb-4">Quizzes nesta disciplina</h2>
+                                        <button className="md:text-sm text-xs px-4 py-2 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-5" onClick={() => { openModal() }}>+ Novo Quiz</button>
                                         <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden rounded-lg">
                                             <table className="w-full h-fill border-collapse">
                                             <thead className="bg-(--theader-back) md:text-lg text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm">
@@ -315,8 +334,8 @@ export default function EditDiscipline() {
                             {   
                                 (showAllQuizzes) && (
                                     <div>
-                                        <h2 className="pl-2 font-bold text-lg mb-4">Todos os Quizzes</h2>
-                                        <button className="w-35 h-10 font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-6" onClick={() => { openModal() }}>+ Novo Quiz</button>
+                                        <h2 className="pl-2 font-bold text-sm mb-4">Todos os meus Quizzes</h2>
+                                        <button className="px-4 py-2 text-xs md:text-sm font-bold rounded-lg cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 mb-5" onClick={() => { openModal() }}>+ Novo Quiz</button>
 
                                         <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden rounded-lg">
                                             <table className="w-full h-fill text-lg">
@@ -325,6 +344,7 @@ export default function EditDiscipline() {
                                                         <th className="text-left pl-2">Nome</th>
                                                         <th>Descrição</th>
                                                         <th className="w-2 px-2">Adicionar</th>
+                                                        <th className="w-2 px-4">Apagar</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="bg-(--area-back) text-(--area-fore) text-xs md:text-sm font-bold">
@@ -335,6 +355,9 @@ export default function EditDiscipline() {
                                                                 <td className=" border-gray-400 text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{quiz.description}</td>
                                                                 <td className=" border-gray-400 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer text-center text-3xl items-center" onClick={(e) => addQuizToCurrentDiscipline(quiz._id)}>
                                                                     <Add size={20} className="align-middle w-full"/>
+                                                                </td>
+                                                                <td className=" border-gray-400 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer text-center text-3xl items-center" onClick={(e) => deleteQuiz(quiz._id)}>
+                                                                    <Trash size={20} className="align-middle w-full"/>
                                                                 </td>
                                                             </tr>
                                                         ))
@@ -355,15 +378,15 @@ export default function EditDiscipline() {
             <div className={`fixed inset-0 flex items-center justify-center bg-black/60 transition-opacity duration-500 ${modalVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                 <div className="border-4 border-blue-700 bg-(--screen-back) text-(--foreground) m-4 md:w-240 w-120 md:h-160 h-140 rounded-2xl shadow-xl">
                     <div className="mt-6 text-center font-bold">
-                        <h2 className="text-2xl">Criar novo Quiz</h2>
+                        <h2 className="md:text-lg text-lg">Criar novo Quiz</h2>
                         <div className="mt-8">
                             <div className="ml-4 mr-4">
-                                <h2 className="font-bold mb-1 text-lg md:text-left">Nome do Quiz:</h2>
-                                <input maxLength={100} value={newQuizName} onChange={(e) => setNewQuizName(e.target.value)} type="text" className="bg-(--input-back) text-(--input-fore) pl-2 w-full h-8 md:mb-6 mb-3 rounded-lg" />
+                                <h2 className="font-bold mb-1 md:text-lg text-xs text-left">Nome do Quiz:</h2>
+                                <input maxLength={100} value={newQuizName} onChange={(e) => setNewQuizName(e.target.value)} type="text" className="text-xs md:text-lg bg-(--input-back) text-(--input-fore) pl-2 w-full h-8 md:mb-6 mb-3 rounded-lg" />
                             </div>
                             <div className="ml-4 mr-4">
-                                <h2 className="font-bold mb-1 text-lg md:text-left">Descrição:</h2>
-                                <textarea value={newQuizDescription} onChange={(e) => setNewQuizDescription(e.target.value)} className="bg-(--input-back) text-(--input-fore) pl-2 w-full h-30 md:mb-6 mb-3 rounded-lg" />
+                                <h2 className="font-bold mb-1 md:text-lg text-xs text-left pt-4">Descrição:</h2>
+                                <textarea value={newQuizDescription} onChange={(e) => setNewQuizDescription(e.target.value)} className="bg-(--input-back) text-(--input-fore) text-xs md:text-lg pl-2 w-full h-20 md:mb-6 mb-3 rounded-lg" />
                             </div>
                             <div className="items-center justify-center flex mt-26 gap-8">
                                 <button onClick={() => setModalVisible(false)} className="bg-(--button-delete) hover:bg-(--button-hover) cursor-pointer duration-300 text-(--button-fore) font-bold w-30 h-12 rounded-lg">Cancelar</button>

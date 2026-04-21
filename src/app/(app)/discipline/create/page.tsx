@@ -94,7 +94,7 @@ export default function CreateDiscipline() {
                 <div className="w-full h-full p-2">
                     <div className="md:w-300 w-full flex flex-col text-center md:text-left justify-center gap-4">
                         <div>
-                            <h2 className="font-bold text-sm md:text-lg">Semestre:</h2>
+                            <h2 className="font-bold text-sm md:text-lg">Período:</h2>
                             <select value={semesterSelected} onChange={ (e)=>setSemesterSelected(e.target.value)} className="bg-(--select-back) text-xs  text-(--select-fore) w-full rounded-lg h-8 cursor-pointer">
                             <option value="">Selecione</option>
                             {
@@ -106,11 +106,11 @@ export default function CreateDiscipline() {
                         </div>
                         <div>
                             <h2 className="font-bold text-sm md:text-lg">Nome:</h2>
-                            <input value={name} onChange={(e)=>setName(e.target.value)} maxLength={100} className="bg-(--input-back) text-xs  text-(--input-fore) rounded-lg h-8 pl-2 w-full" type="text" />
+                            <input placeholder="Nome da nova disciplina" value={name} onChange={(e)=>setName(e.target.value)} maxLength={100} className="bg-(--input-back) text-xs  text-(--input-fore) rounded-lg h-8 pl-2 w-full" type="text" />
                         </div>
                         <div>
                             <h2 className="font-bold text-sm md:text-lg">Descrição:</h2>
-                            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) text-xs  text-(--input-fore) rounded-lg h-8 md:h-16 pl-2 w-full"/>
+                            <textarea placeholder="Informe uma breve descrição sobre o conteúdo dessa disciplina" value={description} onChange={(e)=>setDescription(e.target.value)} maxLength={500} className="bg-(--input-back) text-xs  text-(--input-fore) rounded-lg h-8 md:h-16 pl-2 w-full"/>
                         </div>
                         {/* <div>
                             <h2 className="font-bold text-xl">Privar:</h2>

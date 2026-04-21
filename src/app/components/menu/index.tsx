@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { useMenu } from "@/contexts/StateContext"
 import { useTheme } from "@/contexts/ThemeContext"
-import { Categories, Folder, Home, MenuIcon, Moon, Persons, Power, Search, Settings, Star, Sun, Users } from "@/app/components/icons"
+import { Categories, CoursesIcon, Folder, Home, MenuIcon, Moon, Persons, Power, Search, Settings, Star, Sun, Users } from "@/app/components/icons"
 
 export default function Menu() {
   const { logout, user } = useAuth()
@@ -28,15 +28,19 @@ export default function Menu() {
         </li>
 
         <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
-          <Link href="/semesters" className={linkClass(pathname === "/semesters")} style={{color:myTheme.theme.menuButtonFore}}> <Categories/> Semestres</Link>
+          <Link href="/courses" className={linkClass(pathname === "/courses")} style={{color:myTheme.theme.menuButtonFore}}> <CoursesIcon/> Cursos</Link>
+        </li>
+
+        <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
+          <Link href="/semesters" className={linkClass(pathname === "/semesters")} style={{color:myTheme.theme.menuButtonFore}}> <Categories/> Períodos</Link>
+        </li>
+
+        <li>
+          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <Search/> Disciplinas</Link>
         </li>
 
         <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
           <Link href="/users" className={linkClass(pathname === "/users")} style={{color:myTheme.theme.menuButtonFore}}> <Users/> Usuários</Link>
-        </li>
-        
-        <li>
-          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <Search/> Disciplinas</Link>
         </li>
         
         <li>

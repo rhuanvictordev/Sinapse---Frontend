@@ -73,10 +73,15 @@ export default function Home() {
 
   return (
   <div style={{ color: myTheme.theme.foreground }} className="text-xs md:text-lg">
+    
+    <div className="w-full">
+        <select className="font-bold w-full h-8 text-center text-sm bg-amber-600">
+          <option value="">Selecione um Curso</option>
+        </select>
+    </div>
 
      <header className="flex flex-col md:flex-row md:justify-between justify-center md:pl-4 text-center">
       <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0"> Disciplinas disponíveis </h2>
-
       <button onClick={() => router.push("/discipline/create")} className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 rounded-lg">
         + Criar Disciplina
       </button>
