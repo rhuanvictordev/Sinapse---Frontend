@@ -12,7 +12,6 @@ import { LoadingIcon, LogoDark, LogoLight } from "@/app/components/icons"
 export default function Register(){
 const { showToast } = useToast();
 const [userEmail, setUserEmail] = useState("");
-const [userName, setUserName] = useState("");
 const [modalVisible, setModalVisible] = useState(false);
 const myTheme = useTheme();
 
@@ -27,28 +26,22 @@ async function sendConfirmation(){
         showToast("Informe o email corretamente!", "info")
         return
     }
-    if (userName.trim() == ""){
-        showToast("Informe o nome de usuário!", "info")
-        return
-    }
     
     setModalVisible(true)
 
     try {
-        const response = await sinapseAPI.post("/users/forgotPassword", {email: userEmail, name: userName});
+        const response = await sinapseAPI.post("/users/forgotPassword", {email: userEmail});
         if (response.status == 201){
             showToast("Um email foi enviado a sua caixa de entrada! Verifique e siga os próximos passos.")
             setModalVisible(false)
         }else{
             setUserEmail("")
-            setUserName("")
             showToast("Usuário não encontrado!", "info")
             setModalVisible(false)
         }
     } catch (error) {
         showToast("Ocorreu um erro", "info")
         setUserEmail("")
-        setUserName("")
         setModalVisible(false)
     }
     
@@ -60,17 +53,14 @@ return (
         
           <Image className="w-40" src={myTheme.mode=="light"? LogoLight.src : LogoDark.src} alt="logo" width={200} height={200}/>
         
-
           <div className=" w-[90%] h-fill pl-8 pr-8 md:w-100 rounded-2xl flex flex-col bg-(--screen-back) shadow-2xl py-4">
             <h2 className="md:text-lg font-bold">Recuperação de Senha</h2>
               <div className="w-full text-left mt-4">
-                <p className="font-bold text-sm">Nome de usuário</p>
-                <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userName} onChange={(event) => setUserName(event.target.value)}/>
               </div>
 
               <div className="w-full text-left my-2">
                 <p className="font-bold text-sm">E-mail</p>
-                <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userEmail} onChange={(event) => setUserEmail(event.target.value)}/>
+                <input type="text" className="w-full h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userEmail} onChange={(event) => setUserEmail(event.target.value)}/>
                 <p className="text-sm my-2 text-center">
                     Caso o E-mail informado corresponda a um <strong>usuário do Sinapse</strong>, enviaremos os próximos passos para a alteração da senha.
                 </p>

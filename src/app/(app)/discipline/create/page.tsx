@@ -23,39 +23,76 @@ type Semester = {
     name: string
 }
 
+type Course = {
+    _id: string
+    name: string
+    semesters_ids: string[]
+}
+
 export default function CreateDiscipline() {
   const { user, login, logout } = useAuth();
   const myTheme = useTheme();
   const router = useRouter();
   const { showToast } = useToast();
   const [created, setCreated] = useState(false);
-
+  const [allSemesters, setAllSemesters] = useState <Semester[]> ([]);
   const [semesters, setSemesters] = useState <Semester[]> ([]);
-  
+  const [courses, setCourses] = useState <Course[]> ([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [semesterSelected, setSemesterSelected] = useState("");
+  const [courseSelected, setCourseSelected] = useState("");
   const [restrict, setRestrict] = useState("N");
 
   useEffect( () => {
     document.title = "Sinapse - Nova Disciplina"
     getSemesters()
+    getCourses()
   }, [])
 
 
   async function getSemesters(){
     try {
         const response = await sinapseAPI.get("/semesters")
-        setSemesters(response.data)
+        setAllSemesters(response.data)
     } catch (error) {
         showToast("Ocorreu um erro ao obter os períodos","error")
     }
   }
 
+  async function getCourses(){
+    try {
+        const response = await sinapseAPI.get("/courses")
+        setCourses(response.data)
+    } catch (error) {
+        showToast("Ocorreu um erro ao obter os cursos","error")
+    }
+  }
+
+  function showSemesters(courseID: string) {
+    if (!courseID) {
+        setSemesters([]);
+        return;
+    }
+
+    const course = courses.find(c => c._id === courseID);
+
+    if (!course) {
+        setSemesters([]);
+        return;
+    }
+
+    const filteredSemesters = allSemesters.filter(s =>
+        course.semesters_ids.includes(s._id)
+    );
+
+    setSemesters(filteredSemesters);
+    }
+
 
   async function createDiscipline(){
     
-    if (name == "" || semesterSelected == "" || restrict == ""||description==""){
+    if (name == "" || semesterSelected == "" || restrict == ""||description=="" || courseSelected == ""){
         showToast("Preencha todos os campos!","info")
     }else{
         try {
@@ -67,7 +104,7 @@ export default function CreateDiscipline() {
                 students_ids: [
                     user?._id
                 ],
-                semester_id: semesterSelected,
+                semester_id: semesterSelected+"-"+courseSelected,
                 ranking: []
             }
             const response = await sinapseAPI.post("/subjects",obj)
@@ -93,6 +130,17 @@ export default function CreateDiscipline() {
                 {/* conteudo inicio */}
                 <div className="w-full h-full p-2">
                     <div className="md:w-300 w-full flex flex-col text-center md:text-left justify-center gap-4">
+                        <div>
+                            <h2 className="font-bold text-sm md:text-lg">Curso:</h2>
+                            <select value={courseSelected} onChange={(e) => {const value = e.target.value; setCourseSelected(value); showSemesters(value);}} className="bg-(--select-back) text-xs  text-(--select-fore) w-full rounded-lg h-8 cursor-pointer">
+                            <option value="">Selecione</option>
+                            {
+                            courses.map( (item) => (
+                                <option value={item._id} key={item._id}>{item.name}</option>
+                            ) )
+                            }
+                            </select>
+                        </div>
                         <div>
                             <h2 className="font-bold text-sm md:text-lg">Período:</h2>
                             <select value={semesterSelected} onChange={ (e)=>setSemesterSelected(e.target.value)} className="bg-(--select-back) text-xs  text-(--select-fore) w-full rounded-lg h-8 cursor-pointer">

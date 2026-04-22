@@ -1,20 +1,10 @@
 "use client"
 
-import { useRouter, useParams } from "next/navigation"
+import { useRouter, useParams, useSearchParams } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { useToast } from "@/contexts/ToastContext"
 import { useEffect, useRef, useState } from "react"
 import { sinapseAPI } from "@/services/api"
-
-type User = {
-    _id: string
-    name: string
-    email: string
-    paying: boolean
-    is_admin: boolean
-    answered_questions: number
-    points: number
-}
 
 type Question = {
     question: string
@@ -32,21 +22,43 @@ type QuizResponse = {
     questions: Question[]
 }
 
+type Ranking = {
+    student_id: string
+    answered_questions: number
+    correct_answers: number
+}
+
+type Discipline = {
+    _id: string
+    name: string
+    description: string
+    user_id: string
+    quizzes_ids: string[]
+    semester_id: string
+    invitation_code: string
+    ranking: Ranking[]
+}
+
 export default function playQuizPage(){
     const router = useRouter();
     const { user } = useAuth();
     const { showToast } = useToast();
+    const [quizDiscipline, setQuizDiscipline] = useState<Discipline>()
     const [quiz, setQuiz] = useState<QuizResponse>()
     const params = useParams();
+    const searchParams = useSearchParams();
+    const subjectId = searchParams.get('subject');
     const [points, setPoints] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answeredQuestions, setAnsweredQuestions] = useState(0);
+    const [correctAnsweredQuestions, setCorrectAnsweredQuestions] = useState(0);
     
     const correctSound = new Audio("/sounds/correct.mp3")
     const wrongSound = new Audio("/sounds/wrong.mp3")
 
     useEffect(() => {
         getQuiz(params.id)
+        getDiscipline(subjectId!)
     }, [])
 
     useEffect(() => {
@@ -55,6 +67,15 @@ export default function playQuizPage(){
         }
     }, [user])
 
+
+    async function getDiscipline(subjectId: string){
+        try {
+            const response = await sinapseAPI.get(`/subjects/${subjectId}`)
+            setQuizDiscipline(response.data)
+        } catch (error: any) {
+            showToast("Erro ao obter a disciplina do Quiz", "error")
+        }
+    }
 
     async function getQuiz(id: any){
         try {
@@ -74,17 +95,69 @@ export default function playQuizPage(){
 
     async function finalizeQuiz(finalPoints: number){
         try {
-            const totalPoints = (user?.points ?? 0) + finalPoints;
-            const response = await sinapseAPI.patch(`/users/${user?._id}`,{ points: totalPoints })
-            if (response.status === 200){
-                showToast("Quiz finalizado, Total de Pontos: " + finalPoints,"success")
-                setTimeout(() => {
-                    window.location.href = "/home"; // redireciona e recarrega os pontos do usuario
-                }, 3000);
+            const updatedDiscipline = buildUpdatedDiscipline();
+            const { invitation_code, ...DTOupdatedDiscipline } = updatedDiscipline!;
+            console.log(DTOupdatedDiscipline)
+
+            const response = await sinapseAPI.patch(`/subjects/${subjectId}`, DTOupdatedDiscipline);
+
+            if (response.status == 200){
+                const totalPoints = (user?.points ?? 0) + finalPoints;
+
+                const userResponse = await sinapseAPI.patch(`/users/${user?._id}`, {
+                    points: totalPoints
+                });
+
+                if (userResponse.status === 200){
+                    showToast("Quiz finalizado, Total de Pontos: " + finalPoints,"success")
+
+                    setTimeout(() => {
+                        window.location.href = "/home";
+                    }, 1500);
+                }
             }
-        } catch (error: any) {
-            showToast("Ocorreu um erro ao finalizar o quiz", "error")
+
+        } catch (error) {
+            showToast("Erro ao finalizar o quiz", "error")
         }
+    }
+
+
+    function buildUpdatedDiscipline() {
+        if (!quizDiscipline || !user) return quizDiscipline;
+
+        const existingIndex = quizDiscipline.ranking.findIndex(
+            rank => rank.student_id === user._id
+        );
+
+        let updatedRanking;
+
+        if (existingIndex !== -1) {
+            updatedRanking = quizDiscipline.ranking.map((rank, index) => {
+                if (index === existingIndex) {
+                    return {
+                        ...rank,
+                        answered_questions: answeredQuestions,
+                        correct_answers: correctAnsweredQuestions
+                    };
+                }
+                return rank;
+            });
+        } else {
+            updatedRanking = [
+                ...quizDiscipline.ranking,
+                {
+                    student_id: user._id,
+                    answered_questions: answeredQuestions,
+                    correct_answers: correctAnsweredQuestions
+                }
+            ];
+        }
+
+        return {
+            ...quizDiscipline,
+            ranking: updatedRanking
+        };
     }
 
     function nextQuestion(updatedPoints?: number){
@@ -110,6 +183,7 @@ export default function playQuizPage(){
                 if (responseAnswer.data === true){
                     const newPoints = points + Number(quiz?.questions[currentQuestion].weight)
                     setPoints(newPoints)
+                    setCorrectAnsweredQuestions(prev => prev + 1)
                     showToast("Acertou","success")
                     correctSound.play()
                     nextQuestion(newPoints)

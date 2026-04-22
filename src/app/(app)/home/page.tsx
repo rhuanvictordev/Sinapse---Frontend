@@ -6,7 +6,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
-import { Pencil, Trash } from "@/app/components/icons";
+import { EyeClosed, EyeOpened, Pencil, Trash } from "@/app/components/icons";
 
 type Discipline = {
   _id: string
@@ -24,16 +24,24 @@ type Semester = {
   name: string
 }
 
+type Course = {
+  _id: string
+  name: string
+  semesters_ids: string[]
+}
+
 export default function Home() {
   const router = useRouter();
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
   const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
   const myTheme = useTheme();
   const { user } = useAuth();
   const { showToast } = useToast();
 
   useEffect( () => {
     document.title = "Sinapse - Início"
+    getCourses();
     getSemesters();
     getDisciplines();
   }, [])
@@ -48,9 +56,21 @@ export default function Home() {
     setSemesters(response.data);
   }
 
+  async function getCourses(){
+    const response = await sinapseAPI.get("/courses");
+    setAllCourses(response.data);
+  }
+
   function getSemesterName(id: string){
-      const semester = semesters.find(semester => semester._id === id)
+      const parts = id.split("-");
+      const semester = semesters.find(s => s._id === parts[0]);
       return semester?.name
+  }
+
+  function getCourseName(id: string){
+      const parts = id.split("-");
+      const course = allCourses.find(c => c._id === parts[1]);
+      return course?.name
   }
 
   async function deleteDiscipline(id: string){
@@ -67,6 +87,28 @@ export default function Home() {
     }
   }
 
+  async function removeCurrentUserFromSelectedDiscipline(disciplineID: string) {
+    const discipline = disciplines.find(d => d._id === disciplineID);
+    if (!discipline) return;
+
+    const students_ids = discipline.students_ids.filter(
+      studentID => studentID !== user?._id
+    );
+
+    try {
+      const response = await sinapseAPI.patch(`/subjects/${disciplineID}`, {
+        students_ids
+      });
+
+      if (response.status === 200) {
+        showToast("Disciplina desafixada!", "success");
+        getDisciplines()
+      }
+    } catch (error: any) {
+      showToast("Erro ao tentar desafixar a disciplina do painel", "error");
+    }
+  }
+
   const myDisciplines = disciplines.filter(d =>
     d.user_id === user?._id || d.students_ids.includes(user?._id || "")
   )
@@ -74,17 +116,21 @@ export default function Home() {
   return (
   <div style={{ color: myTheme.theme.foreground }} className="text-xs md:text-lg">
     
-    <div className="w-full">
+    {/* <div className="w-full">
         <select className="font-bold w-full h-8 text-center text-sm bg-amber-600">
           <option value="">Selecione um Curso</option>
         </select>
-    </div>
+    </div> */}
 
      <header className="flex flex-col md:flex-row md:justify-between justify-center md:pl-4 text-center">
       <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0"> Disciplinas disponíveis </h2>
-      <button onClick={() => router.push("/discipline/create")} className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 rounded-lg">
-        + Criar Disciplina
-      </button>
+        {
+          user?.is_admin && (
+          <button onClick={() => router.push("/discipline/create")} className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 rounded-lg">
+            + Criar Disciplina
+          </button>
+          )
+        }
     </header>
 
   <div>
@@ -99,8 +145,15 @@ export default function Home() {
 
           <div className="ml-4 mr-5 mt-4 flex flex-row justify-between">
             <h2 className="rounded-sm pl-2 pr-2 md:h-auto border overflow-hidden text-sm">
-              {getSemesterName(item.semester_id)}
+              {getCourseName(item.semester_id) + " - "+ getSemesterName(item.semester_id)}
             </h2>
+            {
+             item.user_id != user?._id && (
+              <div className="cursor-pointer">
+              <h2><EyeClosed onClick={() => removeCurrentUserFromSelectedDiscipline(item._id)}/></h2>
+            </div>
+             ) 
+            }
           </div>
 
           <div className="md:mt-4 mt-2 mr-2 md:ml-14 ml-4">
@@ -137,7 +190,6 @@ export default function Home() {
             {user?._id === item.user_id && (
               <div className="flex items-center justify-center h-10">
                 <div className="flex flex-row w-full justify-center md:gap-14 gap-4">
-
                   <button
                     className="h-10 bg-(--button-enter) hover:bg-(--button-enter-hover) text-(--button-fore) duration-300 flex items-center text-lg gap-2 px-5 rounded-lg cursor-pointer"
                     onClick={() => router.push(`/discipline/view/${item._id}`)}

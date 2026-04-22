@@ -25,6 +25,12 @@ type Semester = {
     name: string
 }
 
+type Course = {
+    _id: string
+    name: string
+    semesters_ids: string[]
+}
+
 type Quiz = {
     _id: string
     name: string
@@ -41,8 +47,9 @@ export default function EditDiscipline() {
     const router = useRouter();
     const params = useParams();
     const disciplineID = params.id;
-
-    const [semesters, setSemesters] = useState<Semester[]>([])
+    const [allCourses, setAllCourses] = useState<Course[]>([])
+    const [allsemesters, setAllSemesters] = useState<Semester[]>([])
+    const [courseSemesters, setCourseSemesters] = useState<Semester[]>([]);
     const [quizzes, setQuizzes] = useState<Quiz[]>([])
 
     const [discipline, setDiscipline] = useState<Discipline | null>(null);
@@ -52,7 +59,7 @@ export default function EditDiscipline() {
 
     const [newQuizName, setNewQuizName] = useState("");
     const [newQuizDescription, setNewQuizDescription] = useState("");
-
+    const [courseSelected, setCourseSelected] = useState("");
     const [semesterSelected, setSemesterSelected] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -60,10 +67,17 @@ export default function EditDiscipline() {
 
     useEffect(() => {
         document.title = "Sinapse - Editar Disciplina"
+        getCourses();
         getSemesters();
         getQuizzes();
         getDiscipline();
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (courseSelected && allCourses.length && allsemesters.length) {
+            showCourseSemesters(courseSelected);
+        }
+    }, [courseSelected, allCourses, allsemesters]);
 
     function openModal() {
         setNewQuizName("")
@@ -81,10 +95,10 @@ export default function EditDiscipline() {
         try {
             const response = await sinapseAPI.get(`/subjects/${disciplineID}`);
             setDiscipline(response.data);
-            setSemesterSelected(response.data.semester_id)
+            setSemesterSelected(response.data.semester_id.split("-")[0])
+            setCourseSelected(response.data.semester_id.split("-")[1])
             setNewDisciplineName(response.data.name)
             setNewDisciplineDescription(response.data.description)
-
         } catch (error) {
             showToast("Erro ao obter detalhes da disciplina", "error")
             router.push("/home")
@@ -94,9 +108,18 @@ export default function EditDiscipline() {
     async function getSemesters() {
         try {
             const response = await sinapseAPI.get("/semesters");
-            setSemesters(response.data);
+            setAllSemesters(response.data);
         } catch (error) {
             showToast("Erro ao obter os semestres", "error")
+        }
+    }
+
+    async function getCourses() {
+        try {
+            const response = await sinapseAPI.get("/courses");
+            setAllCourses(response.data);
+        } catch (error) {
+            showToast("Erro ao obter os cursos", "error")
         }
     }
 
@@ -108,16 +131,6 @@ export default function EditDiscipline() {
             showToast("Erro ao obter os quizzes", "error")
         }
     }
-
-
-    // async function getQuizzes() {
-    //     try {
-    //         const response = await sinapseAPI.get("/quizzes");
-    //         setQuizzes(response.data);
-    //     } catch (error) {
-    //         showToast("Erro ao obter os quizzes", "error")
-    //     }
-    // }
 
     async function deleteQuiz(id: string){
         try{
@@ -134,7 +147,7 @@ export default function EditDiscipline() {
     }
 
     async function saveDisciplineChanges() {
-        if (semesterSelected == "" || newDisciplineName == "" || newDisciplineDescription == "") {
+        if (semesterSelected == "" || newDisciplineName == "" || newDisciplineDescription == "" || courseSelected == "") {
             showToast("Preencha todos os campos!", "info")
             return
         } else {
@@ -142,11 +155,11 @@ export default function EditDiscipline() {
                 const obj = {
                     name: newDisciplineName,
                     description: newDisciplineDescription,
-                    semester_id: semesterSelected
+                    semester_id: semesterSelected+"-"+courseSelected
                 }
                 const response = await sinapseAPI.patch(`/subjects/${discipline!._id}`, obj)
                 if (response.status == 200) {
-                    showToast("Disciplina atualizada com sucesso!", "success")
+                    showToast("Disciplina salva com sucesso!", "success")
                     getDiscipline()
                 }
             } catch (error) {
@@ -199,6 +212,21 @@ export default function EditDiscipline() {
         }
     }
 
+    function showCourseSemesters(courseID: string){
+        const course = allCourses.find(c => c._id === courseID);
+
+        if (!course) {
+            setCourseSemesters([]);
+            return;
+        }
+
+        const filteredSemesters = allsemesters.filter(s =>
+            course.semesters_ids.includes(s._id)
+        );
+
+        setCourseSemesters(filteredSemesters);
+    }
+
 
     async function removeQuizFromCurrentDiscipline(idParam: string) {
         try {
@@ -241,11 +269,22 @@ export default function EditDiscipline() {
                                 <div className="flex md:flex-col md:gap-4">
                                     <div className="md:w-220 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
                                         <div className="flex md:flex-row flex-col md:mb-4 mb-2">
-                                            <h2 className="text-sm font-bold">Semestre:</h2>
+                                            <h2 className="text-sm font-bold">Curso:</h2>
+                                            <select value={courseSelected} onChange={(e)=>{setCourseSelected(e.target.value)}} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-8 text-sm font-bold cursor-pointer">
+                                                <option value="">Selecione</option>
+                                                {
+                                                    allCourses.map((course) => (
+                                                        <option key={course._id} value={course._id}>{course.name}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
+                                        <div className="flex md:flex-row flex-col md:mb-4 mb-2">
+                                            <h2 className="text-sm font-bold">Período:</h2>
                                             <select value={semesterSelected} onChange={(e) => setSemesterSelected(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-8 text-sm font-bold cursor-pointer">
                                                 <option value="">Selecione</option>
                                                 {
-                                                    semesters.map((semester) => (
+                                                    courseSemesters.map((semester) => (
                                                         <option key={semester._id} value={semester._id}>{semester.name}</option>
                                                     ))
                                                 }

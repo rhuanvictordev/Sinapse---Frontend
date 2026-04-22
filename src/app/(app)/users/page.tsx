@@ -63,13 +63,12 @@ function editUser(user: User){
 
 
 function closeModal(){
+    setModalVisible(false)
     setUserSelected(null)
     setModalLabelName("")
     setModalName("")
     setModalEmail("")
     setModalPassword("")
-    setModalADM("N")
-    setModalVisible(false)
 }
 
 async function updateUser(){

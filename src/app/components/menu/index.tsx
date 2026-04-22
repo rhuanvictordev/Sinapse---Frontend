@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { useMenu } from "@/contexts/StateContext"
 import { useTheme } from "@/contexts/ThemeContext"
-import { Categories, CoursesIcon, Folder, Home, MenuIcon, Moon, Persons, Power, Search, Settings, Star, Sun, Users } from "@/app/components/icons"
+import { Categories, CoursesIcon, Folder, Home, Lamp, MenuIcon, Moon, Persons, Power, Search, Settings, Star, Sun, Users } from "@/app/components/icons"
 
 export default function Menu() {
   const { logout, user } = useAuth()
@@ -24,7 +24,7 @@ export default function Menu() {
       <ul className="font-bold text-lg md:text-xl text-left md:h-screen bg-(--menu-button-back)">
         
         <li>
-          <Link href="/home" className={linkClass(pathname === "/home")} style={{color:myTheme.theme.menuButtonFore}}> <Home/> Início</Link>
+          <Link href="/home" className={linkClass(pathname === "/home")} style={{color:myTheme.theme.menuButtonFore}}> <Lamp/> Painel</Link>
         </li>
 
         <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>

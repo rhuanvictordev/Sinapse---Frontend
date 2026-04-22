@@ -156,10 +156,12 @@ export default function EditDiscipline() {
   }
 
   function playQuiz(id: string){
-    router.push(`/quiz/play/${id}`);
+    const params = new URLSearchParams();
+    params.append("subject", discipline!._id);
+    router.push(`/quiz/play/${id}?${params.toString()}`);
   }
 
-
+  
 //   async function addQuizToCurrentDiscipline(_id: string){
 //         try {
 //             const response = await sinapseAPI.post(`/subjects/add-quiz/${discipline!._id}`,{quiz_id: _id})
