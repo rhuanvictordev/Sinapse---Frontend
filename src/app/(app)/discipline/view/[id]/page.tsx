@@ -207,7 +207,7 @@ export default function EditDiscipline() {
         <header className="flex flex-col md:justify-between justify-center border-black pl-2 md:pl-6 mb-2">
             <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3">Visualizar Disciplina</h2>
             <h2 className="font-bold text-lg text-left md:text-left">{discipline?.name}</h2>
-            <h2 className="font-normal text-sl">Código de convite: <strong className="font-bold">{discipline?.invitation_code}</strong></h2>
+            <h2 className="font-normal text-sl">Código da disciplina: <strong className="font-bold">{discipline?.invitation_code}</strong></h2>
         </header>
         
         <div className="w-full h-full bg-(--area-back) p-2">

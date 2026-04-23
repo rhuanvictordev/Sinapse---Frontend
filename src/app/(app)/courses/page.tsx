@@ -14,10 +14,23 @@ type Course = {
     semesters_ids: string[]
 }
 
+type Discipline = {
+    _id: string
+    name: string
+    description: string
+    user_id: string
+    quizzes_ids: string[]
+    students_ids: string[]
+    semester_id: string
+    invitation_code: string
+    ranking: []
+}
+
 export default function Courses() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
+  const [allDisciplines, setAllDisciplines] = useState<Discipline[]>([]);
   const myTheme = useTheme();
   const { showToast } = useToast();
   const [name, setName] = useState("");
@@ -30,11 +43,17 @@ export default function Courses() {
         return
     }
     getCourses();
+    getDisciplines();
   }, [])
 
   async function getCourses(){
     const response = await sinapseAPI.get("/courses")
     setCourses(response.data);
+  }
+
+  async function getDisciplines(){
+    const response = await sinapseAPI.get("/subjects")
+    setAllDisciplines(response.data);
   }
 
   async function createCourse(){
@@ -53,21 +72,40 @@ export default function Courses() {
     }
   }
 
-    async function deleteCourse(courseID: string) {
-        if (!confirm("Deseja excluir este Curso?")) return;
-
-        const obj = {user_id: user?._id}
-        try {
-            const response = await sinapseAPI.delete(`/courses/${courseID}`, {
-                data: { user_id: user?._id }
-            });
-            if (response.status == 200){
-                showToast("Curso excluído!", "success");
-                getCourses();
+  function verifyUsingCourse(courseID: string){
+    let exist = false;
+    allDisciplines.forEach(discipline => {
+        courses.forEach(course=>{
+            if (discipline.semester_id.split("-")[1] == courseID){
+                exist = true;
             }
-        } catch (error: any) {
-            const message = error?.response?.data?.message || "Erro ao excluir o Curso";
-            showToast(message, "error");
+        });
+    });
+
+    return exist;
+  }
+
+    async function deleteCourse(courseID: string) {
+        
+        let courseUsed = (verifyUsingCourse(courseID));
+        if (!courseUsed){
+            if (!confirm("Deseja excluir este Curso?")) return;
+
+            const obj = {user_id: user?._id}
+            try {
+                const response = await sinapseAPI.delete(`/courses/${courseID}`, {
+                    data: { user_id: user?._id }
+                });
+                if (response.status == 200){
+                    showToast("Curso excluído!", "success");
+                    getCourses();
+                }
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Erro ao excluir o Curso";
+                showToast(message, "error");
+            }
+        }else{
+            showToast("Este curso possui disciplinas vinculadas, não será possível excluir no momento!", "info");
         }
     }
 

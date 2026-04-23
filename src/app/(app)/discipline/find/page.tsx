@@ -130,7 +130,7 @@ async function subscribe(discipline: Discipline){
     <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
     
         <header className="flex flex-col md:justify-between justify-center border-black pl-2 mb-2">
-            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3">Encontrar Disciplinas</h2>
+            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3 md:pl-2">Disciplinas</h2>
         </header>
         
         <div className="w-full h-full bg-(--area-back) p-2">
@@ -163,12 +163,12 @@ async function subscribe(discipline: Discipline){
                                 </div>
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-sl font-bold">Disciplina:</h2>
-                                    <input value={searchName} maxLength={100} onChange={(e)=>setSearchName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-8 text-xs font-bold"></input>
+                                    <input placeholder="Nome da disciplina" value={searchName} maxLength={100} onChange={(e)=>setSearchName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-8 text-xs font-bold"></input>
                                 </div>
 
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-sl font-bold">Código:</h2>
-                                    <input value={searchCode} maxLength={8} onChange={(e)=>setSearchCode(e.target.value)} className="md:w-60 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-8 text-xs font-bold"></input>
+                                    <input placeholder="Código da disciplina" value={searchCode} maxLength={8} onChange={(e)=>setSearchCode(e.target.value)} className="md:w-60 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-(--input-fore) h-8 text-xs font-bold"></input>
                                 </div>
                                         
                                 {/* <div>
@@ -181,25 +181,38 @@ async function subscribe(discipline: Discipline){
                     </div>
                     <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg">
                         <table className="w-150 md:w-full h-fill border-collapse text-sm overflow-scroll">
-                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-sm">
+                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-lg">
                                 <tr>
-                                    <th className="text-left pl-2">Curso</th>
-                                    <th className="text-left pl-2">Semestre</th>
-                                    <th className="">Disciplina</th>
-                                    <th className="w-20 px-2">Fixar</th>
+                                    <th className="text-left pl-2 px-2">Curso</th>
+                                    <th className="text-left px-2">Semestre</th>
+                                    <th className="text-left px-2">Disciplina</th>
+                                    <th className="w-20 text-center px-2">Fixar</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore)">
-                            {
-                            disciplinesFiltered.map((discipline) => (
-                                <tr key={discipline._id}>
-                                    <td className="text-left pl-2 py-1 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{getCourseName(discipline.semester_id)}</td>
-                                    <td className="text-left pl-2 py-1 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{getSemesterName(discipline.semester_id)}</td>
-                                    <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">{discipline.name}</td>
-                                    <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={(e)=>subscribe(discipline)}><Add className="align-middle w-full"/></td>
-                                </tr>
-                            ))
-                            }
+
+                            <tbody className="bg-(--area-back) text-(--area-fore) text-sm md:text-lg">
+                                {disciplinesFiltered.map((discipline) => (
+                                    <tr key={discipline._id}>
+                                        <td className="text-left pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
+                                            {getCourseName(discipline.semester_id)}
+                                        </td>
+
+                                        <td className="text-left pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
+                                            {getSemesterName(discipline.semester_id)}
+                                        </td>
+
+                                        <td className="text-left pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
+                                            {discipline.name}
+                                        </td>
+
+                                        <td
+                                            className="text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
+                                            onClick={() => subscribe(discipline)}
+                                        >
+                                            <Add className="align-middle w-full" />
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>

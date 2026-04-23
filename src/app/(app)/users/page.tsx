@@ -152,30 +152,31 @@ return (
                 </div>
                 <div className="items-center justify-center flex flex-col">
                     <div className="w-full items-center flex flex-col md:flex-col md:gap-2 gap-2">
-                        <div className="w-full">
+                        {/* <div className="w-full">
                             <h2 className="font-bold">Id:</h2>
                             <input value={id} onChange={(e)=>setId(e.target.value)} type="text" className=" bg-(--input-back) text-(--input-fore) pl-1 h-8 text-xs md:text-lg font-normal rounded-lg w-60"/>
-                        </div>
+                        </div> */}
                         <div className="w-full">
                             <h2 className="font-bold">Nome:</h2>
-                            <input value={name} onChange={(e)=>setName(e.target.value)} type="text" className=" bg-(--input-back) text-(--input-fore) pl-1 h-8 text-xs md:text-lg font-normal rounded-lg w-full md:w-140"/>
+                            <input placeholder="Nome do usuário" value={name} onChange={(e)=>setName(e.target.value)} type="text" className=" bg-(--input-back) text-(--input-fore) pl-1 h-8 text-xs md:text-lg font-normal rounded-lg w-full md:w-140"/>
                         </div>
                         <div className="w-full">
                             <h2 className="font-bold">E-mail:</h2>
-                            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" className=" bg-(--input-back) text-(--input-fore) pl-1 h-8 text-xs md:text-lg font-normal rounded-lg w-full md:w-140"/> 
+                            <input placeholder="E-mail do usuário" value={email} onChange={(e)=>setEmail(e.target.value)} type="text" className=" bg-(--input-back) text-(--input-fore) pl-1 h-8 text-xs md:text-lg font-normal rounded-lg w-full md:w-140"/> 
                         </div>
                     </div>
                 </div>
                 <div className="mt-4 justify-center flex">
-                    <button onClick={()=>filterUsers()} className="px-4 py-1 mb-4 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) font-bold cursor-pointer">Buscar</button>
+                    <button onClick={()=>filterUsers()} className="px-4 py-1 mb-4 rounded-lg bg-(--button-back) hover:bg-(--button-hover) duration-300 text-(--button-fore) font-bold cursor-pointer">Aplicar Filtro</button>
                 </div>
                 <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg  md:mt-0 mt-8">
                     <table className="w-full h-fill border-collapse">
                         <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-lg">
                             <tr>
-                                <th className="text-left  pl-2 md:py-3">Nome</th>
-                                <th className="text-center  px-2">Email</th>
+                                <th className="text-left  pl-2 px-2">Nome</th>
+                                <th className="text-left  px-2">Email</th>
                                 <th className="text-center  px-2">Pontuação</th>
+                                <th className="text-center  px-2">ADM</th>
                                 <th className="text-center  px-2 w-10">Editar</th>
                                 <th className="text-center  px-2 w-10">Remover</th>
                             </tr>
@@ -185,11 +186,12 @@ return (
                         {
                         filtredUsers.map((item) => (
                         <tr key={item._id}>
-                            <td className="text-left  pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.name} </td>
+                            <td className="text-left py-1 pl-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) whitespace-nowrap"> {item.name} </td>
 
-                            <td className="text-center  pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.email} </td>
+                            <td className="text-left  pl-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.email} </td>
 
-                            <td className="text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.points} </td>
+                            <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.points} </td>
+                            <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.is_admin == true ? "Sim" : "Não"} </td>
 
                             <td className="text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=> editUser(item)}>
                                 <Pencil className="align-middle w-full"/>
@@ -207,10 +209,6 @@ return (
             </div>
         </div>
     </div>
-
-
-
-
 
 
 

@@ -40,7 +40,7 @@ export default function EditCourse() {
 
     const [semesters, setSemesters] = useState<Semester[]>([])
     const [course, setCourse] = useState<Course>()
-
+    const [allDisciplines, setAllDisciplines] = useState<Discipline[]>([])
     const [discipline, setDiscipline] = useState<Discipline | null>(null);
     const [newDisciplineName, setNewDisciplineName] = useState("");
     const [newDisciplineDescription, setNewDisciplineDescription] = useState("");
@@ -58,7 +58,7 @@ export default function EditCourse() {
         document.title = "Sinapse - Visualizar Curso"
         getSemesters();
         getCourse();
-        // getDiscipline();
+        getDisciplines();
     }, [])
 
     function openModal() {
@@ -73,24 +73,19 @@ export default function EditCourse() {
         setModalVisible(false)
     }
 
-    // async function getDiscipline() {
-    //     try {
-    //         const response = await sinapseAPI.get(`/subjects/${disciplineID}`);
-    //         setDiscipline(response.data);
-    //         setSemesterSelected(response.data.semester_id)
-    //         setNewDisciplineName(response.data.name)
-    //         setNewDisciplineDescription(response.data.description)
-
-    //     } catch (error) {
-    //         showToast("Erro ao obter detalhes da disciplina", "error")
-    //         router.push("/home")
-    //     }
-    // }
-
     async function getSemesters() {
         try {
             const response = await sinapseAPI.get("/semesters");
             setSemesters(response.data);
+        } catch (error) {
+            showToast("Erro ao obter os semestres", "error")
+        }
+    }
+
+    async function getDisciplines() {
+        try {
+            const response = await sinapseAPI.get("/subjects");
+            setAllDisciplines(response.data);
         } catch (error) {
             showToast("Erro ao obter os semestres", "error")
         }
@@ -141,32 +136,48 @@ export default function EditCourse() {
         }
     }
 
+    function verifyUsingSemester(semesterID: string){
+        let exists = false;
+
+        allDisciplines.forEach(discipline => {
+            if (discipline.semester_id.split("-")[0] == semesterID){
+                exists = true;
+            }
+        });
+
+        return exists;
+    }
+
     async function removeSemesterFromCurrentCourse(semesterID: string) {
-        if (!course) return;
+        if (!verifyUsingSemester(semesterID)){
+            if (!course) return;
 
-        const updatedSemesters = course.semesters_ids.filter(
-            id => id !== semesterID
-        );
+            const updatedSemesters = course.semesters_ids.filter(
+                id => id !== semesterID
+            );
 
-        const obj = {
-            user_id: user?._id,
-            updated_course: {
-                name: course.name,
-                semesters_ids: updatedSemesters
+            const obj = {
+                user_id: user?._id,
+                updated_course: {
+                    name: course.name,
+                    semesters_ids: updatedSemesters
+                }
+            };
+
+            try {
+                const response = await sinapseAPI.patch(`/courses/${courseID}`, obj);
+
+                if (response.status === 200) {
+                    showToast("Período removido do curso com sucesso!", "success");
+                    getCourse();
+                }
+            } catch (error: any) {
+                const message =
+                    error?.response?.data?.message || "Erro ao remover o período";
+                showToast(message, "error");
             }
-        };
-
-        try {
-            const response = await sinapseAPI.patch(`/courses/${courseID}`, obj);
-
-            if (response.status === 200) {
-                showToast("Período removido do curso com sucesso!", "success");
-                getCourse();
-            }
-        } catch (error: any) {
-            const message =
-                error?.response?.data?.message || "Erro ao remover o período";
-            showToast(message, "error");
+        }else{
+            showToast("Existem disciplinas vinculadas ao período. Não será possível excluir no momento.", "info");
         }
     }
 

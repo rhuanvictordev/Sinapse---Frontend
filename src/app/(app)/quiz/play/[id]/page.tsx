@@ -124,40 +124,42 @@ export default function playQuizPage(){
 
 
     function buildUpdatedDiscipline() {
-        if (!quizDiscipline || !user) return quizDiscipline;
+        return quizDiscipline
 
-        const existingIndex = quizDiscipline.ranking.findIndex(
-            rank => rank.student_id === user._id
-        );
+        // if (!quizDiscipline || !user) return quizDiscipline;
 
-        let updatedRanking;
+        // const existingIndex = quizDiscipline.ranking.findIndex(
+        //     rank => rank.student_id === user._id
+        // );
 
-        if (existingIndex !== -1) {
-            updatedRanking = quizDiscipline.ranking.map((rank, index) => {
-                if (index === existingIndex) {
-                    return {
-                        ...rank,
-                        answered_questions: answeredQuestions,
-                        correct_answers: correctAnsweredQuestions
-                    };
-                }
-                return rank;
-            });
-        } else {
-            updatedRanking = [
-                ...quizDiscipline.ranking,
-                {
-                    student_id: user._id,
-                    answered_questions: answeredQuestions,
-                    correct_answers: correctAnsweredQuestions
-                }
-            ];
-        }
+        // let updatedRanking;
 
-        return {
-            ...quizDiscipline,
-            ranking: updatedRanking
-        };
+        // if (existingIndex !== -1) {
+        //     updatedRanking = quizDiscipline.ranking.map((rank, index) => {
+        //         if (index === existingIndex) {
+        //             return {
+        //                 ...rank,
+        //                 answered_questions: answeredQuestions,
+        //                 correct_answers: correctAnsweredQuestions
+        //             };
+        //         }
+        //         return rank;
+        //     });
+        // } else {
+        //     updatedRanking = [
+        //         ...quizDiscipline.ranking,
+        //         {
+        //             student_id: user._id,
+        //             answered_questions: answeredQuestions,
+        //             correct_answers: correctAnsweredQuestions
+        //         }
+        //     ];
+        // }
+
+        // return {
+        //     ...quizDiscipline,
+        //     ranking: updatedRanking
+        // };
     }
 
     function nextQuestion(updatedPoints?: number){

@@ -259,7 +259,7 @@ export default function EditDiscipline() {
                 <header className="flex flex-col md:justify-between justify-center border-black pl-2 md:pl-6 mb-2">
                     <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3">Editar Disciplina</h2>
                     <h2 className="font-bold text-lg text-left md:text-left">{discipline?.name}</h2>
-                    <h2 className="font-normal text-sl">Código de convite: <strong className="font-bold">{discipline?.invitation_code}</strong></h2>
+                    <h2 className="font-normal text-sl">Código da disciplina: <strong className="font-bold">{discipline?.invitation_code}</strong></h2>
                 </header>
 
                 <div className="w-full h-full bg-(--area-back) p-2">
@@ -292,11 +292,11 @@ export default function EditDiscipline() {
                                         </div>
                                         <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                             <h2 className="text-sm font-bold">Nome:</h2>
-                                            <input value={newDisciplineName} onChange={(e) => setNewDisciplineName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-sm  text-(--input-fore) h-8 font-bold"></input>
+                                            <input placeholder="Nome da disciplina" value={newDisciplineName} onChange={(e) => setNewDisciplineName(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) rounded-lg pl-2 md:ml-4 text-sm  text-(--input-fore) h-8 font-bold"></input>
                                         </div>
                                         <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                             <h2 className="text-sm font-bold">Descrição:</h2>
-                                            <textarea value={newDisciplineDescription} onChange={(e) => setNewDisciplineDescription(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) text-sm rounded-lg pl-2 md:ml-4 text-(--input-fore) h-8 font-bold"></textarea>
+                                            <textarea placeholder="Descrição da disiciplina" value={newDisciplineDescription} onChange={(e) => setNewDisciplineDescription(e.target.value)} className="md:w-160 ml-2 mr-2 w-fill bg-(--input-back) text-sm rounded-lg pl-2 md:ml-4 text-(--input-fore) h-8 font-bold"></textarea>
                                         </div>
                                         {/* <div className="flex md:flex-row md:mr-2 flex-col items-center md:w-100 w-full mb-6 md:mt-0 mt-2 md:justify-end">
                                         <h2 className="text-lg font-bold">Privar disciplina:</h2>
