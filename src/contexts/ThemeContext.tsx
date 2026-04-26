@@ -144,7 +144,7 @@ const ThemeContext = createContext<ThemeContextType | null>(null)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
-  const [mode, setMode] = useState<ThemeMode>("light")
+  const [mode, setMode] = useState<ThemeMode | null>(null)
 
   const toggleTheme = () => {
     setMode(prev => {
@@ -157,64 +157,81 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const iconColor = mode === "light" ? "#000" : "#FFF";
   const theme = mode === "light" ? lightTheme : darkTheme
 
+
   useEffect(() => {
-
     const storedTheme = localStorage.getItem("theme")
-        if (storedTheme === "light" || storedTheme === "dark") {
-      setMode(storedTheme)
-    }
 
-    document.body.style.backgroundImage = mode=="light" ? `url(${bg_light.src})` : `url(${bg_dark.src})`
+    if (storedTheme === "light" || storedTheme === "dark") {
+      setMode(storedTheme)
+    } else {
+      setMode("light")
+    }
+  }, [])
+
+
+  useEffect(() => {
+    if (!mode) return
+
+    const currentTheme = mode === "light" ? lightTheme : darkTheme
+
+    document.body.style.backgroundImage =
+      mode === "light"
+        ? `url(${bg_light.src})`
+        : `url(${bg_dark.src})`
+
     document.body.className = "bg-cover bg-center"
-    
+
     const root = document.documentElement
 
-    root.style.setProperty("--background", theme.background)
-    root.style.setProperty("--foreground", theme.foreground)
-    root.style.setProperty("--screen-back", theme.screenBack)
-    root.style.setProperty("--area-fore", theme.areaFore)
-    root.style.setProperty("--area-back", theme.areaBack)
-    root.style.setProperty("--theader-back", theme.tableHeaderBack)
-    root.style.setProperty("--theader-back-hover", theme.tableHeaderBackHover)
-    root.style.setProperty("--theader-fore", theme.tableHeaderFore)
-    root.style.setProperty("--theader-fore-hover", theme.tableHeaderForeHover)
-    root.style.setProperty("--tbody-back", theme.tableBodyBack)
-    root.style.setProperty("--tbody-back-hover", theme.tableBodyBackHover)
-    root.style.setProperty("--tbody-fore", theme.tableBodyFore)
-    root.style.setProperty("--tbody-fore-hover", theme.tableBodyForeHover)
-    root.style.setProperty("--card-back", theme.cardBack)
-    root.style.setProperty("--card-fore", theme.cardFore)
-    root.style.setProperty("--card-hover", theme.cardHover)
-    root.style.setProperty("--button-back", theme.buttonBack)
-    root.style.setProperty("--button-fore", theme.buttonFore)
-    root.style.setProperty("--button-hover", theme.buttonHover)
-    root.style.setProperty("--button-enter", theme.buttonEnter)
-    root.style.setProperty("--button-enter-hover", theme.buttonEnterHover)
-    root.style.setProperty("--button-edit", theme.buttonEdit)
-    root.style.setProperty("--button-edit-hover", theme.buttonEditHover)
-    root.style.setProperty("--button-delete", theme.buttonDelete)
-    root.style.setProperty("--button-delete-hover", theme.buttonDeleteHover)
-    root.style.setProperty("--select-back", theme.selectBack)
-    root.style.setProperty("--select-fore", theme.selectFore)
-    root.style.setProperty("--success", theme.success)
-    root.style.setProperty("--error", theme.error)
-    root.style.setProperty("--warning", theme.warning)
-    root.style.setProperty("--info", theme.info)
-    root.style.setProperty("--menu-button-back", theme.menuButtonBack)
-    root.style.setProperty("--menu-button-hover", theme.menuButtonHover)
-    root.style.setProperty("--input-back", theme.inputBack)
-    root.style.setProperty("--input-fore", theme.inputFore)
-    root.style.setProperty("--modal-back", theme.modalBack)
-    root.style.setProperty("--modal-fore", theme.modalFore)
-    
-  }, [theme])
+    root.style.setProperty("--background", currentTheme.background)
+    root.style.setProperty("--foreground", currentTheme.foreground)
 
+    root.style.setProperty("--screen-back", currentTheme.screenBack)
+    root.style.setProperty("--area-fore", currentTheme.areaFore)
+    root.style.setProperty("--area-back", currentTheme.areaBack)
+    root.style.setProperty("--theader-back", currentTheme.tableHeaderBack)
+    root.style.setProperty("--theader-back-hover", currentTheme.tableHeaderBackHover)
+    root.style.setProperty("--theader-fore", currentTheme.tableHeaderFore)
+    root.style.setProperty("--theader-fore-hover", currentTheme.tableHeaderForeHover)
+    root.style.setProperty("--tbody-back", currentTheme.tableBodyBack)
+    root.style.setProperty("--tbody-back-hover", currentTheme.tableBodyBackHover)
+    root.style.setProperty("--tbody-fore", currentTheme.tableBodyFore)
+    root.style.setProperty("--tbody-fore-hover", currentTheme.tableBodyForeHover)
+    root.style.setProperty("--card-back", currentTheme.cardBack)
+    root.style.setProperty("--card-fore", currentTheme.cardFore)
+    root.style.setProperty("--card-hover", currentTheme.cardHover)
+    root.style.setProperty("--button-back", currentTheme.buttonBack)
+    root.style.setProperty("--button-fore", currentTheme.buttonFore)
+    root.style.setProperty("--button-hover", currentTheme.buttonHover)
+    root.style.setProperty("--button-enter", currentTheme.buttonEnter)
+    root.style.setProperty("--button-enter-hover", currentTheme.buttonEnterHover)
+    root.style.setProperty("--button-edit", currentTheme.buttonEdit)
+    root.style.setProperty("--button-edit-hover", currentTheme.buttonEditHover)
+    root.style.setProperty("--button-delete", currentTheme.buttonDelete)
+    root.style.setProperty("--button-delete-hover", currentTheme.buttonDeleteHover)
+    root.style.setProperty("--select-back", currentTheme.selectBack)
+    root.style.setProperty("--select-fore", currentTheme.selectFore)
+    root.style.setProperty("--success", currentTheme.success)
+    root.style.setProperty("--error", currentTheme.error)
+    root.style.setProperty("--warning", currentTheme.warning)
+    root.style.setProperty("--info", currentTheme.info)
+    root.style.setProperty("--menu-button-back", currentTheme.menuButtonBack)
+    root.style.setProperty("--menu-button-hover", currentTheme.menuButtonHover)
+    root.style.setProperty("--input-back", currentTheme.inputBack)
+    root.style.setProperty("--input-fore", currentTheme.inputFore)
+    root.style.setProperty("--modal-back", currentTheme.modalBack)
+    root.style.setProperty("--modal-fore", currentTheme.modalFore)
+    
+  }, [mode])
+
+  if (!mode) return null
   return (
     <ThemeContext.Provider value={{ theme, mode, toggleTheme, iconColor }}>
       {children}
     </ThemeContext.Provider>
   )
 }
+
 
 export function useTheme() {
   const context = useContext(ThemeContext)
@@ -226,6 +243,7 @@ export function useTheme() {
 
 export function ThemeIcon() {
   const { mode, toggleTheme } = useTheme()
+  if (!mode) return null
   return (
     <div className="fixed bottom-4 right-4 w-8 h-8 cursor-pointer" onClick={toggleTheme}>
       {mode === "light" ? <Moon size={22}/> : <Sun size={22}/>}

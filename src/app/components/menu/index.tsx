@@ -31,9 +31,9 @@ export default function Menu() {
           <Link href="/courses" className={linkClass(pathname === "/courses")} style={{color:myTheme.theme.menuButtonFore}}> <CoursesIcon/> Cursos</Link>
         </li>
 
-        <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
+        {/* <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
           <Link href="/semesters" className={linkClass(pathname === "/semesters")} style={{color:myTheme.theme.menuButtonFore}}> <Categories/> Períodos</Link>
-        </li>
+        </li> */}
 
         <li>
           <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <Search/> Disciplinas</Link>

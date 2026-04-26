@@ -60,13 +60,13 @@ return (
 
               <div className="w-full text-left my-2">
                 <p className="font-bold text-sm">E-mail</p>
-                <input type="text" className="w-full h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userEmail} onChange={(event) => setUserEmail(event.target.value)}/>
+                <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userEmail} onChange={(event) => setUserEmail(event.target.value)}/>
                 <p className="text-sm my-2 text-center">
                     Caso o E-mail informado corresponda a um <strong>usuário do Sinapse</strong>, enviaremos os próximos passos para a alteração da senha.
                 </p>
               </div>
 
-            <button className="bg-(--button-back) text-white font-bold w-30 self-center rounded-lg text-sm justify-between h-8 cursor-pointer hover:bg-(--button-hover) duration-300" onClick={sendConfirmation}> Enviar código </button>
+            <button className="bg-(--button-back) text-white font-bold w-full self-center rounded-lg text-sm justify-between h-8 cursor-pointer hover:bg-(--button-hover) duration-300" onClick={sendConfirmation}> Enviar código </button>
 
             <div className="text-center mt-3">
                 <Link href={"/login"} className="text-center text-sm font-bold">Voltar</Link>

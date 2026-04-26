@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import {  sinapseAPI } from "@/services/api";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { EyeOpened, Pencil, Trash } from "@/app/components/icons";
+import { Categories, EyeOpened, Pencil, Trash } from "@/app/components/icons";
 import { useToast } from "@/contexts/ToastContext";
 import { useRouter } from "next/navigation";
 
@@ -151,14 +151,60 @@ export default function Courses() {
                             </div>
                             <div className="flex md:flex-row flex-col md:gap-4 gap-4">
                                 <input placeholder="Nome do novo curso" type="text" className="bg-(--input-back) pl-2 text-(--input-fore) font-bold md:w-200 w-fill md:h-10 h-8 rounded-lg md:mb-0 md:mt-0 mt-2" maxLength={50} value={name} onChange={(e) => setName(e.target.value)}/>
-                                <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) font-bold rounded-lg cursor-pointer duration-300 md:px-4 md:py-2 md:h-10 h-6" onClick={()=>createCourse()}>Criar Curso</button>
+                                <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) font-bold rounded-lg cursor-pointer duration-300 md:px-4 md:py-2 md:h-10 h-8" onClick={()=>createCourse()}>Criar Curso</button>
                             </div>
-                            <div className="md:mt-14 mt-2">
-                                <h2 className="font-bold md:text-xl text-lg">Cursos existentes</h2>
+                            <div className="md:mt-14 mt-8">
+                            {courses.length > 0 && (
+                                <h2 className="font-bold md:text-xl text-lg">
+                                Cursos existentes
+                                </h2>
+                            )}
                             </div>
                         </div>
                     </div>
-                    <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg md:mt-0 mt-8">
+
+                    <div className="flex flex-wrap gap-2 justify-left mt-8 mb-10">
+                        {
+                            courses.map( (course)=> (
+                                <div key={course._id} className="bg-(--card-back) md:w-100 w-full h-35 rounded-lg py-4 shadow-[0_4px_10px_rgba(0,0,0,0.35)]">
+                                    <div className="rounded-2xl text-center mb-4">
+                                        <h2 className="font-bold h-14 text-lg text-left pl-3">{course.name}</h2>
+                                    </div>
+                                    <div className="justify-between flex flex-row pl-3 pr-3">
+                                        <button
+                                            className="h-8 bg-(--button-edit) hover:bg-(--button-edit-hover) duration-300 flex items-center text-sm gap-2 md:gap-4 px-2 rounded-lg cursor-pointer"
+                                            onClick={() => renameCourse(course._id)}
+                                        >
+                                            <Pencil/>
+                                            Renomear
+                                        </button>
+
+                                        <button
+                                            className="h-8 bg-(--button-edit) hover:bg-(--button-edit-hover) text-(--button-fore) duration-300 flex items-center text-sm gap-2 md:gap-4 px-2 rounded-lg cursor-pointer"
+                                            style={{color: myTheme.mode == "light" ? "#000" : "#FFF"}}
+                                            onClick={() => viewCourse(course._id)}
+                                        >
+                                            <Categories/>
+                                            Períodos
+                                        </button>
+
+                                        <button
+                                            className="h-8 bg-(--button-delete) hover:bg-(--button-delete-hover) duration-300 flex items-center text-sm gap-2 md:gap-4 px-2 rounded-lg cursor-pointer"
+                                            style={{color: myTheme.mode == "light" ? "#960a0f" : "#5f0609"}}
+                                            onClick={() => deleteCourse(course._id)}
+                                        >
+                                            <Trash style={{color: myTheme.mode == "light" ? "#960a0f" : "#5f0609"}}/>
+                                            Excluir
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+
+
+
+                    {/* <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg md:mt-0 mt-8">
                         <table className="w-full h-fill">
                             <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
                                 <tr>
@@ -181,7 +227,11 @@ export default function Courses() {
                                 }
                             </tbody>
                         </table>
-                    </div>
+                    </div> */}
+
+
+
+
                 </div>
             </div>
         </div>
