@@ -190,7 +190,7 @@ async function subscribe(discipline: Discipline){
                                 </tr>
                             </thead>
 
-                            <tbody className="bg-(--area-back) text-(--area-fore) text-sm md:text-lg">
+                            <tbody className="bg-(--area-back) text-(--area-fore) text-sm md:text-sm">
                                 {disciplinesFiltered.map((discipline) => (
                                     <tr key={discipline._id}>
                                         <td className="text-left pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">

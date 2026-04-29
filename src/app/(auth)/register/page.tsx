@@ -56,27 +56,27 @@ export default function Register(){
           
             <div className="w-full text-left">
               <p className="font-bold text-sm">Nome de Usuário</p>
-              <input type="text" className="w-full h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userName} onChange={(event) => setUserName(event.target.value)}/>
+              <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={userName} onChange={(event) => setUserName(event.target.value)}/>
               {/* <h3 className="text-left font-bold text-xs md:text-xs text-red-500"> Guarde seu nome de usuário para conseguir recuperar a sua conta! </h3> */}
             </div>
 
             <div className="w-full text-left">
               <p className="font-bold text-sm">Email</p>
-              <input type="text" className="w-full h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={email} onChange={(event) => setEmail(event.target.value)}/>
+              <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={email} onChange={(event) => setEmail(event.target.value)}/>
             </div>
 
             <div className="w-full text-left">
               <p className="font-bold text-sm">Senha</p>
-              <input type="text" className="w-full h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={password} onChange={(event) => setPassord(event.target.value)}/>
+              <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={password} onChange={(event) => setPassord(event.target.value)}/>
             </div>
 
             <div className="w-full text-left">
               <p className="font-bold text-sm">Confirme a senha</p>
-              <input type="text" className="w-full h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={password2} onChange={(event) => setPassord2(event.target.value)}/>
+              <input type="text" className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={password2} onChange={(event) => setPassord2(event.target.value)}/>
             </div>
 
             <div className="flex flex-col w-full items-center gap-4 mt-3">
-              <button className=" bg-(--button-back) text-(--button-fore) px-6 py-1 font-bold rounded-lg justify-between cursor-pointer hover:bg-(--button-hover) duration-300" onClick={createUser}>
+              <button className=" bg-(--button-back) h-8 text-(--button-fore) w-full py-1 font-bold rounded-lg justify-between cursor-pointer hover:bg-(--button-hover) duration-300" onClick={createUser}>
                 <p className="text-sm">Criar Conta</p>
               </button>
               <Link href={"/login"} className=" text-center font-bold text-sm">Voltar</Link>

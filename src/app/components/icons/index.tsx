@@ -9,7 +9,7 @@ import { HiMiniUser as User } from "react-icons/hi2";
 import { MdChromeReaderMode as CoursesIcon } from "react-icons/md";
 import { GiFlexibleLamp as Lamp } from "react-icons/gi";
 import { FaPen as Pencil } from "react-icons/fa";
-import { TiThMenu as MenuIcon } from "react-icons/ti";
+import { FiMenu as MenuIcon } from "react-icons/fi";
 import { FaFolder as Folder } from "react-icons/fa6";
 import { IoLayers as Categories } from "react-icons/io5";
 import { HiUsers as Users } from "react-icons/hi2";
@@ -27,6 +27,7 @@ import LogoDark from "@/../assets/images/logo_dark.png"
 import { IoMdAddCircle as Add } from "react-icons/io";
 import { FaRegEye as EyeOpened } from "react-icons/fa";
 import { FaEyeSlash as EyeClosed } from "react-icons/fa";
+import { GiSettingsKnobs as Ajustes } from "react-icons/gi";
 
 export {
   Folder,
@@ -55,5 +56,6 @@ export {
   EyeOpened,
   EyeClosed,
   CoursesIcon,
-  Lamp
+  Lamp,
+  Ajustes
 }

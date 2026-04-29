@@ -1,21 +1,18 @@
 "use client"
 
 import Image from "next/image"
-import Google from "../../../../assets/images/google.png"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { redirect, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext"
 import { ThemeIcon, useTheme } from "@/contexts/ThemeContext"
 import { EyeClosed, EyeOpened, LogoDark, LogoLight } from "@/app/components/icons"
 
 export default function Login(){
-  const { user, login, loading } = useAuth();
-  const router = useRouter();
+  const { login} = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
   const { showToast } = useToast();
   const myTheme = useTheme();
   const [eyeOpen, setEyeOpen] = useState(false);
@@ -38,8 +35,6 @@ export default function Login(){
     login(email, password);
   }
 
-
-
   return (
       <div style={{color:myTheme.theme.foreground}} className="items-center text-center justify-center self-center flex flex-col h-screen">
         
@@ -49,17 +44,35 @@ export default function Login(){
             
               <div className="w-full text-left mb-2">
                 <p className="font-bold text-sm">Email</p>
-                <input type="text" className="w-full h-8 md:h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={email} onChange={(event) => setEmail(event.target.value)}/>
+                <input type="text" className=" bg-(--input-back) w-full h-8 text-xs border border-blue-900 rounded-lg pl-2" maxLength={80} value={email} onChange={(event) => setEmail(event.target.value)}/>
               </div>
 
               <div className="w-full text-left mb-2">
                 <p className="font-bold text-sm">Senha</p>
-                <div className="flex items-center justify-center gap-1">
-                  <input type={eyeOpen ? "text" : "password"} className="w-full h-8 md:h-6 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2" maxLength={80} value={password} onChange={(event) => setPassword(event.target.value)}/>
+
+                <div className="relative w-full">
+                  <input type={eyeOpen ? "text" : "password"} className="w-full h-8 text-xs border border-blue-900 rounded-lg bg-(--input-back) pl-2 pr-8" maxLength={80} value={password} onChange={(event) => setPassword(event.target.value)} />
+
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
                   {
-                    eyeOpen ? (<EyeOpened className="cursor-pointer" onClick={ ()=> setEyeOpen(!eyeOpen) }/> ): (<EyeClosed className="cursor-pointer" onClick={ ()=> setEyeOpen(!eyeOpen) } />)
+                  eyeOpen ? (
+                    <EyeOpened
+  className={`cursor-pointer ${
+    myTheme.mode === "light" ? "text-black" : "text-white"
+  }`}
+  onClick={() => setEyeOpen(false)}
+/>
+                  ) : (
+                    <EyeClosed
+  className={`cursor-pointer ${
+    myTheme.mode === "light" ? "text-black" : "text-white"
+  }`}
+  onClick={() => setEyeOpen(true)}
+/>
+                  )
                   }
                 </div>
+                  </div>
               </div>
 
               <div className="text-center my-2 text-sm">
@@ -68,7 +81,7 @@ export default function Login(){
              </div>
              
              <button
-              className="ml-2 mr-2 my-2 h-6 bg-(--button-back) rounded-lg font-bold text-white hover:bg-(--button-hover) hover:text-white hover:border-white transition duration-300 cursor-pointer"
+              className="ml-2 mr-2 my-2 h-8 bg-(--button-back) rounded-lg font-bold text-white hover:bg-(--button-hover) hover:text-white hover:border-white transition duration-300 cursor-pointer"
               onClick={validateFields}>
                 <p className="text-sm">Entrar</p>
             </button>

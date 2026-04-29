@@ -5,6 +5,14 @@
   --foreground: #171717;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--input-back) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
 
 body {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;

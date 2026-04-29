@@ -20,20 +20,20 @@ type Discipline = {
     ranking: []
 }
 
-type RankingResponse = {
-    _id: string
-    name: string
-    points: number
+type Ranking = {
+    user_id: string
+    user_name: string
+    score: number
 }
 
 export default function Ranking() {
-  const { user, login, logout, loading } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const myTheme = useTheme();
   const { showToast } = useToast();
   const [allDisciplines, setAllDisciplines] = useState<Discipline[]>([]);
   const [disciplineSelected, setDisciplineSelected] = useState("");
-  const [allrank, setAllRank] = useState<RankingResponse[]>([]);
+  const [allrank, setAllRank] = useState<Ranking[]>([]);
 
   useEffect( () => {
     document.title = "Sinapse - Ranking"
@@ -121,7 +121,7 @@ export default function Ranking() {
                                 <h2 className="text-lg font-bold">Disciplina:</h2>
                             </div>
                             <div className="flex md:flex-row flex-col md:gap-4 gap-4">
-                                <select value={disciplineSelected} onChange={ (e) => setDisciplineSelected(e.target.value)} className="bg-(--input-back) text-(--input-fore) font-bold md:w-200 w-fill h-10 rounded-lg">
+                                <select value={disciplineSelected} onChange={ (e) => setDisciplineSelected(e.target.value)} className="cursor-pointer bg-(--input-back) text-(--input-fore) font-bold md:w-200 w-fill h-10 rounded-lg">
                                     <option value="">Selecione</option>
                                     {
                                         allDisciplines.map( (discipline) => (
@@ -135,20 +135,20 @@ export default function Ranking() {
                     </div>
                     <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg md:mt-0 mt-8">
                         <table className="w-full h-fill">
-                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover)">
+                            <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-lg">
                                 <tr>
                                     <th className="text-left pl-2">Nome</th>
                                     <th className="text-center">Pontos</th>
                                     <th className="text-center">Classificação</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-(--area-back) text-(--area-fore)">
+                            <tbody className="bg-(--area-back) text-(--area-fore) text-sm md:text-lg">
                                 {
                                 allrank.map((user) => (
-                                    <tr key={user._id}>
-                                        <td className="pl-2 h-12">{user.name}</td>
-                                        <td className="text-center" onClick={()=>{}}> {user.points}</td>
-                                        <td className="text-center" onClick={()=>{}}> {getClassification(user.points)}</td>
+                                    <tr key={user.user_id}>
+                                        <td className="text-left pl-2 h-12" onClick={()=>{}}> {user.user_name}</td>
+                                        <td className="text-center" onClick={()=>{}}> {Math.round(user.score)}</td>
+                                        <td className="text-center" onClick={()=>{}}> {getClassification(user.score)}</td>
                                     </tr>
                                 ))
                                 }

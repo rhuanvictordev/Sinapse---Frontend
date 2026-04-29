@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useMenu, useProfileMenu } from "@/contexts/StateContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "next/navigation";
-import { LogoHorizontalDark, LogoHorizontalLight, MenuIcon, Persons, Settings, User } from "../icons";
+import { Ajustes, LogoHorizontalDark, LogoHorizontalLight, MenuIcon, Persons, Settings, User } from "../icons";
 
 export default function Header() {
   const { user } = useAuth();
@@ -49,19 +49,19 @@ export default function Header() {
         <div className="flex flex-row items-center justify-between w-full">
             <div>
               <button className="p-1 fixed top-2 rounded-full cursor-pointer" onClick={()=>changeMenu()}> 
-                <MenuIcon color={myTheme.iconColor} size={38} className="bg-(--screen-back) p-1 border border-white shadow-xl mt-2 rounded-lg"/>
+                <MenuIcon color={myTheme.iconColor} size={38} className="bg-(--screen-back) p-1 mt-2 rounded-lg"/>
                 </button>
             </div>
             <div className="cursor-pointer" onClick={()=>handleLogoClick()}>
               <Image src={myTheme.mode=="light" ? LogoHorizontalLight : LogoHorizontalDark} alt="logo" className="w-32 ml-10 mt-2 md:ml-34"/>
             </div>
-            <div className="flex flex-row justify-center items-center gap-2 cursor-pointer" onClick={() => changeProfileMenu()}>
+            <div className="flex flex-row justify-center items-center gap-4 cursor-pointer" onClick={() => changeProfileMenu()}>
                 <div className="flex-col text-end hidden md:block">
-                  <h2>{user.name}</h2>
-                  <h2>Pontos: {user.points}</h2>
+                  <h2 className="text-sm">{user.name}</h2>
+                  <h2 className="text-xs">Pontos: {user.points}</h2>
                 </div>
                 <div>
-                  <User size={38} className="border rounded-lg p-1"/>
+                  <Ajustes size={38} className="g p-1"/>
                 </div>
             </div>
         </div>

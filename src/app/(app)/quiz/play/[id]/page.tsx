@@ -23,7 +23,7 @@ type QuizResponse = {
 }
 
 type Ranking = {
-    student_id: string
+    user_id: string
     answered_questions: number
     correct_answers: number
 }
@@ -52,7 +52,7 @@ export default function playQuizPage(){
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answeredQuestions, setAnsweredQuestions] = useState(0);
     const [correctAnsweredQuestions, setCorrectAnsweredQuestions] = useState(0);
-    
+    const [acumulatedUserPoints, setAcumulatedUserPoints] = useState(user?.answered_questions);
     const correctSound = new Audio("/sounds/correct.mp3")
     const wrongSound = new Audio("/sounds/wrong.mp3")
 
@@ -60,13 +60,6 @@ export default function playQuizPage(){
         getQuiz(params.id)
         getDiscipline(subjectId!)
     }, [])
-
-    useEffect(() => {
-        if (user) {
-            setAnsweredQuestions(user.answered_questions ?? 0)
-        }
-    }, [user])
-
 
     async function getDiscipline(subjectId: string){
         try {
@@ -93,86 +86,89 @@ export default function playQuizPage(){
         }
     }
 
-    async function finalizeQuiz(finalPoints: number){
-        try {
-            const updatedDiscipline = buildUpdatedDiscipline();
-            const { invitation_code, ...DTOupdatedDiscipline } = updatedDiscipline!;
-            console.log(DTOupdatedDiscipline)
+    async function finalizeQuiz(finalPoints: number, finalAnswered: number, finalCorrect: number){
+    try {
+        const updatedDiscipline = buildUpdatedDiscipline(finalAnswered,finalCorrect);
 
-            const response = await sinapseAPI.patch(`/subjects/${subjectId}`, DTOupdatedDiscipline);
+        const { invitation_code, ...DTOupdatedDiscipline } = updatedDiscipline!;
 
-            if (response.status == 200){
-                const totalPoints = (user?.points ?? 0) + finalPoints;
+        const response = await sinapseAPI.patch(`/subjects/${subjectId}`,DTOupdatedDiscipline);
 
-                const userResponse = await sinapseAPI.patch(`/users/${user?._id}`, {
-                    points: totalPoints
-                });
+        if (response.status === 200) {
 
-                if (userResponse.status === 200){
-                    showToast("Quiz finalizado, Total de Pontos: " + finalPoints,"success")
+            const userUpdated = {
+                answered_questions: (user?.answered_questions ?? 0) + finalAnswered,
+                points: (user?.points ?? 0) + finalPoints
+            };
 
-                    setTimeout(() => {
-                        window.location.href = "/home";
-                    }, 1500);
-                }
+            const userResponse = await sinapseAPI.patch(`/users/${user?._id}`, userUpdated);
+
+            if (userResponse.status === 200) {
+                showToast(`Quiz finalizado, Total de Pontos: ${finalPoints}`, "success");
+
+                setTimeout(() => {window.location.href = "/home";
+                }, 800);
             }
-
-        } catch (error) {
-            showToast("Erro ao finalizar o quiz", "error")
         }
+
+    } catch (error: any) {
+        showToast("Erro ao finalizar o quiz", "error");
+    }
+}
+    
+
+
+    function buildUpdatedDiscipline(finalAnswered: number,finalCorrect: number ) {
+
+        if (!quizDiscipline || !user) return quizDiscipline;
+
+        const existingIndex = quizDiscipline.ranking.findIndex(
+            rank => rank.user_id === user._id
+        );
+
+        let updatedRanking;
+
+        if (existingIndex !== -1) {
+            updatedRanking = quizDiscipline.ranking.map((rank, index) => {
+                if (index === existingIndex) {
+                    return {
+                        ...rank,
+                        answered_questions: finalAnswered,
+                        correct_answers: finalCorrect
+                    };
+                }
+                return rank;
+            });
+        } else {
+            updatedRanking = [
+                ...quizDiscipline.ranking,
+                {
+                    user_id: user._id,
+                    answered_questions: finalAnswered,
+                    correct_answers: finalCorrect
+                }
+            ];
+        }
+
+        return {
+            ...quizDiscipline,
+            ranking: updatedRanking
+        };
     }
 
-
-    function buildUpdatedDiscipline() {
-        return quizDiscipline
-
-        // if (!quizDiscipline || !user) return quizDiscipline;
-
-        // const existingIndex = quizDiscipline.ranking.findIndex(
-        //     rank => rank.student_id === user._id
-        // );
-
-        // let updatedRanking;
-
-        // if (existingIndex !== -1) {
-        //     updatedRanking = quizDiscipline.ranking.map((rank, index) => {
-        //         if (index === existingIndex) {
-        //             return {
-        //                 ...rank,
-        //                 answered_questions: answeredQuestions,
-        //                 correct_answers: correctAnsweredQuestions
-        //             };
-        //         }
-        //         return rank;
-        //     });
-        // } else {
-        //     updatedRanking = [
-        //         ...quizDiscipline.ranking,
-        //         {
-        //             student_id: user._id,
-        //             answered_questions: answeredQuestions,
-        //             correct_answers: correctAnsweredQuestions
-        //         }
-        //     ];
-        // }
-
-        // return {
-        //     ...quizDiscipline,
-        //     ranking: updatedRanking
-        // };
-    }
-
-    function nextQuestion(updatedPoints?: number){
+    function nextQuestion(updatedPoints?: number, finalAnswered?: number, finalCorrect?: number){
         if (currentQuestion >= quiz!.questions.length - 1){
-            finalizeQuiz(updatedPoints ?? points)
-        }else{
+            finalizeQuiz( updatedPoints ?? points, finalAnswered ?? answeredQuestions, finalCorrect ?? correctAnsweredQuestions)
+        } else {
             setCurrentQuestion(prev => prev + 1)
         }
     }
 
     async function verifyAnswer(questionText: string, indexAnswer: number){
         const newAnsweredQuestions = answeredQuestions + 1
+        const newCorrectAnswers = correctAnsweredQuestions + 1
         setAnsweredQuestions(newAnsweredQuestions)
+        
         console.log("texto da questao:", questionText, "resposta:", indexAnswer)
 
         try {
@@ -185,16 +181,25 @@ export default function playQuizPage(){
                 if (responseAnswer.data === true){
                     const newPoints = points + Number(quiz?.questions[currentQuestion].weight)
                     setPoints(newPoints)
-                    setCorrectAnsweredQuestions(prev => prev + 1)
+                    setCorrectAnsweredQuestions(newCorrectAnswers)
                     showToast("Acertou","success")
                     correctSound.play()
-                    nextQuestion(newPoints)
+                    nextQuestion(
+                        newPoints,
+                        newAnsweredQuestions,
+                        newCorrectAnswers
+                    )
                 } else {
                     const newPoints = points >= Number(quiz?.questions[currentQuestion].weight) ? points - Number(quiz?.questions[currentQuestion].weight) : points
+                    setAnsweredQuestions(newAnsweredQuestions)
                     setPoints(newPoints)
                     showToast("Errou","error")
                     wrongSound.play()
-                    nextQuestion(newPoints)
+                    nextQuestion(
+                        newPoints,
+                        newAnsweredQuestions,
+                        correctAnsweredQuestions
+                    )
                 }
             }
         } catch (error: any) {
