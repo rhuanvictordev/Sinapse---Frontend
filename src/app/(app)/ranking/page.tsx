@@ -26,24 +26,41 @@ type Ranking = {
     score: number
 }
 
+type User = {
+    _id: string
+    name: string
+    email: string
+    paying: string
+    is_admin: boolean
+    answered_questions: number
+    points: number
+}
+
 export default function Ranking() {
   const { user } = useAuth();
   const router = useRouter();
   const myTheme = useTheme();
   const { showToast } = useToast();
   const [allDisciplines, setAllDisciplines] = useState<Discipline[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [disciplineSelected, setDisciplineSelected] = useState("");
   const [allrank, setAllRank] = useState<Ranking[]>([]);
 
   useEffect( () => {
     document.title = "Sinapse - Ranking"
     getAllDisciplines()
+    getAllUsers();
   }, [])
 
   async function getAllDisciplines(){
     const response = await sinapseAPI.get("/subjects");
     setAllDisciplines(response.data);
     filterDisciplinesByUser(response.data)
+  }
+
+  async function getAllUsers(){
+    const response = await sinapseAPI.get("/users");
+    setAllUsers(response.data);
   }
 
   function filterDisciplinesByUser(disciplines: Discipline[]) {
@@ -68,6 +85,15 @@ export default function Ranking() {
         }
     }
   }
+
+  function getUserDetails(user_id: string, getPointsOrClassification: string){
+    const user = allUsers.find(user => user._id == user_id)
+    if (getPointsOrClassification == "points"){
+        return user?.points;
+    }else{
+        return getClassification(user?.points!);
+    }
+}
 
   function getClassification(points: number){
     if (points <= 1000){
@@ -134,26 +160,39 @@ export default function Ranking() {
                         </div>
                     </div>
                     <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg md:mt-0 mt-8">
+                        {
+                        allrank.length > 0 && (
                         <table className="w-full h-fill">
                             <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-lg">
                                 <tr>
-                                    <th className="text-left pl-2">Nome</th>
-                                    <th className="text-center">Pontos</th>
+                                    <th className="text-left pl-2">Usuário</th>
+                                    <th className="text-center pl-2">Pontos</th>
+                                    <th className="text-center">Pontuação Acumulada</th>
                                     <th className="text-center">Classificação</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-(--area-back) text-(--area-fore) text-sm md:text-lg">
                                 {
-                                allrank.map((user) => (
-                                    <tr key={user.user_id}>
-                                        <td className="text-left pl-2 h-12" onClick={()=>{}}> {user.user_name}</td>
-                                        <td className="text-center" onClick={()=>{}}> {Math.round(user.score)}</td>
-                                        <td className="text-center" onClick={()=>{}}> {getClassification(user.score)}</td>
+                                allrank && (
+                                    allrank.map((user) => (
+                                    <tr key={user.user_id} className="border border-gray-500">
+                                        <td className="text-left pl-2"> {user.user_name}</td>
+                                        <td className="text-center h-12" onClick={()=>{}}> {Math.round(user.score)}</td>
+                                        <td className="text-center" onClick={()=>{}}> {getUserDetails(user.user_id, "points")}</td>
+                                        <td className="text-center" onClick={()=>{}}> {getUserDetails(user.user_id, "classification")}</td>
                                     </tr>
                                 ))
+                                )
                                 }
                             </tbody>
                         </table>
+                        )
+                        }
+                        {allrank.length == 0 && (
+                        <div className="text-center py-10 text-lg">
+                            <h2>Esta disciplina ainda não possui histórico de respostas!</h2>
+                        </div>
+                        )}
                     </div>
                 </div>
             </div>
