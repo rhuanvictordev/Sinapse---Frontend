@@ -10,10 +10,10 @@ type UserType = {
   name?: string;
   email?: string;
   paying?: boolean;
-  is_admin?: boolean;
+  type?: string;
   answered_questions?: number;
   points?: number;
-  image?: string;
+  course_id: string;
 };
 
 type AuthContextType = {
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await sinapseAPI.get(`/users/${id}`)
       if (response.data){
         setUser(response.data)
-        console.log("Usuario obtido da api: " + JSON.stringify(response.data))
+        //console.log("Usuario obtido da api: " + JSON.stringify(response.data))
         setLoading(false)
       }
     } catch (error: any) {
@@ -87,7 +87,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("token", response.data.token)
         setUser(response.data)
         setLoading(false)
-        router.push("/home")
+        if (response.data.type == "Admin"){
+          router.push("/courses")
+          return
+        }else if (response.data.type == "Teacher" || response.data.type == "Student"){
+          router.push("/home")
+          return
+        }
         showToast("Logado com sucesso.", "success")
       }
     } catch (error: any) {

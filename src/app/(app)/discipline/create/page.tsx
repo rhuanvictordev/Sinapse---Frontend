@@ -48,7 +48,19 @@ export default function CreateDiscipline() {
     document.title = "Sinapse - Nova Disciplina"
     getSemesters()
     getCourses()
+    if (user?.type != "Teacher"){
+        router.push("/home")
+        showToast("Você não possui permissão para acessar esta página!", "info")
+    }
+    setCourseSelected(user?.course_id!)
+    //showSemesters(user?.course_id!)
   }, [])
+
+  useEffect(() => {
+    if (user?.course_id && courses.length > 0 && allSemesters.length > 0) {
+        showSemesters(user.course_id);
+    }
+    }, [courses, allSemesters, user]);
 
 
   async function getSemesters(){
@@ -75,7 +87,7 @@ export default function CreateDiscipline() {
         return;
     }
 
-    const course = courses.find(c => c._id === courseID);
+    const course = courses.find(course => course._id === courseID);
 
     if (!course) {
         setSemesters([]);
@@ -92,19 +104,18 @@ export default function CreateDiscipline() {
 
   async function createDiscipline(){
     
-    if (name == "" || semesterSelected == "" || restrict == ""||description=="" || courseSelected == ""){
+    if (name == "" || semesterSelected == "" || restrict == ""|| courseSelected == ""){
         showToast("Preencha todos os campos!","info")
     }else{
         try {
             const obj = {
                 name: name,
-                description: description,
+                description: !description ? " " : description,
                 user_id: user!._id,
                 quizzes_ids: [],
-                students_ids: [
-                    user?._id
-                ],
-                semester_id: semesterSelected+"-"+courseSelected,
+                students_ids: [user?._id],
+                semester_id: semesterSelected,
+                course_id: courseSelected,
                 ranking: []
             }
             const response = await sinapseAPI.post("/subjects",obj)
@@ -120,6 +131,13 @@ export default function CreateDiscipline() {
   }
 
   
+    function getCourseName(courseId: string){
+        const course = courses.find(course => course._id === courseId);
+        return course ? course.name : undefined;
+    }
+  
+
+  
   if (!created){ return (
     <div className="flex flex-col h-full text-xs md:text-lg" style={{color:myTheme.theme.foreground}}>
         <header className="flex flex-col md:flex-row md:justify-between justify-center md:pr-15 md:pl-4 text-center md:h-20">
@@ -131,15 +149,17 @@ export default function CreateDiscipline() {
                 <div className="w-full h-full p-2">
                     <div className="md:w-300 w-full flex flex-col text-center md:text-left justify-center gap-4">
                         <div>
-                            <h2 className="font-bold text-sm md:text-lg">Curso:</h2>
-                            <select value={courseSelected} onChange={(e) => {const value = e.target.value; setCourseSelected(value); showSemesters(value);}} className="bg-(--select-back) text-xs  text-(--select-fore) w-full rounded-lg h-8 cursor-pointer">
+                            <h2 className="font-bold text-sm md:text-lg">
+                            Curso: {getCourseName(user?.course_id!) || "Carregando..."}
+                            </h2>
+                            {/* <select value={courseSelected} onChange={(e) => {const value = e.target.value; setCourseSelected(value); showSemesters(value);}} className="bg-(--select-back) text-xs  text-(--select-fore) w-full rounded-lg h-8 cursor-pointer">
                             <option value="">Selecione</option>
                             {
                             courses.map( (item) => (
                                 <option value={item._id} key={item._id}>{item.name}</option>
                             ) )
                             }
-                            </select>
+                            </select> */}
                         </div>
                         <div>
                             <h2 className="font-bold text-sm md:text-lg">Período:</h2>

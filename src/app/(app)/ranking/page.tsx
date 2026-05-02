@@ -74,7 +74,7 @@ export default function Ranking() {
 
   async function getRanking(){
     if (disciplineSelected == ""){
-        showToast("Selecione uma disciplina antes", "info")
+        showToast("Selecione uma disciplina para ver o ranking!", "info")
         return
     }else{
         try{
@@ -157,6 +157,13 @@ export default function Ranking() {
                                 </select>
                                 <button className="bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) font-bold rounded-lg cursor-pointer duration-300 md:px-4 md:py-2 h-10" onClick={()=>{getRanking()}}>Buscar</button>
                             </div>
+                            {
+                                allrank.length > 0 && (
+                                    <div className="mt-8 text-sm md:text-lg font-bold text-center">
+                                        <h2>A taxa de acerto refere-se ao último quiz respondido na disciplina selecionada.</h2>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                     <div className="w-full h-fill overflow-x-scroll md:overflow-x-hidden font-bold rounded-lg md:mt-0 mt-8">
@@ -166,8 +173,8 @@ export default function Ranking() {
                             <thead className="bg-(--theader-back) text-(--theader-fore) hover:bg-(--theader-back-hover) hover:text-(--theader-fore-hover) text-sm md:text-lg">
                                 <tr>
                                     <th className="text-left pl-2">Usuário</th>
-                                    <th className="text-center pl-2">Pontos</th>
-                                    <th className="text-center">Pontuação Acumulada</th>
+                                    <th className="text-center pl-2">Taxa de Acerto</th>
+                                    <th className="text-center">Pontos do usuário</th>
                                     <th className="text-center">Classificação</th>
                                 </tr>
                             </thead>
@@ -177,7 +184,7 @@ export default function Ranking() {
                                     allrank.map((user) => (
                                     <tr key={user.user_id} className="border border-gray-500">
                                         <td className="text-left pl-2"> {user.user_name}</td>
-                                        <td className="text-center h-12" onClick={()=>{}}> {Math.round(user.score)}</td>
+                                        <td className="text-center h-12" onClick={()=>{}}> {Math.round(user.score) + "%"}</td>
                                         <td className="text-center" onClick={()=>{}}> {getUserDetails(user.user_id, "points")}</td>
                                         <td className="text-center" onClick={()=>{}}> {getUserDetails(user.user_id, "classification")}</td>
                                     </tr>

@@ -16,6 +16,7 @@ type Discipline = {
     quizzes_ids: string[]
     students_ids: string[]
     semester_id: string
+    course_id: string
     invitation_code: string
     ranking: string[]
 }
@@ -95,8 +96,8 @@ export default function EditDiscipline() {
         try {
             const response = await sinapseAPI.get(`/subjects/${disciplineID}`);
             setDiscipline(response.data);
-            setSemesterSelected(response.data.semester_id.split("-")[0])
-            setCourseSelected(response.data.semester_id.split("-")[1])
+            setSemesterSelected(response.data.semester_id)
+            setCourseSelected(response.data.course_id)
             setNewDisciplineName(response.data.name)
             setNewDisciplineDescription(response.data.description)
         } catch (error) {
@@ -136,7 +137,7 @@ export default function EditDiscipline() {
         try{
             const response = await sinapseAPI.delete(`/quizzes/${id}`)
             if (response.status == 200){
-                removeQuizFromCurrentDiscipline(id);
+                removeQuizFromCurrentDiscipline(id, true);
                 getQuizzes()
                 showToast("Quiz apagado com sucesso!", "success")
             }
@@ -155,7 +156,8 @@ export default function EditDiscipline() {
                 const obj = {
                     name: newDisciplineName,
                     description: newDisciplineDescription,
-                    semester_id: semesterSelected+"-"+courseSelected
+                    semester_id: semesterSelected,
+                    course_id: courseSelected
                 }
                 const response = await sinapseAPI.patch(`/subjects/${discipline!._id}`, obj)
                 if (response.status == 200) {
@@ -169,13 +171,13 @@ export default function EditDiscipline() {
     }
 
     async function createQuiz() {
-        if (newQuizName == "" || newQuizDescription == "") {
+        if (newQuizName == "") {
             showToast("Preencha todos os campos!", "info")
             return
         } else {
             const obj = {
                 name: newQuizName,
-                description: newQuizDescription,
+                description: !newQuizDescription ? " " : newQuizDescription,
                 user_id: user!._id,
                 questions: [],
                 categories_ids: []
@@ -195,6 +197,11 @@ export default function EditDiscipline() {
                 showToast(msg, "error")
             }
         }
+    }
+
+    function getCourseName(courseID: string){
+        const course = allCourses.find(c => c._id == courseID)
+        return course?.name
     }
 
 
@@ -228,12 +235,12 @@ export default function EditDiscipline() {
     }
 
 
-    async function removeQuizFromCurrentDiscipline(idParam: string) {
+    async function removeQuizFromCurrentDiscipline(idParam: string, deleted: boolean) {
         try {
             const newQuizzes = discipline?.quizzes_ids.filter((id) => id !== idParam);
             const response = await sinapseAPI.patch(`/subjects/${discipline!._id}`, { quizzes_ids: newQuizzes });
             if (response.status == 200) {
-                showToast("Quiz removido da disciplina!", "success")
+                deleted ? showToast("Quiz excluído com sucesso!", "success") : showToast("Quiz removido da disciplina!", "success")
                 getDiscipline();
             }
         } catch (error: any) {
@@ -269,15 +276,15 @@ export default function EditDiscipline() {
                                 <div className="flex md:flex-col md:gap-4">
                                     <div className="md:w-220 w-full md:items-end flex flex-col md:ml-4 md:mt-4 mt-2">
                                         <div className="flex md:flex-row flex-col md:mb-4 mb-2">
-                                            <h2 className="text-sm font-bold">Curso:</h2>
-                                            <select value={courseSelected} onChange={(e)=>{setCourseSelected(e.target.value)}} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-8 text-sm font-bold cursor-pointer">
+                                            <h2 className="text-sm font-bold">Curso: {getCourseName(discipline?.course_id!)}</h2>
+                                            {/* <select value={courseSelected} onChange={(e)=>{setCourseSelected(e.target.value)}} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-8 text-sm font-bold cursor-pointer">
                                                 <option value="">Selecione</option>
                                                 {
                                                     allCourses.map((course) => (
                                                         <option key={course._id} value={course._id}>{course.name}</option>
                                                     ))
                                                 }
-                                            </select>
+                                            </select> */}
                                         </div>
                                         <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                             <h2 className="text-sm font-bold">Período:</h2>
@@ -355,7 +362,7 @@ export default function EditDiscipline() {
 
                                                                 <td
                                                                     className="py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer"
-                                                                    onClick={() => removeQuizFromCurrentDiscipline(quiz._id)}
+                                                                    onClick={() => removeQuizFromCurrentDiscipline(quiz._id, false)}
                                                                 >
                                                                     <Trash className="mx-auto" />
                                                                 </td>

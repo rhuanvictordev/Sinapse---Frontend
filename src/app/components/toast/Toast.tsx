@@ -13,9 +13,9 @@ export default function Toast({ message, type, duration = 3000, onClose }: Toast
   const [progress, setProgress] = useState(100)
 
   const colors = {
-    success: "bg-green-600",
-    error: "bg-red-800",
-    info: "bg-blue-600"
+    success: "bg-green-700",
+    error: "bg-red-700",
+    info: "bg-yellow-700"
   }
 
   useEffect(() => {

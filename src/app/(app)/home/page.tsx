@@ -16,6 +16,7 @@ type Discipline = {
   quizzes_ids: string[]
   students_ids: string[]
   semester_id: string
+  course_id: string
   ranking: []
 }
 
@@ -67,9 +68,8 @@ export default function Home() {
       return semester?.name
   }
 
-  function getCourseName(id: string){
-      const parts = id.split("-");
-      const course = allCourses.find(c => c._id === parts[1]);
+  function getCourseName(courseId: string){
+      const course = allCourses.find(c => c._id === courseId);
       return course?.name
   }
 
@@ -113,6 +113,8 @@ export default function Home() {
     d.user_id === user?._id || d.students_ids.includes(user?._id || "")
   )
 
+  const hasDisciplines = myDisciplines.length > 0;
+  
   return (
   <div style={{ color: myTheme.theme.foreground }} className="text-xs md:text-lg">
     
@@ -123,9 +125,9 @@ export default function Home() {
     </div> */}
 
      <header className="flex flex-col md:flex-row md:justify-between justify-center md:pl-4 text-center">
-      <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0"> Disciplinas disponíveis </h2>
+      <h2 className="font-bold md:text-2xl text-lg justify-center flex pt-6 md:pt-8 pb-2 md:mb-0"> {user?.type == "Teacher" ? "Minhas Disciplinas" : "Disciplinas disponíveis"} </h2>
         {
-          user?.is_admin && (
+          user?.type == "Teacher" && (
           <button onClick={() => router.push("/discipline/create")} className="md:w-50 mt-2 mb-6 ml-10 mr-10 md:h-14 md:mt-3 h-12 font-bold cursor-pointer bg-(--button-back) hover:bg-(--button-hover) text-(--button-fore) transition-all duration-300 rounded-lg">
             + Criar Disciplina
           </button>
@@ -134,7 +136,8 @@ export default function Home() {
     </header>
 
   <div>
-  <div className="flex flex-wrap justify-center gap-4 py-4">
+    
+  <div className={`flex flex-wrap ${hasDisciplines ? "justify-start" : "justify-center"} gap-4 py-4 md:pl-4`}>
 
     {myDisciplines.length > 0 ? (
       myDisciplines.map((item) => (
@@ -145,7 +148,7 @@ export default function Home() {
 
           <div className="ml-4 mr-5 mt-4 flex flex-row justify-between">
             <h2 className="rounded-sm pl-2 pr-2 md:h-auto border overflow-hidden text-sm">
-              {getCourseName(item.semester_id) + " - "+ getSemesterName(item.semester_id)}
+              {getCourseName(item.course_id) + " - "+ getSemesterName(item.semester_id)}
             </h2>
             {
              item.user_id != user?._id && (
@@ -224,8 +227,16 @@ export default function Home() {
     ) : (
       <div className="text-xs md:text-lg">
         <h2 className="mt-40 font-bold mb-2">Não há disciplinas disponíveis...</h2>
-        <h2 className="font-bold">Encontre disciplinas <strong className="text-blue-500 cursor-pointer hover:text-blue-800" onClick={(e)=>router.push("/discipline/find")}>&nbsp;clicando aqui.</strong>
-        </h2>
+        {
+          user?.type == "Student" && (
+            <h2 className="font-bold">Encontre disciplinas <strong className="text-blue-500 cursor-pointer hover:text-blue-800" onClick={(e)=>router.push("/discipline/find")}>&nbsp;clicando aqui.</strong></h2>
+          )
+        }
+        {
+          user?.type == "Teacher" && (
+            <h2 className="font-bold">Crie suas disciplinas <strong className="text-blue-500 cursor-pointer hover:text-blue-800" onClick={(e)=>router.push("/discipline/create")}>&nbsp;clicando aqui.</strong></h2>
+          )
+        }
       </div>
     )}
 

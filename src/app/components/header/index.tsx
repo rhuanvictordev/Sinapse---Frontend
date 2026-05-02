@@ -20,7 +20,12 @@ export default function Header() {
   }
 
   function handleLogoClick(){
-      router.push("/home")
+      if(user?.type == "Student" || user?.type == "Teacher"){
+        router.push("/home")
+      }else{
+        router.push("/courses")
+      }
+
       if (menu.menuActive){
         menu.toggleMenu()
       }

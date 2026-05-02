@@ -23,11 +23,11 @@ export default function Menu() {
       
       <ul className="font-bold text-lg md:text-xl text-left md:h-screen bg-(--menu-button-back)">
         
-        <li>
+        <li className="hidden" style={ (user?.type == "Teacher" || user?.type == "Student") ? {display: "block"} : {} }>
           <Link href="/home" className={linkClass(pathname === "/home")} style={{color:myTheme.theme.menuButtonFore}}> <Lamp/> Painel</Link>
         </li>
 
-        <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
+        <li className="hidden" style={ user?.type == "Admin" ? {display: "block"} : {} }>
           <Link href="/courses" className={linkClass(pathname === "/courses")} style={{color:myTheme.theme.menuButtonFore}}> <CoursesIcon/> Cursos</Link>
         </li>
 
@@ -35,21 +35,21 @@ export default function Menu() {
           <Link href="/semesters" className={linkClass(pathname === "/semesters")} style={{color:myTheme.theme.menuButtonFore}}> <Categories/> Períodos</Link>
         </li> */}
 
-        <li>
-          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <Search/> Disciplinas</Link>
+        <li className="hidden" style={ (user?.type == "Student") ? {display: "block"} : {} }>
+          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <Search/> Encontrar Disciplinas</Link>
         </li>
 
-        <li className="hidden" style={ user?.is_admin == true ? {display: "block"} : {} }>
+        <li className="hidden" style={ user?.type == "Admin" ? {display: "block"} : {} }>
           <Link href="/users" className={linkClass(pathname === "/users")} style={{color:myTheme.theme.menuButtonFore}}> <Users/> Usuários</Link>
         </li>
         
-        <li>
+        <li className="hidden" style={ (user?.type == "Student" || user?.type == "Teacher") ? {display: "block"} : {} }>
           <Link href="/ranking" className={linkClass(pathname === "/ranking")} style={{color:myTheme.theme.menuButtonFore}}> <Star/> Ranking</Link>
         </li>
         
-        {/* <li>
+        <li className="hidden" style={ (user?.type == "Student") ? {display: "block"} : {} }>
           <Link href="/duel" className={linkClass(pathname === "/duel")} style={{color:myTheme.theme.menuButtonFore}}> <Persons/> Duelo</Link>
-        </li> */}
+        </li>
         
       </ul>
 

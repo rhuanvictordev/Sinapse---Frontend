@@ -13,9 +13,16 @@ type User = {
     name: string
     email: string
     paying: string
-    is_admin: boolean
+    type: string
     answered_questions: number
     points: number
+    course_id: string
+}
+
+type Course = {
+    _id: string
+    name: string
+    semesters_ids: string[]
 }
 
 
@@ -26,7 +33,7 @@ const {showToast} = useToast();
 const myTheme = useTheme();
 const [users, setUsers] = useState<User[]>([]);
 const [filtredUsers, setFiltredUsers] = useState<User[]>([]);
-
+const [allCourses, setAllCourses] = useState<Course[]>([]);
 const [modalVisible, setModalVisible] = useState(false)
 const [id, setId] = useState("");
 const [name, setName] = useState("");
@@ -36,20 +43,28 @@ const [modalLabelName, setModalLabelName] = useState("");
 const [modalName, setModalName] = useState("");
 const [modalEmail, setModalEmail] = useState("");
 const [modalPassword, setModalPassword] = useState("");
-const [modalADM, setModalADM] = useState("N");
+const [modalPosition, setModalPosition] = useState("");
 
 const [userSelected, setUserSelected] = useState<User | null>(null)
-
+const [showSelectCourse, setShowSelectCourse] = useState(false);
+const [courseSelected, setCourseSelected] = useState("");
 
 useEffect( () => {
     document.title = "Sinapse - Usuários"
     getUsers();
-    if ( !loading && !user?.is_admin){
+    getAllCourses();
+    if ( !loading && !(user?.type == "Admin")){
         router.push("/home")
         showToast("Você não tem permissão para acessar esta página!", "error");
         return
     }
 }, [] )
+
+
+async function getAllCourses(){
+    const response = await sinapseAPI.get("/courses")
+    setAllCourses(response.data)
+}
 
 function editUser(user: User){
     setUserSelected(user)
@@ -57,7 +72,8 @@ function editUser(user: User){
     setModalName(user.name)
     setModalEmail(user.email)
     setModalPassword("")
-    setModalADM(user.is_admin ? "Y" : "N")
+    setModalPosition(user.type == "Admin" ? "Admin" : (user.type == "Student") ? "Student" : (user.type == "Teacher") ? "Teacher" : "Invalido" )
+    setCourseSelected(user.course_id)
     setModalVisible(true)
 }
 
@@ -73,27 +89,29 @@ function closeModal(){
 
 async function updateUser(){
 
-if(modalADM==""){
-    showToast("Preencha todos os campos", "error")
-    console.log("ID do usuario logado: " + user?._id)
+if(modalPosition == ""){
+    showToast("Preencha todos os campos", "info")
+    return
 }
+if(modalPosition == "Teacher" && courseSelected == ""){
+    showToast("Professores devem ser vinculados a um curso!", "info")
+    return
+}
+
 else{
     const obj = {
-        // name: modalName,
-        // email: modalEmail,
-        // password: modalPassword,
-        // paying: true,
-        is_admin: modalADM == "Y" ? true : false,
+        type: modalPosition,
         answered_questions: user?.answered_questions,
-        points: user?.points
+        points: user?.points,
+        course_id: (courseSelected == "") ? "" : courseSelected
     }
         try {
         const response = await sinapseAPI.patch(`/users/${userSelected?._id}`, obj)
         if (response.status == 200){
-            showToast("Usuário atualizado com sucesso!")
+            showToast("Usuário atualizado com sucesso!", "success")
         }
         } catch (error) {
-            showToast("Erro ao atualizar o usuário")
+            showToast("Erro ao atualizar o usuário", "error")
         }
         closeModal()
         getUsers()
@@ -101,11 +119,11 @@ else{
 }
 
 async function deleteUser(id: string){
-    if (confirm("Confirma a remoção deste usuário?")){
+    if (confirm("Confirma a exclusão deste usuário?")){
         try {
             const response = await sinapseAPI.delete(`/users/${id}`)
             if (response.status == 200){
-                showToast("Usuário removido com sucesso!", "success")
+                showToast("Usuário excluído com sucesso!", "success")
                 getUsers()
             }
         } catch (error) {
@@ -176,9 +194,9 @@ return (
                                 <th className="text-left  pl-2 px-2">Nome</th>
                                 <th className="text-left  px-2">Email</th>
                                 <th className="text-center  px-2">Pontuação</th>
-                                <th className="text-center  px-2">ADM</th>
+                                <th className="text-center  px-2">Posição</th>
                                 <th className="text-center  px-2 w-10">Editar</th>
-                                <th className="text-center  px-2 w-10">Remover</th>
+                                <th className="text-center  px-2 w-10">Excluir</th>
                             </tr>
                         </thead>
 
@@ -191,7 +209,7 @@ return (
                             <td className="text-left  pl-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.email} </td>
 
                             <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.points} </td>
-                            <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.is_admin == true ? "Sim" : "Não"} </td>
+                            <td className="text-center bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)"> {item.type == "Admin" ? "Administrador" : (item.type == "Student") ? "Estudante" : (item.type == "Teacher") ? "Professor" : "invalido"} </td>
 
                             <td className="text-center py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover) cursor-pointer" onClick={()=> editUser(item)}>
                                 <Pencil className="align-middle w-full"/>
@@ -232,12 +250,29 @@ return (
                         <input value={modalPassword} onChange={(e) => setModalPassword(e.target.value)} type="text" className="bg-(--input-back) text-(--input-fore) pl-2 w-full h-8 md:mb-6 mb-3 rounded-lg" />
                     </div> */}
                     <div className="ml-2 mr-2">
-                        <h2 className="font-bold mb-1">Administrador:</h2>
-                        <select value={modalADM} onChange={(e)=>setModalADM(e.target.value)} className="bg-(--select-back) text-(--select-fore) w-full h-8 md:mb-6 mb-3 rounded-lg">
-                            <option value="N">Não</option>
-                            <option value="Y">Sim</option>
+                        <h2 className="font-bold mb-1">Posição:</h2>
+                        <select value={modalPosition} onChange={(e)=>setModalPosition(e.target.value)} className="bg-(--select-back) text-(--select-fore) w-full h-8 md:mb-6 mb-3 rounded-lg">
+                            <option value="Admin">Administrador</option>
+                            <option value="Student">Estudante</option>
+                            <option value="Teacher">Professor</option>
                         </select>
                     </div>
+                    {
+                        (modalPosition == "Teacher") && (
+                            <div className="ml-2 mr-2">
+                                <h2 className="font-bold mb-1">Vincular ao curso:</h2>
+                                <select value={courseSelected} onChange={(e)=>setCourseSelected(e.target.value)} className="bg-(--select-back) text-(--select-fore) w-full h-8 md:mb-6 mb-3 rounded-lg">
+                                    <option value="">Selecione</option>
+                                {
+                                allCourses.map(course => (
+                                    <option key={course._id} value={course._id}>{course.name}</option>
+                                )
+                                )
+                                }
+                                </select>
+                            </div>
+                        )
+                    }
                     <div className="items-center justify-center flex mt-26 gap-8">
                         <button onClick={()=>closeModal()} className="bg-(--button-delete) hover:bg-(--button-hover) cursor-pointer duration-300 text-(--button-fore) font-bold w-30 h-12 rounded-lg">Cancelar</button>
                         <button onClick={()=>{updateUser()}} className="bg-(--button-back) hover:bg-(--button-hover) cursor-pointer duration-300 text-(--button-fore) font-bold w-30 h-12 rounded-lg">Salvar</button>
