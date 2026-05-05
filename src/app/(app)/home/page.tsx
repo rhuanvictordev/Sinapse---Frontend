@@ -137,7 +137,7 @@ export default function Home() {
 
   <div>
     
-  <div className={`flex flex-wrap ${hasDisciplines ? "justify-start" : "justify-center"} gap-4 py-4 md:pl-4`}>
+  <div className={`flex flex-wrap ${hasDisciplines ? "md:justify-start justify-center" : "justify-center"} gap-4 py-4 md:pl-4`}>
 
     {myDisciplines.length > 0 ? (
       myDisciplines.map((item) => (
