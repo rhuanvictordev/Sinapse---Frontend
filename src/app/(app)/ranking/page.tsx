@@ -97,7 +97,7 @@ export default function Ranking() {
 
   function getClassification(points: number){
     if (points <= 1000){
-        return "Café com leite";
+        return "Iniciante";
     } else if (points > 1000 && points <= 2000){
         return "Iniciante"
     } else if (points > 2000 && points <= 3000){

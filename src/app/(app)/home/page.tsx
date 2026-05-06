@@ -6,7 +6,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
-import { EyeClosed, EyeOpened, Pencil, Trash } from "@/app/components/icons";
+import { EyeClosed, EyeOpened, Pencil, Pino, Trash } from "@/app/components/icons";
 
 type Discipline = {
   _id: string
@@ -153,7 +153,7 @@ export default function Home() {
             {
              item.user_id != user?._id && (
               <div className="cursor-pointer">
-              <h2><EyeClosed onClick={() => removeCurrentUserFromSelectedDiscipline(item._id)}/></h2>
+              <h2><Pino onClick={() => removeCurrentUserFromSelectedDiscipline(item._id)}/></h2>
             </div>
              ) 
             }

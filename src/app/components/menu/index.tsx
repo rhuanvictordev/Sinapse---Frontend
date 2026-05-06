@@ -15,7 +15,7 @@ export default function Menu() {
 
 
   function linkClass(isActive: boolean) {
-    return `py-2 border md:border-0 p-2 flex flex-row gap-2 items-center m-0 cursor-pointer duration-500 text-(--foreground) ${isActive ? " bg-(--menu-button-hover)" : " bg-(--menu-button-back) hover:bg-(--menu-button-hover)"}`
+    return `py-2 border md:border-0 p-2 flex flex-row gap-3 items-center m-0 cursor-pointer duration-500 text-(--foreground) ${isActive ? " bg-(--menu-button-hover)" : " bg-(--menu-button-back) hover:bg-(--menu-button-hover)"}`
   }
 
   return (
@@ -36,7 +36,7 @@ export default function Menu() {
         </li> */}
 
         <li className="hidden" style={ (user?.type == "Student") ? {display: "block"} : {} }>
-          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <Search/> Encontrar Disciplinas</Link>
+          <Link href="/discipline/find" className={linkClass(pathname === "/discipline/find")} style={{color:myTheme.theme.menuButtonFore}}> <Search/> <strong className="text-lg">Encontrar Disciplinas</strong></Link>
         </li>
 
         <li className="hidden" style={ user?.type == "Admin" ? {display: "block"} : {} }>
