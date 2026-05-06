@@ -30,7 +30,7 @@ export default function Home() {
 
   useEffect( () => {
     document.title = "Sinapse - Períodos"
-    if ( !loading && !user?.is_admin){
+    if ( !loading && !(user?.type == "Admin")){
         router.push("/home")
         showToast("Você não tem permissão para acessar esta página!", "error");
         return
