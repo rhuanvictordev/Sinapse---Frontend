@@ -106,8 +106,7 @@ export default function playQuizPage(){
             if (userResponse.status === 200) {
                 showToast(`Quiz finalizado, Total de Pontos: ${finalPoints}`, "success");
 
-                setTimeout(() => {window.location.href = "/home";
-                }, 800);
+                setTimeout(() => {window.location.href = "/home";}, 800);
             }
         }
 
