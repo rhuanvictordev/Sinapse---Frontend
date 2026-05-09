@@ -1,3 +1,5 @@
+"use client"
+
 import { io } from "socket.io-client";
 
-export const socket = io("http://192.168.0.27:3334");
+export const socket = io();
