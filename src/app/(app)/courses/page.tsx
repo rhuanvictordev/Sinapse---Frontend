@@ -37,7 +37,7 @@ export default function Courses() {
 
   useEffect( () => {
     document.title = "Sinapse - Cursos"
-    if ( !loading && !user?.is_admin){
+    if ( !loading && !(user?.type == "Admin")){
         router.push("/home")
         showToast("Você não tem permissão para acessar esta página!", "error");
         return

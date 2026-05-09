@@ -15,6 +15,7 @@ type Discipline = {
     quizzes_ids: string[]
     students_ids: string[]
     semester_id: string
+    course_id: string
     invitation_code: string
     ranking: []
 }
@@ -88,8 +89,8 @@ export default function Home() {
 
   function filterAndShow(){
     const filtered = allDisciplines.filter(discipline =>
-    (!selectedCourse || discipline.semester_id.split("-")[1] === selectedCourse) &&
-    (!selectedSemester || discipline.semester_id.split("-")[0] === selectedSemester) &&
+    (!selectedCourse || discipline.course_id === selectedCourse) &&
+    (!selectedSemester || discipline.semester_id === selectedSemester) &&
     (!searchName || discipline.name.toLowerCase().includes(searchName.toLowerCase())) &&
     (!searchCode || discipline.invitation_code == searchCode)
     )
@@ -97,14 +98,12 @@ export default function Home() {
   }
 
 function getSemesterName(id: string){
-    const part = id.split("-");
-    const semester = allSemesters.find((semester) => semester._id == part[0])
+    const semester = allSemesters.find((semester) => semester._id == id)
     return semester?.name
 }
 
 function getCourseName(id: string){
-    const part = id.split("-");
-    const course = allCourses.find((course) => course._id == part[1])
+    const course = allCourses.find((course) => course._id == id)
     return course?.name
 }
 
@@ -130,7 +129,7 @@ async function subscribe(discipline: Discipline){
     <div className="flex flex-col h-full" style={{color:myTheme.theme.foreground}}>
     
         <header className="flex flex-col md:justify-between justify-center border-black pl-2 mb-2">
-            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3 md:pl-2">Disciplinas</h2>
+            <h2 className="font-bold md:text-2xl text-xl mt-3 text-center md:text-left mb-3 md:pl-2">Encontrar Disciplinas</h2>
         </header>
         
         <div className="w-full h-full bg-(--area-back) p-2">
@@ -142,7 +141,7 @@ async function subscribe(discipline: Discipline){
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-sl font-bold">Curso:</h2>
                                     <select value={selectedCourse} onChange={(e)=>{setSelectedCourse(e.target.value); showCourseSemesters(e.target.value)}} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-8 text-xs font-bold cursor-pointer">
-                                        <option value="">Selecione</option>
+                                        <option value="">Todos</option>
                                         {
                                         courses.map( (item)=>(
                                             <option key={item._id} value={item._id}>{item.name}</option>
@@ -153,7 +152,7 @@ async function subscribe(discipline: Discipline){
                                 <div className="flex md:flex-row flex-col md:mb-4 mb-2">
                                     <h2 className="text-sl font-bold">Período:</h2>
                                     <select value={selectedSemester} onChange={(e)=>{setSelectedSemester(e.target.value);}} className="md:w-160 ml-2 mr-2 w-fill bg-(--select-back) rounded-lg pl-2 md:ml-4 text-(--select-fore) h-8 text-xs font-bold cursor-pointer">
-                                        <option value="">Selecione</option>
+                                        <option value="">Todos</option>
                                         {
                                         courseSemesters.map( (item)=>(
                                             <option key={item._id} value={item._id}>{item.name}</option>
@@ -194,7 +193,7 @@ async function subscribe(discipline: Discipline){
                                 {disciplinesFiltered.map((discipline) => (
                                     <tr key={discipline._id}>
                                         <td className="text-left pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
-                                            {getCourseName(discipline.semester_id)}
+                                            {getCourseName(discipline.course_id)}
                                         </td>
 
                                         <td className="text-left pl-2 py-2 bg-(--tbody-back) text-(--tbody-fore) hover:bg-(--tbody-back-hover) hover:text-(--tbody-fore-hover)">
