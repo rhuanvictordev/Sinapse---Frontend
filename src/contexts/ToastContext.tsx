@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useRef } from "react"
 import Toast from "@/app/components/toast/Toast"
 
-type ToastType = "success" | "error" | "info"
+type ToastType = "success" | "error" | "info" | "gray"
 
 type ToastData = {
   message: string

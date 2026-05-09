@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { sinapseAPI } from "@/services/api";
 import { useToast } from "@/contexts/ToastContext";
-import { socket } from "./socket/socket";
+import { socket } from "../../../services/socket";
 
 type Discipline = {
     _id: string
@@ -86,6 +86,13 @@ export default function Duel() {
           showToast("Sala não encontrada!", "info")
       });
 
+      socket.on("started-game", () => {
+        showToast("Iniciando o duelo!", "success", 2000)
+        setTimeout( () =>{
+          router.push("/duel/play");
+        }, 2000)
+      });
+
       socket.on("room-full", (data) => {
           showToast("Sala lotada!", "info")
       });
@@ -103,6 +110,7 @@ export default function Duel() {
         socket.off("room-not-found");
         socket.off("room-full");
         socket.off("player-left");
+        socket.off("started-game");
     };
 
   }, []);
@@ -146,7 +154,7 @@ export default function Duel() {
         }
         socket.emit("create-room", {username: user?.name});
     } else {
-        showToast("A sala já foi criada, aguardando outros jogadores.", "info");
+        showToast("A sala já foi criada.", "info");
     }
   }
 
@@ -188,6 +196,22 @@ export default function Duel() {
 
     setQuizzesFiltred(filtered);
 }
+
+
+  function startGame(){
+    if (!roomCode){
+      showToast("Sala não encontrada", "error");
+      return
+    }
+
+    if (!quiz){
+      showToast("Quiz não encontrado", "error");
+      return
+    }
+
+    socket.emit("start-game", {roomCode, quiz});
+  }
+  
 
   return(
     <div className="p-4 gap-4 flex flex-col items-center justify-center text-center text-(--foreground) pb-0">
@@ -266,9 +290,9 @@ export default function Duel() {
               </div>
           </div>
           {
-            (roomCode != "" && creator) && (
+            (roomCode != "" && creator && player2Name) && (
               <div className="pl-2 pr-2 mt-6">
-                <button className="bg-(--button-enter) px-4 py-1 rounded-lg text-(--button-fore) hover:bg-(--button-hover) duration-300 cursor-pointer font-bold" onClick={()=> router.push("/duel/play/69f655ec21163aa4ba21a060?subject=69f6536621163aa4ba219eae")}>Iniciar Competição</button>
+                <button className="bg-(--button-enter) px-4 py-1 rounded-lg text-(--button-fore) hover:bg-(--button-hover) duration-300 cursor-pointer font-bold" onClick={()=> startGame()}>Iniciar Competição</button>
               </div>
             )
           }
@@ -293,7 +317,7 @@ export default function Duel() {
                           !creator && (
                             <div className="mt-8">
                               <h2>Informe o código da partida:</h2>
-                              <input maxLength={6} value={roomCode} onChange={(e)=>{setRoomCode(e.target.value)}} type="text" className="text-center text-3xl bg-(--input-back) text-(--input-fore) pl-2 w-70 my-4 h-16 md:mb-6 mb-3 rounded-lg" />
+                              <input maxLength={6} value={roomCode} onChange={(e)=>{setRoomCode(e.target.value.toUpperCase())}} type="text" className="text-center text-3xl bg-(--input-back) text-(--input-fore) pl-2 w-70 my-4 h-16 md:mb-6 mb-3 rounded-lg" />
                             </div>
                           )
                         }
