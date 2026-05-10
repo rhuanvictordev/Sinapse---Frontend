@@ -3,7 +3,8 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 
-const dev = process.env.NODE_ENV !== "production";
+//const dev = process.env.NODE_ENV !== "production";
+const dev = false;
 
 const nextApp = next({
     dev,
