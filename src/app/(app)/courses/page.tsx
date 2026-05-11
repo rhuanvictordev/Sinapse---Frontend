@@ -22,6 +22,7 @@ type Discipline = {
     quizzes_ids: string[]
     students_ids: string[]
     semester_id: string
+    course_id: string
     invitation_code: string
     ranking: []
 }
@@ -75,13 +76,10 @@ export default function Courses() {
   function verifyUsingCourse(courseID: string){
     let exist = false;
     allDisciplines.forEach(discipline => {
-        courses.forEach(course=>{
-            if (discipline.semester_id.split("-")[1] == courseID){
-                exist = true;
-            }
-        });
+        if (discipline.course_id == courseID){
+            exist = true;
+        }
     });
-
     return exist;
   }
 

@@ -39,6 +39,7 @@ export default function playQuizDuel(){
     const [quizName, setQuizName] = useState("");
     const correctSound = useRef<HTMLAudioElement | null>(null);
     const wrongSound = useRef<HTMLAudioElement | null>(null);
+    const [enemyName, setEnemyName] = useState("Carregando...");
  
     useEffect(() => {
         correctSound.current = new Audio("/sounds/correct.mp3"); correctSound.current.load();
@@ -47,7 +48,7 @@ export default function playQuizDuel(){
         const loadingTimeout = setTimeout(() => {
             router.push("/duel");
             showToast("Ocorreu um erro ao conectar-se à partida.", "error");
-        }, 9000);
+        }, 4000);
 
         socket.on("next-question", (data) => {
             clearTimeout(loadingTimeout)
@@ -57,43 +58,13 @@ export default function playQuizDuel(){
             setQuestion(data.question);
             setCurrentQuestion(data.currentQuestion);
             setTotalQuestions(data.totalQuestions);
+            setEnemyName(data.players?.find((player: any) => player.socketId !== socket.id).username);
         });
 
-        // socket.on("player-answered", (data) => {
-        //     if (data.correct){
-        //         if (data.player == user?.name){
-        //             showToast(`Você acertou!`, "success", 1400);
-        //             if (correctSound.current){
-        //                 correctSound.current.currentTime = 0;
-        //                 correctSound.current.play();
-        //             }
-        //         }else{
-        //             showToast(`${data.player} acertou!`, "gray", 1400);
-        //             if (correctSound.current){
-        //                 correctSound.current.currentTime = 0;
-        //                 correctSound.current.play();
-        //             }
-        //         }
-        //     } else {
-        //         if (data.player == user?.name){
-        //             showToast(`Você errou!`, "error", 1400);
-        //             if (wrongSound.current){
-        //                 wrongSound.current.currentTime = 0;
-        //                 wrongSound.current.play();
-        //             }
-        //         }else{
-        //             showToast(`${data.player} errou!`, "gray", 1400);
-        //             if (wrongSound.current){
-        //                 wrongSound.current.currentTime = 0;
-        //                 wrongSound.current.play();
-        //             }
-        //         }
-        //     }
-        // });
-
+        
         socket.on("player-left", () => {
             showToast("O Jogador saiu da sala. Aguarde... ", "info");
-            setTimeout(() => {window.location.href = "/duel";}, 1500);
+            setTimeout(() => {window.location.reload() }, 1500);
         });
 
         socket.on("player-progress", (data) => {
@@ -101,6 +72,7 @@ export default function playQuizDuel(){
                 setMyProgress(data.progress);
                 setMyScore(data.score)
             } else {
+                setEnemyName(data.player)
                 setEnemyProgress(data.progress);
                 setEnemyScore(data.score)
             }
@@ -125,31 +97,15 @@ export default function playQuizDuel(){
         });
 
         socket.on("player-finished", (data) => {
-
             if (data.player == user?.name){
-
                 showToast("Você terminou o quiz!", "info", 3000);
-
-                setTimeout(() => {
-                    showToast("Você venceu o duelo.", "success", 3000);
-                }, 3000);
-
             } else {
-
                 showToast(`${data.player} terminou o quiz!`, "info", 3000);
-
-                setTimeout(() => {
-                    showToast("Você perdeu o duelo.", "error", 3000);
-                }, 3000);
-
             }
-
             setTimeout(() => {
-                router.push("/duel");
-            }, 6500);
-
+                router.push("/duel/result");
+            }, 3000);
         });
-
 
         return () => {
             clearTimeout(loadingTimeout);
@@ -217,12 +173,12 @@ export default function playQuizDuel(){
             {
                 (myScore > enemyScore) && (
                     <>
-                        <h2 className="font-bold pr-2 text-right text-green-800">
+                        <h2 className="font-bold pr-2 text-right text-green-500">
                             Eu: {myScore}
                         </h2>
 
                         <h2 className="font-bold pr-2 text-right text-red-800">
-                            PlayerY: {enemyScore}
+                            {enemyName}: {enemyScore}
                         </h2>
                     </>
                 )
@@ -235,8 +191,8 @@ export default function playQuizDuel(){
                             Eu: {myScore}
                         </h2>
 
-                        <h2 className="font-bold pr-2 text-right text-green-800">
-                            PlayerY: {enemyScore}
+                        <h2 className="font-bold pr-2 text-right text-green-500">
+                            {enemyName}: {enemyScore}
                         </h2>
                     </>
                 )
@@ -260,7 +216,7 @@ export default function playQuizDuel(){
                     </div>
 
                     <div>
-                        <h2 className="text-left">PlayerY</h2>
+                        <h2 className="text-left">{enemyName}</h2>
                         <div className="flex flex-row justify-center align-middle text-center items-center gap-2">
                             <h2>{progressPlayer2}%</h2>
                             <div className="h-3 bg-blue-200 md:w-80 w-full rounded-lg">
@@ -272,7 +228,7 @@ export default function playQuizDuel(){
             </div>
 
             <div className="mt-12 text-xl font-bold">
-                <h2 className="text-sm md:text-xl">Pergunta {currentQuestion} de {totalQuestions}</h2>
+                <h2 className="text-sm md:text-xl">Pergunta {currentQuestion + 1} de {totalQuestions}</h2>
                 <h2 className="md:mt-10 mt-4 font-bold md:text-3xl text-lg">{question.question}</h2>
             </div>
             <div className="bg-(--area-back) rounded-lg py-4 w-full h-fill mt-10 flex flex-col gap-3 md:gap-6 text-center items-center justify-center">

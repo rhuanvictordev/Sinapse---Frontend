@@ -146,13 +146,21 @@ export default function Duel() {
     setQuiz(response.data);
   }
   
-  function createRoom(){
+  async function createRoom(){
     if (roomCode == ""){
-        if (!quiz){
+        if (selectedQuiz == ""){
           showToast("Selecione um Quiz para criar uma sala!", "info");
           return;
+        }else{
+          if (!quiz){
+            showToast("Carregando Quiz...", "info");
+            await getQuiz(selectedQuiz);
+            showToast("Erro ao criar a sala, tente novamente.", "info");
+            return;
+          }else{
+            socket.emit("create-room", {username: user?.name});
+          }
         }
-        socket.emit("create-room", {username: user?.name});
     } else {
         showToast("A sala já foi criada.", "info");
     }

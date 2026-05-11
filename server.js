@@ -4,13 +4,14 @@ const http = require("http");
 const { Server } = require("socket.io");
 
 //const dev = process.env.NODE_ENV !== "production";
-const dev = false;
 
-const nextApp = next({
-    dev,
-    hostname: "0.0.0.0",
-    port: 3000
-});
+//const dev = true;  PARA (NPM RUN DEV)
+//const dev = false; PARA (NPM START DEPOIS DO NPM RUN BUILD)
+
+
+const dev = true;
+
+const nextApp = next({ dev, hostname: "0.0.0.0", port: 3000 });
 
 const handler = nextApp.getRequestHandler();
 
@@ -92,7 +93,8 @@ io.on("connection", (socket) => {
                 questions: room.quiz.questions,
                 currentQuestion: 0,
                 totalQuestions: room.quiz.questions.length,
-                quizName: room.quiz.name
+                quizName: room.quiz.name,
+                players: room.players
             });
         }, 5000);
     });
