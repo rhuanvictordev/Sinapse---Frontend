@@ -73,7 +73,6 @@ export default function Duel() {
 
     socket.on("player-joined", (data) => {
       showToast("Jogador conectado", "success");
-      console.log(data.players);
       const otherPlayer = data.players.find((player: any) => player.socketId !== socket.id);
       if (otherPlayer){
           setPlayer2Name(otherPlayer.username);

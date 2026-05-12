@@ -59,7 +59,6 @@ io.on("connection", (socket) => {
 
             if (room.players.length === 0){
                 delete rooms[roomCode];
-
                 console.log("Sala removida:", roomCode);
             }
 
@@ -99,6 +98,37 @@ io.on("connection", (socket) => {
         }, 5000);
     });
 
+
+    socket.on("result", (data) => {
+        let foundRoom = null;
+        let foundRoomCode = null;
+
+        for (const roomCode in rooms) {
+            const room = rooms[roomCode];
+            const player = room.players.find(p => p.socketId === socket.id);
+
+            if (player) {
+                foundRoom = room;
+                foundRoomCode = roomCode;
+
+                io.to(roomCode).emit("duel-results", {
+                    result: room
+                });
+
+                //console.log("Resultado:", room);
+                break;
+            }
+        }
+
+        if (!foundRoom) return;
+
+        console.log("Apagando a sala em 10seg...");
+
+        setTimeout(() => {
+            delete rooms[foundRoomCode];
+            console.log("Sala removida após os 10seg:", foundRoomCode);
+        }, 10000);
+    });
 
 
 
