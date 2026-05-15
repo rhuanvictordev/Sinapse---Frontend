@@ -21,9 +21,9 @@ export default function Header() {
 
   function handleLogoClick(){
       if(user?.type == "Student" || user?.type == "Teacher"){
-        router.push("/home")
+        window.location.href = "/home"
       }else{
-        router.push("/courses")
+        window.location.href = "/courses"
       }
 
       if (menu.menuActive){

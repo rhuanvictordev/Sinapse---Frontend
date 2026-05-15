@@ -128,7 +128,7 @@ export default function Duel() {
                           <div className="py-2"><hr /></div>
                           <div>
                               <h2 className="font-bold">
-                                  {isTie ? "" : winner.username}
+                                  {winner.username}
                                 </h2>
 
                               <h2 className="font-bold">
@@ -139,7 +139,7 @@ export default function Duel() {
                           <div className="py-2"><hr /></div>
                           <div className="mt-0">
                               <h2 className="font-bold">
-                                {isTie ? "" : loser.username}
+                                {loser.username}
                               </h2>
 
                               <h2 className="font-bold">

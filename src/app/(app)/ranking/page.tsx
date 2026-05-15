@@ -97,37 +97,17 @@ export default function Ranking() {
 
   function getClassification(points: number){
     if (points <= 1000){
-        return "Café com leite";
-    } else if (points > 1000 && points <= 2000){
-        return "Iniciante"
-    } else if (points > 2000 && points <= 3000){
-        return "Guerreiro"
-    } else if (points > 3000 && points <= 4000){
-        return "Focado"
-    } else if (points > 4000 && points <= 8000){
-        return "Pegando Fogo"
-    } else if (points > 8000 && points <= 16000){
+        return "Iniciante";
+    } else if (points > 1000 && points <= 3000){
+        return "Amador"
+    } else if (points > 3000 && points <= 6000){
         return "Intermediário"
-    } else if (points > 16000 && points <= 20000){
-        return "Avançado"
-    } else if (points > 20000 && points <= 30000){
+    } else if (points > 6000 && points <= 12000){
         return "Profissional"
-    } else if (points > 30000 && points <= 40000){
-        return "Imparável"
-    } else if (points > 40000 && points <= 60000){
-        return "Maldoso"
-    } else if (points > 60000 && points <= 80000){
-        return "Negociante de almas"
-    } else if (points > 80000 && points <= 90000){
-        return "Tenebroso"
-    } else if (points > 90000 && points <= 100000){
-        return "Imbatível"
-    } else if (points > 100000 && points <= 150000){
-        return "Inalcançável"
-    } else if (points > 150000 && points <= 200000){
-        return "Dono do jogo"
-    } else if (points > 200000){
-        return "Aposentado do Saber"
+    } else if (points > 12000 && points <= 30000){
+        return "Craque"
+    } else {
+        return "Estrela"
     }
   }
 

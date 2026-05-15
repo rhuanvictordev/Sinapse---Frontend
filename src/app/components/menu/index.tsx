@@ -47,8 +47,8 @@ export default function Menu() {
           <Link href="/ranking" className={linkClass(pathname === "/ranking")} style={{color:myTheme.theme.menuButtonFore}}> <Star/> Ranking</Link>
         </li>
         
-        <li className="hidden" style={ (user?.type == "Student") ? {display: "block"} : {} }>
-          <Link href="/duel" className={linkClass(pathname === "/duel")} style={{color:myTheme.theme.menuButtonFore}}> <Persons/> Duelo</Link>
+        <li onClick={() => window.location.href = "/duel"} className="hidden" style={ (user?.type == "Student") ? {display: "block"} : {} }>
+          <h2 className={linkClass(pathname === "/duel")} style={{color:myTheme.theme.menuButtonFore}}> <Persons/> Duelo</h2>
         </li>
         
       </ul>

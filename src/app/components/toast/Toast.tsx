@@ -37,12 +37,44 @@ export default function Toast({ message, type, duration = 3000, onClose }: Toast
   }, [duration, onClose])
 
   return (
-    <div className={`fixed md:bottom-8 bottom-4 md:right-6 right-2 ${colors[type]} md:w-200 w-[320px] rounded-xl p-4 border-2 hover:border-4 duration-200 text-white`}>
-      <p className="font-normal md:mb-4 mb-2">{type=="error" ? "Erro" : type=="info" ? "Aviso" : type== "success"? "Mensagem" : "" }</p>
-      <p className="mb-4 font-bold">{message}</p>
-      <div className="h-1 bg-white/30 w-full rounded">
-        <div className="h-1 bg-white transition-all" style={{ width: `${progress}%` }}/>
-      </div>
+  <div
+    className={`
+      fixed md:bottom-8 bottom-4 md:right-6 right-2
+      ${colors[type]}
+      md:w-[25%] w-[40%]
+      min-h-25
+      rounded-xl
+      p-4
+      border-2 hover:border-4
+      duration-200
+      text-white
+      flex flex-col gap-2
+    `}
+  >
+    <h2 className="font-normal">
+      {
+        type == "error"
+          ? "Erro"
+          : type == "info"
+          ? "Aviso"
+          : type == "success"
+          ? "Mensagem"
+          : ""
+      }
+    </h2>
+
+    <div className="wrap-break-word whitespace-pre-wrap">
+      <h2 className="text-sm">
+        {message}
+      </h2>
     </div>
-  )
+
+    <div className="h-1 bg-white/30 w-full rounded mt-2">
+      <div
+        className="h-1 bg-white transition-all"
+        style={{ width: `${progress}%` }}
+      />
+    </div>
+  </div>
+)
 }
