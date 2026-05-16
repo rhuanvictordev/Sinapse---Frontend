@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error: any) {
         console.log("Erro ao obter usuario no getByID")
         logout();
-        showToast("Sessão expirada", "error")
+        showToast("Sessão expirada", "info")
     }
   }
 
@@ -98,7 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error: any) {
       const message = error?.response?.data?.message || "Erro ao fazer login"
-      showToast(message, "error")
+      showToast(message, "info")
     }
   }
 

@@ -62,8 +62,8 @@ export default function Duel() {
     getAllDisciplines();
     getAllQuizzes();
     
-    socket.on("connect", () => {console.log("Conectado:", socket.id);});
-    socket.on("joined-room", (data) => {console.log(data.message);});
+    //socket.on("connect", () => {console.log("Conectado:", socket.id);});
+    //socket.on("joined-room", (data) => {console.log(data.message);});
 
     socket.on("room-created", (data) => {
         showToast("Sala criada com sucesso", "success")
@@ -102,8 +102,8 @@ export default function Duel() {
       });
 
       return () => {
-        socket.off("connect");
-        socket.off("joined-room");
+        //socket.off("connect");
+        //socket.off("joined-room");
         socket.off("room-created");
         socket.off("player-joined");
         socket.off("room-not-found");

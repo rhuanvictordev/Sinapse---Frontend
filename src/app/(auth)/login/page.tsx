@@ -23,12 +23,12 @@ export default function Login(){
 
   function validateFields(){
     if (email === "" || password === ""){
-      showToast("Preencha todos os campos!", "error")
+      showToast("Preencha todos os campos!", "info")
       return
     }
 
     if (!email.includes("@") || !email.includes(".")){
-      showToast("Insira um email válido!", "error")
+      showToast("Insira um email válido!", "info")
       return
     }
 
@@ -57,17 +57,17 @@ export default function Login(){
                   {
                   eyeOpen ? (
                     <EyeOpened
-  className={`cursor-pointer ${
-    myTheme.mode === "light" ? "text-black" : "text-white"
-  }`}
-  onClick={() => setEyeOpen(false)}
-/>
-                  ) : (
-                    <EyeClosed
-  className={`cursor-pointer ${
-    myTheme.mode === "light" ? "text-black" : "text-white"
-  }`}
-  onClick={() => setEyeOpen(true)}
+                    className={`cursor-pointer ${
+                      myTheme.mode === "light" ? "text-black" : "text-white"
+                    }`}
+                    onClick={() => setEyeOpen(false)}
+                  />
+                                    ) : (
+                                      <EyeClosed
+                    className={`cursor-pointer ${
+                      myTheme.mode === "light" ? "text-black" : "text-white"
+                    }`}
+                    onClick={() => setEyeOpen(true)}
 />
                   )
                   }
