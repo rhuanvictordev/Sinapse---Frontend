@@ -75,6 +75,15 @@ export default function playQuizDuel(){
             setCurrentQuestion(data.currentQuestion);
             setTotalQuestions(data.totalQuestions);
             setEnemyName(data.players?.find((player: any) => player.socketId !== socket.id).username);
+            if (!question){
+                setTimeout(()=>{
+                    showToast("O Quiz não possui perguntas!", "info", 3000)
+                    setTimeout(()=>{
+                        window.location.href = "/duel"
+                    },3000)
+                },4000)
+            }
+        
         });
 
         

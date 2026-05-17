@@ -15,7 +15,7 @@ export default function Menu() {
 
 
   function linkClass(isActive: boolean) {
-    return `py-2 border md:border-0 p-2 flex flex-row gap-3 items-center m-0 cursor-pointer duration-500 text-(--foreground) ${isActive ? " bg-(--menu-button-hover)" : " bg-(--menu-button-back) hover:bg-(--menu-button-hover)"}`
+    return `py-2 border md:border-0 p-2 flex flex-row m-1 gap-3 items-center m-0 cursor-pointer duration-500 text-(--foreground) ${isActive ? " bg-(--menu-button-hover)" : " bg-(--menu-button-back) hover:bg-(--menu-button-hover)"}`
   }
 
   return (

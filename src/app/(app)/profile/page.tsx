@@ -32,7 +32,7 @@ export default function Profile() {
 
     const response = await sinapseAPI.patch(`/users/${user?._id}`, {password: newPassword})
     if (response.status == 200){
-      showToast("Sua senha foi atualizada com sucesso!","info")
+      showToast("Sua senha foi atualizada com sucesso!","success")
     }else{
       showToast("Ocorreu um erro ao tentar atualizar sua senha!","error")
     }
