@@ -56,6 +56,7 @@ export default function playQuizDuel(){
     const correctSound = useRef<HTMLAudioElement | null>(null);
     const wrongSound = useRef<HTMLAudioElement | null>(null);
     const [enemyName, setEnemyName] = useState("Adversário");
+    const [myName, setMyName] = useState("Você");
  
     useEffect(() => {
         correctSound.current = new Audio("/sounds/correct.mp3"); correctSound.current.load();
@@ -75,7 +76,8 @@ export default function playQuizDuel(){
             setCurrentQuestion(data.currentQuestion);
             setTotalQuestions(data.totalQuestions);
             setEnemyName(data.players?.find((player: any) => player.socketId !== socket.id).username);
-            if (!question){
+            setMyName(data.players?.find((player: any) => player.socketId == socket.id).username);
+            if (!data.question){
                 setTimeout(()=>{
                     showToast("O Quiz não possui perguntas!", "info", 3000)
                     setTimeout(()=>{
@@ -196,7 +198,7 @@ export default function playQuizDuel(){
                         (myScore > enemyScore) && (
                             <>
                                 <h2 className="font-bold pr-2 text-right text-green-500">
-                                    Eu: {myScore}
+                                    {myName}: {myScore}
                                 </h2>
 
                                 <h2 className="font-bold pr-2 text-right text-red-800">
@@ -210,7 +212,7 @@ export default function playQuizDuel(){
                         (myScore < enemyScore) && (
                             <>
                                 <h2 className="font-bold pr-2 text-right text-red-800">
-                                    Eu: {myScore}
+                                    {myName}: {myScore}
                                 </h2>
 
                                 <h2 className="font-bold pr-2 text-right text-green-500">
@@ -224,7 +226,7 @@ export default function playQuizDuel(){
                         (myScore == enemyScore) && (
                             <>
                                 <h2 className="font-bold pr-2 text-right text-(--foreground)">
-                                    Eu: {myScore}
+                                    {myName}: {myScore}
                                 </h2>
 
                                 <h2 className="font-bold pr-2 text-right text-(--foreground)">
@@ -242,7 +244,7 @@ export default function playQuizDuel(){
                     
                     <div className="w-full">
                         <div className="flex flex-row justify-center align-middle text-center items-center gap-2">
-                        <h2 className="text-left">Eu</h2>
+                        <h2 className="text-left">{myName}</h2>
                             <h2 className="hidden md:block">{progressPlayer1}%</h2>
                             <div className="h-fill bg-blue-200 md:w-80 w-full rounded-lg">
                                 <div className="bg-green-500 h-3 md:h-6 rounded-lg transition-all duration-500" style={{ width: `${progressPlayer1}%` }}></div>
